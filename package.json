@@ -1,0 +1,11 @@
+{
+  "name": "cap",
+  "version": "1.0.0",
+  "keywords": [],
+  "private": true,
+  "description": "",
+  "workspaces": [
+    "client",
+    "server"
+  ]
+}
