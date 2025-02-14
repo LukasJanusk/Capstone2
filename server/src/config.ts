@@ -14,7 +14,7 @@ const schema = z
       .default('development'),
     isCi: z.preprocess(coerceBoolean, z.boolean().default(false)),
     port: z.coerce.number().default(3000),
-    stravaClientId: z.number().int().positive(),
+    stravaClientId: z.string(),
     stravaClientSecret: z.string(),
   })
   .readonly()
@@ -23,7 +23,7 @@ const config = schema.parse({
   port: env.PORT,
   isCi: env.CI,
   stravaClientId: env.STRAVA_CLIENT_ID,
-  straveClientSecret: env.STRAVA_CLIENT_SECRET,
+  stravaClientSecret: env.STRAVA_CLIENT_SECRET,
 })
 
 export default config
