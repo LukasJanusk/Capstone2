@@ -17,7 +17,7 @@ export class StravaUser {
   }
   async authenticate(redirectUri = 'http://localhost:5173/authenticated') {
     const response = await fetch(
-      `http://www.strava.com/oauth/authorize?client_id=${this.clientId}&response_type=code&redirect_uri=${redirectUri}&approval_prompt=force&scope=read`,
+      `http://www.strava.com/oauth/authorize?client_id=${this.clientId}&response_type=code&redirect_uri=${redirectUri}&approval_prompt=force&scope=read_all`,
       {
         method: 'GET',
       }
@@ -25,5 +25,10 @@ export class StravaUser {
     const toJson = await response.json()
     console.log(toJson)
     return toJson
+  }
+  async getActivities(accessToken: string) {
+    const response = await fetch(
+      `https://www.strava.com/api/v3/activities/{id}?include_all_efforts=" "Authorization: Bearer [[token]]`
+    )
   }
 }

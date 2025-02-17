@@ -16,6 +16,7 @@ const schema = z
     port: z.coerce.number().default(3000),
     stravaClientId: z.string(),
     stravaClientSecret: z.string(),
+    stravaSubscribtionKey: z.string(),
   })
   .readonly()
 const config = schema.parse({
@@ -24,6 +25,7 @@ const config = schema.parse({
   isCi: env.CI,
   stravaClientId: env.STRAVA_CLIENT_ID,
   stravaClientSecret: env.STRAVA_CLIENT_SECRET,
+  stravaSubscribtionKey: env.STRAVA_SUBSCRIBTION_SECRET,
 })
 
 export default config

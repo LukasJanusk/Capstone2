@@ -17,11 +17,11 @@ onMounted(async () => {
   if (code) {
     authCode.value = code
     const access = await trpc.strava.getAccess.mutate({ code })
-
     if (access) {
       user.value.accessToken = access.accessToken
       const userDetails = await user.value.getAthlete()
       if (userDetails.firstname) {
+        console.log(userDetails)
         userName.value = userDetails.firstname
         accessGranter.value = true
       }

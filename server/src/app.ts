@@ -19,6 +19,11 @@ export default function createApp() {
     res.status(200).send('OK')
   })
 
+  app.use('/api/trpc', (req, res, next) => {
+    console.log(`Incoming request: ${req.method} ${req.originalUrl}`)
+    next()
+  })
+
   app.use(
     '/api/trpc',
     createExpressMiddleware({

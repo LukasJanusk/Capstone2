@@ -19,6 +19,7 @@ export default publicProcedure
     // parse data
 
     const accessToken = data.access_token
+    console.log(`Access token: ${accessToken}`)
     // const refreshToken data.refresh_token
     // return only neccessary data for front end.
     return { accessToken }

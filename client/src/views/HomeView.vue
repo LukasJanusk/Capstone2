@@ -23,7 +23,7 @@ const getBody = async () => {
 
 const authorizeUser = () => {
   const redirectUri = 'http://localhost:5173/authenticated'
-  const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}/&approval_prompt=force&scope=read`
+  const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}/&approval_prompt=force&scope=read,activity:read_all`
   window.location.href = authUrl
 }
 </script>
