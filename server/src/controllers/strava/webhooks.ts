@@ -1,55 +1,27 @@
-import z from 'zod'
-import config from '@server/config'
 import { publicProcedure } from '../../trpc'
-import StravaModel from './model'
+import { webhookSchema } from './services/schema'
 
 export default publicProcedure
-  .input(
-    z.union([
-      z.object({
-        'hub.mode': z.string().optional(),
-        'hub.verify_token': z.string(),
-        'hub.challenge': z.string(),
-      }),
-      z.any(),
-    ])
-  )
+  .input(webhookSchema)
   .mutation(async ({ input, ctx }) => {
-    // eslint-disable-next-line no-console
-    console.log('Request received')
-    if (ctx.req?.method === 'GET') {
-      // eslint-disable-next-line no-console
-      console.log('Get method received')
-      const {
-        'hub.mode': mode,
-        'hub.verify_token': token,
-        'hub.challenge': challenge,
-      } = ctx.req.query
-
-      if (mode === 'subscribe' && token === config.stravaSubscribtionKey) {
-        // eslint-disable-next-line no-console
-        console.log('WEBHOOK_VERIFIED')
-        ctx.res?.setHeader('Content-Type', 'application/json')
-        ctx.res?.status(200).json({ 'hub.challenge': challenge })
-        return null
-      }
-      throw new Error('Forbidden')
-    } else if (ctx.req?.method === 'POST') {
-      // eslint-disable-next-line no-console
+    if (ctx.req?.method === 'POST') {
       // TODO: Process the webhook payload (e.g., save to DB)
-      // parse webhook input data
       // if "object_type": "activity" get activity data
       // if "object_type": "athlete" update or delete
-      console.log('Webhook received:')
-      console.log(input)
       // get access token from db
       if (input.aspect_type === 'create' && input.object_type === 'activity') {
-        const activityData = await StravaModel.getActivityById(
-          input.object_id,
-          'f4a9609543dc2f282b4f5e8b18bbfb14f7f65e74'
+        const activityData = await ctx.stravaService.getActivityById(
+          String(input.object_id),
+          'f4a9609543dc2f282b4f5e8b18bbfb14f7f65e74' // !!!PLACEHOLDER ---- This will be received from DB
         )
+        // TODO: get user traits from db
+        // TODO: Pass user trait data and workout data to process promt. Might need to send request to one of other routers to handle AI api logic
+        // WE Will process data and use our formula to set values for prompt based on user traits and activity data
+
+        // eslint-disable-next-line no-console
         console.log(activityData)
       }
+      // TODO: handle errors if something went wrong getting request
       return { status: 'EVENT_RECEIVED' }
     }
     return { status: 'Unknown request method' }

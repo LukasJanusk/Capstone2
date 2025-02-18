@@ -4,22 +4,22 @@ import {
   type CreateExpressContextOptions,
 } from '@trpc/server/adapters/express'
 import cors from 'cors'
+import config from './config'
 import { type Context } from './trpc'
 import { appRouter } from './controllers'
+import { createStravaService } from './controllers/strava/services/strava'
 
 export default function createApp() {
   const app = express()
-
+  const stravaService = createStravaService(
+    config.stravaClientId,
+    config.stravaClientSecret
+  )
   app.use(cors())
   app.use(express.json())
 
-  // Endpoint for health checks - pinging the server to see if it's alive.
-  // This can be used by tests, load balancers, monitoring tools, etc.
-  app.use('/api/health', (_, res) => {
-    res.status(200).send('OK')
-  })
-
   app.use('/api/trpc', (req, res, next) => {
+    // eslint-disable-next-line no-console
     console.log(`Incoming request: ${req.method} ${req.originalUrl}`)
     next()
   })
@@ -30,6 +30,7 @@ export default function createApp() {
       createContext: ({ req, res }: CreateExpressContextOptions): Context => ({
         req,
         res,
+        stravaService,
       }),
       router: appRouter,
     })
