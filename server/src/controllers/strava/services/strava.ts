@@ -1,6 +1,9 @@
+/* eslint-disable no-console */
 import {
+  parseStravaActivity,
   parseStravaAthlete,
   parseTokenResponse,
+  type StravaActivity,
   type StravaAthlete,
   type TokensSchema,
 } from './schema'
@@ -26,7 +29,6 @@ export const createStravaService = (
 
       return parseTokenResponse(data)
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(
         error instanceof Error ? error.message : 'Unknown error occurred'
       )
@@ -52,7 +54,6 @@ export const createStravaService = (
 
       return parseTokenResponse(data)
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(
         error instanceof Error ? error.message : 'Unknown error occurred'
       )
@@ -70,7 +71,6 @@ export const createStravaService = (
 
       return parseStravaAthlete(data)
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(
         error instanceof Error ? error.message : 'Unknown error occurred'
       )
@@ -78,7 +78,10 @@ export const createStravaService = (
     }
   },
 
-  async getActivityById(activityId: string, userAccessToken: string) {
+  async getActivityById(
+    activityId: string,
+    userAccessToken: string
+  ): Promise<StravaActivity> {
     try {
       const response = await fetch(
         `https://www.strava.com/api/v3/activities/${activityId}`,
@@ -96,14 +99,14 @@ export const createStravaService = (
         )
       }
 
-      const activityData = await response.json()
-      return activityData
+      const data = await response.json()
+
+      return parseStravaActivity(data)
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error(
         error instanceof Error ? error.message : 'Unknown error occurred'
       )
-      return null
+      throw error
     }
   },
 })

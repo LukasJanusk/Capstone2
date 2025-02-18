@@ -17,6 +17,9 @@ const schema = z
     stravaClientId: z.string(),
     stravaClientSecret: z.string(),
     stravaSubscribtionKey: z.string(),
+    database: z.object({
+      connectionString: z.string().url(),
+    }),
   })
   .readonly()
 const config = schema.parse({
@@ -26,6 +29,9 @@ const config = schema.parse({
   stravaClientId: env.STRAVA_CLIENT_ID,
   stravaClientSecret: env.STRAVA_CLIENT_SECRET,
   stravaSubscribtionKey: env.STRAVA_SUBSCRIBTION_SECRET,
+  database: {
+    connectionString: env.DATABASE_URL,
+  },
 })
 
 export default config
