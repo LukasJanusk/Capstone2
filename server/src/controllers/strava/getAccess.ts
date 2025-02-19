@@ -11,5 +11,6 @@ export default publicProcedure
     // TODO: save tokens to DB
 
     // return only neccessary data to front-end.
+    // should not expose token to front end. Send back username or user id.
     return { accessToken }
   })
