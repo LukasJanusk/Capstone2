@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@trpc/client": "^10.45.2",
+    "kysely": "^0.27.5",
+    "kysely-codegen": "^0.17.0",
+    "server": "^1.0.41",
     "vue": "^3.5.13",
     "vue-router": "^4.3.0"
   },
