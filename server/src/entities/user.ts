@@ -19,5 +19,22 @@ const userSchema = z.object({
     ),
   traits: z.array(traitSchema),
 })
+const userPublicSchema = userSchema.pick({
+  id: true,
+  firstName: true,
+  lastName: true,
+})
+const userSignupSchema = userSchema.pick({
+  firstName: true,
+  lastName: true,
+  password: true,
+  email: true,
+})
+const userSigninSchema = userSchema.pick({ email: true, password: true })
+const authUserSchema = userSchema.pick({ id: true })
 
+export type UserSignup = z.infer<typeof userSignupSchema>
+export type UserPublic = z.infer<typeof userPublicSchema>
 export type ApplicationUser = z.infer<typeof userSchema>
+export type UserSignin = z.infer<typeof userSigninSchema>
+export type AuthUser = z.infer<typeof authUserSchema>

@@ -10,7 +10,7 @@ export default function createMusicGenerationService(
     style: string, // 200 max
     prompt: string, // 3000 max
     model: string = 'V3_5',
-    callBackUrl: string = 'url' // ad port from config later
+    callBackUrl: string = 'url' // add port from config later
   ): Promise<string> => {
     try {
       const response = await fetch(

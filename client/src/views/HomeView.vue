@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { StravaUser } from '../strava/index'
+import { authUser } from '../user'
+import HeaderMain from '@/components/HeaderMain.vue'
+import router from '@/router'
 
 const urlParams = new URLSearchParams(window.location.search)
 const code = urlParams.get('code')
@@ -29,12 +32,18 @@ const authorizeUser = () => {
 </script>
 
 <template>
-  <div><img id="logo" src="../assets/icon.png" /></div>
-  <H2 id="instruction">To start using our app click bellow</H2>
-  <button @click="authorizeUser()">Authorize</button>
-  <div class="box" v-if="authenticated">
-    <p>{{ authenticated }}</p>
-    <button class="logo" @click="authenticated = ''">Close</button>
+  <HeaderMain
+    @signup="router.push({ name: 'SignUp' })"
+    @signin="router.push({ name: 'SignIn' })"
+  ></HeaderMain>
+  <div v-if="authUser" id="authorized">
+    <div><img id="logo" src="../assets/icon.png" /></div>
+    <H2 id="instruction">To start using our app click bellow</H2>
+    <button @click="authorizeUser()">Authorize</button>
+    <div class="box" v-if="authenticated">
+      <p>{{ authenticated }}</p>
+      <button class="logo" @click="authenticated = ''">Close</button>
+    </div>
   </div>
 </template>
 
