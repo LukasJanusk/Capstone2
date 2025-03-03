@@ -7,6 +7,9 @@ if (!env.NODE_ENV) env.NODE_ENV = 'development'
 // force UTC timezone, so it matches the default timezone in production
 env.TZ = 'UTC'
 
+const isTest = env.NODE_ENV === 'test'
+const isDevTest = env.NODE_ENV === 'development' || isTest
+
 const schema = z
   .object({
     env: z
@@ -14,6 +17,17 @@ const schema = z
       .default('development'),
     isCi: z.preprocess(coerceBoolean, z.boolean().default(false)),
     port: z.coerce.number().default(3000),
+    auth: z.object({
+      tokenKey: z.string().default(() => {
+        if (isDevTest) {
+          return 'supersecretkey'
+        }
+
+        throw new Error('You must provide a TOKEN_KEY in a production env!')
+      }),
+      expiresIn: z.string().default('7d'),
+      passwordCost: z.coerce.number().default(isDevTest ? 6 : 12),
+    }),
     stravaClientId: z.string(),
     stravaClientSecret: z.string(),
     stravaSubscribtionKey: z.string(),
@@ -27,6 +41,11 @@ const config = schema.parse({
   env: env.NODE_ENV,
   port: env.PORT,
   isCi: env.CI,
+  auth: {
+    tokenKey: env.TOKEN_KEY,
+    expiresIn: env.TOKEN_EXPIRES_IN,
+    passwordCost: env.PASSWORD_COST,
+  },
   stravaClientId: env.STRAVA_CLIENT_ID,
   stravaClientSecret: env.STRAVA_CLIENT_SECRET,
   stravaSubscribtionKey: env.STRAVA_SUBSCRIBTION_SECRET,

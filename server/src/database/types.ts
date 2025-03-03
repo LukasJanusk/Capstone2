@@ -11,8 +11,8 @@ export type Generated<T> =
     : ColumnType<T, T | undefined, T>
 
 export interface User {
-  firstName: string
   id: Generated<number>
+  firstName: string
   lastName: string
 }
 

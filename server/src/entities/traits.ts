@@ -24,6 +24,22 @@ export const MusicGenreEnum = z.enum([
   'Ska',
 ])
 
+export const traitSchema = z.object({
+  id: z.number().int().positive(),
+  name: z.string().min(1).max(50),
+  tempoMultiplier: z.number().positive(),
+  moodMultiplier: z.number().positive(),
+  energyMultiplier: z.number().positive(),
+  complexityMultiplier: z.number().positive(),
+  genre: z.number().positive(),
+  genreBias: z.number().positive(),
+})
+
+const traitPublic = traitSchema.pick({ id: true, name: true })
+
+export type TraitPublic = z.infer<typeof traitPublic>
+export type Trait = z.infer<typeof traitSchema>
+
 // Example of traits to put in DB
 // const traits = [
 //   'introvert',
@@ -44,19 +60,3 @@ export const MusicGenreEnum = z.enum([
 //   'artistic',
 //   'parctical',
 // ]
-
-export const traitSchema = z.object({
-  id: z.number().int().positive(),
-  name: z.string().min(1).max(50),
-  tempoMultiplier: z.number().positive(),
-  moodMultiplier: z.number().positive(),
-  energyMultiplier: z.number().positive(),
-  complexityMultiplier: z.number().positive(),
-  genere: MusicGenreEnum,
-  genreBias: z.number().positive(),
-})
-
-const traitPublic = traitSchema.pick({ id: true, name: true })
-
-export type TraitPublic = z.infer<typeof traitPublic>
-export type Trait = z.infer<typeof traitSchema>

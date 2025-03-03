@@ -1,4 +1,5 @@
 import z from 'zod'
+import type { Selectable } from 'kysely'
 import { traitSchema } from './traits'
 
 const userSchema = z.object({
@@ -17,13 +18,13 @@ const userSchema = z.object({
       /[!@#$%^&*(),.?":{}|<>]/,
       'Password must contain at least one special character'
     ),
-  traits: z.array(traitSchema),
+  traits: z.array(traitSchema.pick({ id: true })),
+  strava: z.object({
+    accessToken: z.string().nullable().default(null),
+    refreshToken: z.string().nullable().default(null),
+  }),
 })
-const userPublicSchema = userSchema.pick({
-  id: true,
-  firstName: true,
-  lastName: true,
-})
+
 const userSignupSchema = userSchema.pick({
   firstName: true,
   lastName: true,
@@ -34,7 +35,16 @@ const userSigninSchema = userSchema.pick({ email: true, password: true })
 const authUserSchema = userSchema.pick({ id: true })
 
 export type UserSignup = z.infer<typeof userSignupSchema>
-export type UserPublic = z.infer<typeof userPublicSchema>
 export type ApplicationUser = z.infer<typeof userSchema>
 export type UserSignin = z.infer<typeof userSigninSchema>
 export type AuthUser = z.infer<typeof authUserSchema>
+
+export const userKeysAll = Object.keys(
+  userSchema.shape
+) as (keyof ApplicationUser)[]
+export const userKeysPublic = ['id', 'firstName', 'lastName'] as const
+
+export type UserPublic = Pick<
+  Selectable<ApplicationUser>,
+  (typeof userKeysPublic)[number]
+>
