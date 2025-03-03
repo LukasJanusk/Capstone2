@@ -18,7 +18,7 @@ const userSchema = z.object({
       /[!@#$%^&*(),.?":{}|<>]/,
       'Password must contain at least one special character'
     ),
-  traits: z.array(traitSchema.pick({ id: true })),
+  traits: z.array(traitSchema),
   strava: z.object({
     accessToken: z.string().nullable().default(null),
     refreshToken: z.string().nullable().default(null),

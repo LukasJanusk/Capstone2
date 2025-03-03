@@ -10,12 +10,48 @@ export type Generated<T> =
     ? ColumnType<S, I | undefined, U>
     : ColumnType<T, T | undefined, T>
 
-export interface User {
+export type Numeric = ColumnType<string, number | string, number | string>
+
+export interface Genre {
   id: Generated<number>
+  name: string
+}
+
+export interface StravaTokens {
+  accessToken: string | null
+  id: Generated<number>
+  refreshToken: string | null
+  userId: number
+}
+
+export interface Trait {
+  complexityMultiplier: Numeric
+  energyMultiplier: Numeric
+  genre: number
+  genreBias: Numeric
+  id: Generated<number>
+  moodMultiplier: Numeric
+  name: string
+  tempoMultiplier: Numeric
+}
+
+export interface User {
+  email: string
   firstName: string
+  id: Generated<number>
   lastName: string
+  password: string
+}
+
+export interface UserTraits {
+  traitId: number
+  userId: number
 }
 
 export interface DB {
+  genre: Genre
+  stravaTokens: StravaTokens
+  trait: Trait
   user: User
+  userTraits: UserTraits
 }
