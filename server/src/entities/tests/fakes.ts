@@ -1,8 +1,7 @@
-import type { User, Trait } from '@server/database'
+import type { User, Trait, Genre, StravaTokens } from '@server/database'
 import { random } from '@server/tests/utils/random'
 import type { Insertable } from 'kysely'
 import type { AuthUser } from '../user'
-import type { Trait } from '../traits'
 
 export const fakeUser = <T extends Partial<Insertable<User>>>(
   overrides: T = {} as T
@@ -12,8 +11,6 @@ export const fakeUser = <T extends Partial<Insertable<User>>>(
     firstName: random.first(),
     lastName: random.last(),
     password: 'Verysafe_!123',
-    traits: [1, 2, 3],
-    strava: { accessToken: null, refreshToken: null },
     ...overrides,
   }) satisfies Insertable<User>
 
@@ -33,11 +30,29 @@ export const fakeTrait = <T extends Partial<Insertable<Trait>>>(
 ) =>
   ({
     name: random.name(),
-    tempoMultiplier: random.floating({ fixed: 2, min: 0, max: 100 }),
-    moodMultiplier: random.floating({ fixed: 2, min: 0, max: 100 }),
-    energyMultiplier: random.floating({ fixed: 2, min: 0, max: 100 }),
-    complexityMultiplier: random.floating({ fixed: 2, min: 0, max: 100 }),
-    genre: random.integer(),
-    genreBias: random.floating({ fixed: 2, min: 0, max: 100 }),
+    tempoMultiplier: random.integer({ min: 1, max: 3 }),
+    moodMultiplier: random.integer({ min: 1, max: 3 }),
+    energyMultiplier: random.integer({ min: 1, max: 3 }),
+    complexityMultiplier: random.integer({ min: 1, max: 3 }),
+    genreId: random.integer({ min: 1, max: 3 }),
+    genreBias: random.integer({ min: 1, max: 3 }),
     ...overrides,
   }) satisfies Insertable<Trait>
+
+export const fakeGenre = <T extends Partial<Insertable<Genre>>>(
+  overrides: T = {} as T
+) =>
+  ({
+    name: random.string(),
+    ...overrides,
+  }) satisfies Insertable<Genre>
+
+export const fakeStravaTokens = <T extends Partial<Insertable<StravaTokens>>>(
+  overrides: T = {} as T
+) =>
+  ({
+    userId: random.integer({ min: 1, max: 3 }),
+    accessToken: random.string(),
+    refreshToken: random.string(),
+    ...overrides,
+  }) satisfies Insertable<StravaTokens>

@@ -1,11 +1,12 @@
 import type { Database } from '@server/database'
-import type { User } from '@server/database/types'
+import type { User, UserTraits } from '@server/database/types'
+import type { Trait } from '@server/entities/traits'
 import {
+  userKeysDb,
   userKeysPublic,
   type ApplicationUser,
   type UserPublic,
 } from '@server/entities/user'
-import { traitKeysPublic } from '@server/entities/traits'
 import type { Insertable, Selectable } from 'kysely'
 
 export function userRepository(db: Database) {
@@ -20,12 +21,13 @@ export function userRepository(db: Database) {
     async findByEmail(email: string): Promise<Selectable<User> | undefined> {
       const user = await db
         .selectFrom('user')
-        .selectAll()
+        .select(userKeysDb)
         .where('email', '=', email)
-        .executeTakeFirst()
+        .executeTakeFirstOrThrow()
 
       return user
     },
+    // TODO: Refactor into one db call later
     async findUserFull(id: number): Promise<ApplicationUser | undefined> {
       const user = await db
         .selectFrom('user')
@@ -40,14 +42,14 @@ export function userRepository(db: Database) {
         .select([
           'trait.id',
           'trait.name',
-          db.raw('CAST(tempo_multiplier AS FLOAT) AS tempo_multiplier'),
-          db.raw('CAST(mood_multiplier AS FLOAT) AS mood_multiplier'),
-          db.raw('CAST(energy_multiplier AS FLOAT) AS energy_multiplier'),
-          db.raw('CAST(complexity_multiplier AS FLOAT) AS complexity_multiplier'),
-          'trait.genre',
-          db.raw('CAST(genre_bias AS FLOAT) AS genre_bias')
+          'trait.complexityMultiplier',
+          'trait.tempoMultiplier',
+          'trait.energyMultiplier',
+          'trait.moodMultiplier',
+          'trait.genreId',
+          'trait.genreBias',
         ])
-        .where('trait.id', '=', id)
+        .where('user.id', '=', id)
         .execute()
 
       const stravaTokens = await db
@@ -55,9 +57,20 @@ export function userRepository(db: Database) {
         .select(['accessToken', 'refreshToken'])
         .where('stravaTokens.userId', '=', id)
         .executeTakeFirstOrThrow()
-      
-        const traitParsed =
-      return { ...user, traits: userTraits, strava: stravaTokens }
+
+      // @ts-ignore we set return value to float with pg-type
+      // but ts does not recognize it
+      return { ...user, traits: userTraits as Trait[], strava: stravaTokens }
+    },
+    async createUserTrait(
+      userId: number,
+      traitId: number
+    ): Promise<Selectable<UserTraits>> {
+      return db
+        .insertInto('userTraits')
+        .values({ userId, traitId })
+        .returningAll()
+        .executeTakeFirstOrThrow()
     },
   }
 }

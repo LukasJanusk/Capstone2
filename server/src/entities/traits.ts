@@ -31,7 +31,7 @@ export const traitSchema = z.object({
   moodMultiplier: z.coerce.number().positive(),
   energyMultiplier: z.coerce.number().positive(),
   complexityMultiplier: z.coerce.number().positive(),
-  genre: z.coerce.number().positive(),
+  genreId: z.coerce.number().positive(),
   genreBias: z.coerce.number().positive(),
 })
 
@@ -40,7 +40,10 @@ const traitPublic = traitSchema.pick({ id: true, name: true })
 export type TraitPublic = z.infer<typeof traitPublic>
 export type Trait = z.infer<typeof traitSchema>
 
-export const traitKeysPublic = Object.keys(traitSchema.shape) as (keyof Trait)[]
+export const traitKeysPublic = Object.keys(
+  traitPublic.shape
+) as (keyof TraitPublic)[]
+export const traitKeys = Object.keys(traitSchema.shape) as (keyof Trait)[]
 export const parseTrait = (data: unknown) => traitSchema.parse(data)
 // Example of traits to put in DB
 // const traits = [

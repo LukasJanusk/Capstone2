@@ -33,11 +33,21 @@ const userSignupSchema = userSchema.pick({
 })
 const userSigninSchema = userSchema.pick({ email: true, password: true })
 const authUserSchema = userSchema.pick({ id: true })
+const userInDb = userSchema.pick({
+  id: true,
+  firstName: true,
+  lastName: true,
+  email: true,
+  password: true,
+})
 
 export type UserSignup = z.infer<typeof userSignupSchema>
 export type ApplicationUser = z.infer<typeof userSchema>
 export type UserSignin = z.infer<typeof userSigninSchema>
 export type AuthUser = z.infer<typeof authUserSchema>
+export type UserInDb = z.infer<typeof userInDb>
+
+export const userKeysDb = Object.keys(userInDb.shape) as (keyof UserInDb)[]
 
 export const userKeysAll = Object.keys(
   userSchema.shape

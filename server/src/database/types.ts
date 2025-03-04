@@ -27,8 +27,8 @@ export interface StravaTokens {
 export interface Trait {
   complexityMultiplier: Numeric
   energyMultiplier: Numeric
-  genre: number
   genreBias: Numeric
+  genreId: number
   id: Generated<number>
   moodMultiplier: Numeric
   name: string
@@ -44,6 +44,7 @@ export interface User {
 }
 
 export interface UserTraits {
+  id: Generated<number>
   traitId: number
   userId: number
 }

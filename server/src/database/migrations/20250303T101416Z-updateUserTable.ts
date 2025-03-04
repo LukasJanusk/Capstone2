@@ -19,12 +19,15 @@ export async function up(db: Kysely<any>) {
     .addColumn('mood_multiplier', 'numeric', (c) => c.notNull())
     .addColumn('energy_multiplier', 'numeric', (c) => c.notNull())
     .addColumn('complexity_multiplier', 'numeric', (c) => c.notNull())
-    .addColumn('genre', 'integer', (c) => c.references('genre.id').notNull())
+    .addColumn('genre_id', 'integer', (c) => c.references('genre.id').notNull())
     .addColumn('genre_bias', 'numeric', (c) => c.notNull())
     .execute()
 
   await db.schema
     .createTable('user_traits')
+    .addColumn('id', 'integer', (c) =>
+      c.primaryKey().generatedAlwaysAsIdentity()
+    )
     .addColumn('user_id', 'integer', (c) => c.references('user.id').notNull())
     .addColumn('trait_id', 'integer', (c) => c.references('trait.id').notNull())
     .execute()

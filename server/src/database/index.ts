@@ -7,6 +7,9 @@ import {
 import pg from 'pg'
 import type { DB } from './types'
 
+// Set the custom type parser for `numeric` to parse it as a float.
+pg.types.setTypeParser(1700, (val) => parseFloat(val))
+
 export function createDatabase(options: pg.PoolConfig): Kysely<DB> {
   return new Kysely<DB>({
     dialect: new PostgresDialect({
