@@ -1,5 +1,5 @@
 import type { Database } from '@server/database'
-import type { User, UserTraits } from '@server/database/types'
+import type { StravaTokens, User, UserTraits } from '@server/database/types'
 import type { Trait } from '@server/entities/traits'
 import {
   userKeysDb,
@@ -62,13 +62,19 @@ export function userRepository(db: Database) {
       // but ts does not recognize it
       return { ...user, traits: userTraits as Trait[], strava: stravaTokens }
     },
+
     async createUserTrait(
-      userId: number,
-      traitId: number
-    ): Promise<Selectable<UserTraits>> {
+      traits: Insertable<UserTraits>[]
+    ): Promise<Selectable<UserTraits>[]> {
+      return db.insertInto('userTraits').values(traits).returningAll().execute()
+    },
+
+    async storeTokens(
+      tokens: Insertable<StravaTokens>
+    ): Promise<Selectable<StravaTokens>> {
       return db
-        .insertInto('userTraits')
-        .values({ userId, traitId })
+        .insertInto('stravaTokens')
+        .values(tokens)
         .returningAll()
         .executeTakeFirstOrThrow()
     },

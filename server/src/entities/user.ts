@@ -1,12 +1,12 @@
 import z from 'zod'
 import type { Selectable } from 'kysely'
-import { traitSchema } from './traits'
+import { traitSchema, traitPublic } from './traits'
 
 const userSchema = z.object({
   id: z.coerce.number().int().positive(),
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),
-  email: z.string().email().min(5).max(100).toLowerCase(),
+  email: z.string().trim().email().min(5).max(100).toLowerCase(),
   password: z
     .string()
     .min(8, 'Password must be at least 8 characters long')
@@ -25,12 +25,17 @@ const userSchema = z.object({
   }),
 })
 
-const userSignupSchema = userSchema.pick({
-  firstName: true,
-  lastName: true,
-  password: true,
-  email: true,
-})
+export const userSignupSchema = userSchema
+  .pick({
+    firstName: true,
+    lastName: true,
+    password: true,
+    email: true,
+  })
+  .extend({
+    traits: z.array(traitPublic),
+  })
+
 const userSigninSchema = userSchema.pick({ email: true, password: true })
 const authUserSchema = userSchema.pick({ id: true })
 const userInDb = userSchema.pick({

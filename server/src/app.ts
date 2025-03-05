@@ -9,8 +9,9 @@ import { type Context } from './trpc'
 import { appRouter } from './controllers'
 import { createStravaService } from './controllers/strava/services/strava'
 import createMusicGenerationService from './controllers/generator/model'
+import type { Database } from './database'
 
-export default function createApp() {
+export default function createApp(db: Database) {
   const app = express()
   const stravaService = createStravaService(
     config.stravaClientId,
@@ -30,6 +31,7 @@ export default function createApp() {
     '/api/trpc',
     createExpressMiddleware({
       createContext: ({ req, res }: CreateExpressContextOptions): Context => ({
+        db,
         req,
         res,
         stravaService,

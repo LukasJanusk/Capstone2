@@ -2,6 +2,7 @@ import type { User, Trait, Genre, StravaTokens } from '@server/database'
 import { random } from '@server/tests/utils/random'
 import type { Insertable } from 'kysely'
 import type { AuthUser } from '../user'
+import type { TraitPublic } from '../traits'
 
 export const fakeUser = <T extends Partial<Insertable<User>>>(
   overrides: T = {} as T
@@ -38,6 +39,15 @@ export const fakeTrait = <T extends Partial<Insertable<Trait>>>(
     genreBias: random.integer({ min: 1, max: 3 }),
     ...overrides,
   }) satisfies Insertable<Trait>
+
+export const fakeTraitPublic = <T extends Partial<Insertable<TraitPublic>>>(
+  overrides: T = {} as T
+) =>
+  ({
+    id: random.integer({ min: 1, max: 3 }),
+    name: random.string(),
+    ...overrides,
+  }) satisfies Insertable<TraitPublic>
 
 export const fakeGenre = <T extends Partial<Insertable<Genre>>>(
   overrides: T = {} as T

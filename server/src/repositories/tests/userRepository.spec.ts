@@ -89,11 +89,51 @@ describe('createUserTrait', () => {
     )
     const [user] = await insertAll(db, 'user', fakeUser())
 
-    const userTrait = await repository.createUserTrait(user.id, trait.id)
-    expect(userTrait).toEqual({
-      id: expect.any(Number),
-      userId: user.id,
-      traitId: trait.id,
-    })
+    const userTrait = await repository.createUserTrait([
+      { userId: user.id, traitId: trait.id },
+    ])
+    expect(userTrait).toEqual([
+      {
+        id: expect.any(Number),
+        userId: user.id,
+        traitId: trait.id,
+      },
+    ])
+  })
+})
+describe('createUserTrait', () => {
+  it('creates user trait', async () => {
+    const [genre] = await insertAll(db, 'genre', fakeGenre())
+    const [trait] = await insertAll(
+      db,
+      'trait',
+      fakeTrait({ genreId: genre.id })
+    )
+    const [user] = await insertAll(db, 'user', fakeUser())
+
+    const userTraits = await repository.createUserTrait([
+      {
+        userId: user.id,
+        traitId: trait.id,
+      },
+    ])
+
+    expect(userTraits).toEqual([
+      {
+        id: expect.any(Number),
+        userId: user.id,
+        traitId: trait.id,
+      },
+    ])
+  })
+})
+describe('storeTokens', () => {
+  it('stores user tokens to db', async () => {
+    const [user] = await insertAll(db, 'user', fakeUser())
+    const tokens = fakeStravaTokens({ userId: user.id })
+
+    const stored = await repository.storeTokens(tokens)
+
+    expect(stored).toEqual({ id: expect.any(Number), ...tokens })
   })
 })

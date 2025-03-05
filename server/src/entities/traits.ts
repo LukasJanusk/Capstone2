@@ -35,7 +35,7 @@ export const traitSchema = z.object({
   genreBias: z.coerce.number().positive(),
 })
 
-const traitPublic = traitSchema.pick({ id: true, name: true })
+export const traitPublic = traitSchema.pick({ id: true, name: true })
 
 export type TraitPublic = z.infer<typeof traitPublic>
 export type Trait = z.infer<typeof traitSchema>
