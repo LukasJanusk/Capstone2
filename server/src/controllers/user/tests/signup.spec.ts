@@ -109,12 +109,14 @@ it('saves user traits to db', async () => {
   ])
   const traits = [{ id: trait.id, name: trait.name }]
   const userReturned = await caller.signup({ ...user, traits })
-  const [userTraits] = await selectAll(db, 'userTraits', (eb) =>
+  const userTraits = await selectAll(db, 'userTraits', (eb) =>
     eb('userId', '=', userReturned.id)
   )
-  expect(userTraits).toEqual({
-    id: expect.any(Number),
-    traitId: trait.id,
-    userId: userReturned.id,
-  })
+  expect(userTraits).toEqual([
+    {
+      id: expect.any(Number),
+      traitId: trait.id,
+      userId: userReturned.id,
+    },
+  ])
 })

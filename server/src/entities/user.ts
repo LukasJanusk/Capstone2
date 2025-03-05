@@ -2,7 +2,7 @@ import z from 'zod'
 import type { Selectable } from 'kysely'
 import { traitSchema, traitPublic } from './traits'
 
-const userSchema = z.object({
+export const userSchema = z.object({
   id: z.coerce.number().int().positive(),
   firstName: z.string().min(1).max(100),
   lastName: z.string().min(1).max(100),
@@ -36,7 +36,7 @@ export const userSignupSchema = userSchema
     traits: z.array(traitPublic),
   })
 
-const userSigninSchema = userSchema.pick({ email: true, password: true })
+export const userSigninSchema = userSchema.pick({ email: true, password: true })
 const authUserSchema = userSchema.pick({ id: true })
 const userInDb = userSchema.pick({
   id: true,
