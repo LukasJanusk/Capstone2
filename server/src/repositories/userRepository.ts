@@ -23,7 +23,7 @@ export function userRepository(db: Database) {
         .selectFrom('user')
         .select(userKeysDb)
         .where('email', '=', email)
-        .executeTakeFirstOrThrow()
+        .executeTakeFirst()
 
       return user
     },

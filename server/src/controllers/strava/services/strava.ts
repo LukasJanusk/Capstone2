@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { TRPCError } from '@trpc/server'
 import {
   parseStravaActivity,
   parseStravaAthlete,
@@ -57,7 +58,10 @@ export const createStravaService = (
       console.error(
         error instanceof Error ? error.message : 'Unknown error occurred'
       )
-      throw error
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Error accessing Strava servers',
+      })
     }
   },
 
@@ -74,7 +78,10 @@ export const createStravaService = (
       console.error(
         error instanceof Error ? error.message : 'Unknown error occurred'
       )
-      throw error
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Error accessing Strava servers',
+      })
     }
   },
 

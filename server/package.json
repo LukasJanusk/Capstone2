@@ -32,7 +32,8 @@
     "kysely-codegen": "^0.17.0",
     "prettier": "^3.2.5",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.7"
   },
   "dependencies": {
     "@trpc/server": "^10.45.2",
@@ -46,7 +47,6 @@
     "kysely": "^0.27.5",
     "pg": "^8.13.3",
     "server": "^1.0.41",
-    "vitest": "^3.0.5",
     "zod": "^3.24.2"
   }
 }

@@ -7,5 +7,8 @@
   "workspaces": [
     "client",
     "server"
-  ]
+  ],
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2"
+  }
 }

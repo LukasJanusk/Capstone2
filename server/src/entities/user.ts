@@ -37,7 +37,7 @@ export const userSignupSchema = userSchema
   })
 
 export const userSigninSchema = userSchema.pick({ email: true, password: true })
-const authUserSchema = userSchema.pick({ id: true })
+export const authUserSchema = userSchema.pick({ id: true })
 const userInDb = userSchema.pick({
   id: true,
   firstName: true,

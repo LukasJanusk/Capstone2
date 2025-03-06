@@ -12,10 +12,12 @@ export type Context = {
   req?: Request
   res?: Response
   repos?: Partial<Repositories>
-  AuthUser?: AuthUser
+  authUser?: AuthUser
   stravaService?: StravaService
   songGenerationService?: MusicGenerationService
 }
+export type ContextMinimal = Pick<Context, 'db'>
+
 const t = initTRPC.context<Context>().create()
 export const {
   createCallerFactory,
