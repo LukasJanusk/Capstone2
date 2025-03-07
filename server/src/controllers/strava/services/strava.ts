@@ -30,11 +30,13 @@ export const createStravaService = (
 
       return parseTokenResponse(data)
     } catch (error) {
-      console.error(
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      )
-
-      throw error
+      const message =
+        error instanceof Error ? error.message : 'Unknown error occured'
+      console.error(message)
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message,
+      })
     }
   },
 

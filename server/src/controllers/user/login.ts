@@ -4,7 +4,7 @@ import { userRepository } from '@server/repositories/userRepository'
 import { userSigninSchema } from '@server/entities/user'
 import { TRPCError } from '@trpc/server'
 import { compare } from 'bcrypt'
-import jwt from 'jsonwebtoken'
+import jsonwebtoken from 'jsonwebtoken'
 import config from '@server/config'
 import { prepareTokenPayload } from '@server/trpc/tokenPayload'
 
@@ -29,7 +29,9 @@ export default publicProcedure
       })
 
     const tokenPayload = prepareTokenPayload(user)
-    const accessToken = jwt.sign(tokenPayload, tokenKey, { expiresIn: '7d' })
+    const accessToken = jsonwebtoken.sign(tokenPayload, tokenKey, {
+      expiresIn: '7d',
+    })
 
     return { accessToken }
   })

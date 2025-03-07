@@ -1,0 +1,112 @@
+import { it, describe, vi } from 'vitest'
+import { createStravaService } from '../strava'
+import {
+  mockStravaResponse,
+  fakeStravaAccessTokens,
+  mockStravaAthleteResponse,
+} from './utils/fakes'
+
+beforeEach(() => {
+  vi.restoreAllMocks()
+})
+
+const CLIENT_SECRET_TEST = 'testsecret'
+const CLIENT_ID_TEST = 'test_id'
+vi.stubGlobal(
+  'fetch',
+  vi.fn(() => mockStravaResponse())
+)
+const stravaService = createStravaService(CLIENT_ID_TEST, CLIENT_SECRET_TEST)
+
+describe('getUserTokens', () => {
+  it('returns tokens with athlete data', async () => {
+    const fakeResponseData = fakeStravaAccessTokens()
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => mockStravaResponse(fakeResponseData))
+    )
+    const tokensData = await stravaService.getUserTokens('codeString')
+
+    expect(tokensData).toEqual(fakeResponseData)
+    expect(tokensData.token_type).toEqual('Bearer')
+  })
+  it('throws Error when failes to fetch', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => {
+        throw new Error('timeout')
+      })
+    )
+    await expect(stravaService.getUserTokens('codeString')).rejects.toThrow(
+      /timeout/i
+    )
+  })
+  it('throws Error schema missmatch', async () => {
+    const fakeData = fakeStravaAccessTokens() as any
+    fakeData.token_type = 'Basic'
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Response(JSON.stringify(fakeStravaAccessTokens(fakeData)), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+      )
+    )
+    await expect(stravaService.getUserTokens('codeString')).rejects.toThrow(
+      /bearer/i
+    )
+  })
+})
+
+describe.skip('refreshUserAccessToken', () => {
+  it('returns refreshed access token', async () => {
+    // TODO:
+  })
+})
+describe('getUser', async () => {
+  it('returns strava user data', async () => {
+    const userData = {
+      id: 2,
+      firstname: 'Michael',
+      lastname: 'Jackson',
+    }
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => mockStravaAthleteResponse(userData))
+    )
+    const response = await stravaService.getUser('userAccessToken')
+    expect(response).toEqual({
+      id: 2,
+      firstname: 'Michael',
+      lastname: 'Jackson',
+    })
+  })
+  it('throws an error when fails to fetch data', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => {
+        throw new Error('Rejected')
+      })
+    )
+    await expect(stravaService.getUser('userToken')).rejects.toThrow(
+      /error accessing Strava servers/i
+    )
+  })
+  it('throws an error when fails to parse data', async () => {
+    const userData = {}
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => mockStravaAthleteResponse(userData))
+    )
+  })
+  await expect(stravaService.getUser('userToken')).rejects.toThrow(
+    /error accessing Strava servers/i
+  )
+})
+describe.skip('getActivityById', async () => {
+  it('returns activity data', async () => {
+    // TODO:
+  })
+})
