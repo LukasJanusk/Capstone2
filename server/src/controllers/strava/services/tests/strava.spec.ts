@@ -4,6 +4,7 @@ import {
   mockStravaResponse,
   fakeStravaAccessTokens,
   mockStravaAthleteResponse,
+  mockActivityResponse,
 } from './utils/fakes'
 
 beforeEach(() => {
@@ -104,9 +105,27 @@ describe('getUser', async () => {
   await expect(stravaService.getUser('userToken')).rejects.toThrow(
     /error accessing Strava servers/i
   )
+  it('throws when ')
 })
-describe.skip('getActivityById', async () => {
+describe('getActivityById', async () => {
   it('returns activity data', async () => {
+    // TODO:
+    const athlete = { id: 222, first_name: 'Mark' }
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        mockActivityResponse({
+          id: 123,
+          athlete,
+          start_date: '2018-02-16T14:52:54Z',
+          start_date_local: '2018-02-16T14:52:54Z',
+        })
+      )
+    )
+    const response = await stravaService.getActivityById(123, 'userToken')
+    expect(response.athlete.id).toEqual(athlete.id)
+  })
+  it.skip('throws an error when activity wrong format', async () => {
     // TODO:
   })
 })

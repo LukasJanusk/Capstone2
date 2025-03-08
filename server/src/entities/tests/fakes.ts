@@ -64,5 +64,6 @@ export const fakeStravaTokens = <T extends Partial<Insertable<StravaTokens>>>(
     userId: random.integer({ min: 1, max: 3 }),
     accessToken: random.string(),
     refreshToken: random.string(),
+    stravaUserId: random.integer({ min: 1, max: 100 }),
     ...overrides,
   }) satisfies Insertable<StravaTokens>

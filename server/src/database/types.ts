@@ -21,6 +21,7 @@ export interface StravaTokens {
   accessToken: string | null
   id: Generated<number>
   refreshToken: string | null
+  stravaUserId: number
   userId: number
 }
 

@@ -88,7 +88,7 @@ export const createStravaService = (
   },
 
   async getActivityById(
-    activityId: string,
+    activityId: number,
     userAccessToken: string
   ): Promise<StravaActivity> {
     try {

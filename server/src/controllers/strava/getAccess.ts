@@ -12,6 +12,7 @@ export default authenticatedProcedure
       userId: ctx.authUser.id,
       accessToken: data.access_token,
       refreshToken: data.refresh_token,
+      stravaUserId: data.athlete.id,
     }
 
     const savedTokens = await ctx.repos.userRepository.storeTokens(tokensData)

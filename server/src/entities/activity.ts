@@ -1,6 +1,6 @@
 import z from 'zod'
 
-const activitySchema = z.object({
+export const activitySchema = z.object({
   id: z.coerce.number().positive().int(),
   userId: z.coerce.number().positive().int(),
   type: z.enum(['ride', 'static', 'run']),
