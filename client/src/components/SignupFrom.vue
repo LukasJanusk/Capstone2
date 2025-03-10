@@ -12,7 +12,7 @@ const userData = ref({
   lastName: '',
   password: '',
   email: '',
-  selectedTraits: [] as TraitPublic[],
+  traits: [] as TraitPublic[],
 })
 
 const signUp = async () => {
@@ -40,10 +40,8 @@ onMounted(async () => {
 
       <div id="selected-traits">
         <span
-          @click="
-            userData.selectedTraits = userData.selectedTraits.filter((t) => t.id !== trait.id)
-          "
-          v-for="trait in userData.selectedTraits"
+          @click="userData.traits = userData.traits.filter((t) => t.id !== trait.id)"
+          v-for="trait in userData.traits"
           :key="trait.id"
           class="trait-tag"
         >
@@ -53,11 +51,11 @@ onMounted(async () => {
 
       <select multiple>
         <option
-          @click="userData.selectedTraits.push(trait)"
+          @click="userData.traits.push(trait)"
           v-for="trait in traits"
           :key="trait.id"
-          :hidden="userData.selectedTraits.includes(trait)"
-          :disabled="userData.selectedTraits.includes(trait)"
+          :hidden="userData.traits.includes(trait)"
+          :disabled="userData.traits.includes(trait)"
           :value="trait"
         >
           {{ trait.name }}

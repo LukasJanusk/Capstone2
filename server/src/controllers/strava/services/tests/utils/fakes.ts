@@ -1,7 +1,7 @@
 import { random } from '@server/tests/utils/random'
 import type { StravaActivity, StravaAthlete, TokensSchema } from '../../schema'
 
-const fakeStravaAthlete = {
+export const fakeStravaAthlete = {
   id: random.integer({ min: 1, max: 10 }),
   firstname: random.name(),
   lastname: random.last(),

@@ -44,7 +44,6 @@ it('should throw an error if user is not logged in', async () => {
   const unauthenticated = createCaller(requestContext({ db }))
 
   await expect(unauthenticated.testCall()).rejects.toThrow(
-    // any authentication-like error
     /login|log in|logged in|authenticate|unauthorized/i
   )
 })

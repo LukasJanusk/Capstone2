@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { signin } from '../user'
+import router from '../router'
 
 const userData = ref({ email: '', password: '' })
 
 const signIn = async () => {
-  const user = await signin(userData.value)
+  await signin(userData.value)
+  router.push({ name: 'Home' })
 }
 </script>
 
@@ -13,9 +15,9 @@ const signIn = async () => {
   <div class="main-container">
     <form @submit.prevent="signIn">
       <label for="email">Email</label>
-      <input :value="userData.email" type="email" required />
+      <input v-model="userData.email" type="email" required />
       <label for="password">Password</label>
-      <input :value="userData.password" type="password" required />
+      <input v-model="userData.password" type="password" required />
       <button type="submit">Sign in</button>
     </form>
   </div>

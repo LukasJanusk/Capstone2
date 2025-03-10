@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import z from 'zod'
 import { publicProcedure } from '../../trpc'
 
@@ -11,7 +12,7 @@ export default publicProcedure
   )
   .mutation(async ({ input, ctx }) => {
     console.log('trying to access songs in api')
-    const songs = await ctx.songGenerationService.getSongs(
+    const songs = await ctx.songGenerationService!.getSongs(
       input.prompt,
       input.lyric,
       input.title

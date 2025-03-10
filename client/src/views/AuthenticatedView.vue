@@ -2,9 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { trpc } from '@/trpc'
 import router from '@/router'
-import { StravaUser } from '@/strava'
 
-const user = ref(new StravaUser())
 const authCode = ref('')
 const accessGranter = ref(false)
 const userName = ref('')
@@ -18,13 +16,9 @@ onMounted(async () => {
     authCode.value = code
     const access = await trpc.strava.getAccess.mutate({ code })
     if (access) {
-      user.value.accessToken = access.accessToken
-      const userDetails = await user.value.getAthlete()
-      if (userDetails.firstname) {
-        console.log(userDetails)
-        userName.value = userDetails.firstname
-        accessGranter.value = true
-      }
+      const athlete = await trpc.strava.getAthlete.query()
+      userName.value = athlete.stravaName
+      accessGranter.value = true
     }
   }
 })

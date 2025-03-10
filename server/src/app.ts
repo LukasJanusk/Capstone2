@@ -7,7 +7,7 @@ import cors from 'cors'
 import config from './config'
 import { type Context } from './trpc'
 import { appRouter } from './controllers'
-import { createStravaService } from './controllers/strava/services/strava'
+import { createStravaService } from './controllers/strava/services'
 import createMusicGenerationService from './controllers/generator/model'
 import type { Database } from './database'
 

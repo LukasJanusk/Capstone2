@@ -1,5 +1,4 @@
 import type { Database, Trait } from '@server/database'
-
 import { type TraitPublic, traitKeysPublic } from '@server/entities/traits'
 import type { Insertable, Selectable } from 'kysely'
 
@@ -12,7 +11,10 @@ export function traitRepository(db: Database) {
         .returning(traitKeysPublic)
         .executeTakeFirstOrThrow()
     },
-    async findById(id: number): Promise<TraitPublic> {
+    async getAllPublic(): Promise<TraitPublic[]> {
+      return db.selectFrom('trait').select(traitKeysPublic).execute()
+    },
+    async findByIdPublic(id: number): Promise<TraitPublic> {
       return db
         .selectFrom('trait')
         .select(traitKeysPublic)

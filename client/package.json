@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@trpc/client": "^10.45.2",
+    "jsonwebtoken": "^9.0.2",
     "kysely": "^0.27.5",
     "kysely-codegen": "^0.17.0",
     "server": "^1.0.41",

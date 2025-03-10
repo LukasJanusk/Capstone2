@@ -1,6 +1,6 @@
 import { initTRPC } from '@trpc/server'
 import type { Request, Response } from 'express'
-import type { StravaService } from '@server/controllers/strava/services/strava'
+import type { StravaService } from '@server/controllers/strava/services'
 import type { MusicGenerationService } from '@server/entities/services/MusicGenerationService'
 
 import type { Repositories } from '@server/repositories'

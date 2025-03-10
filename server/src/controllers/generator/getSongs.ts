@@ -10,7 +10,7 @@ export default publicProcedure
     })
   )
   .mutation(async ({ input, ctx }) => {
-    const songs = await ctx.songGenerationService.getSongs(
+    const songs = await ctx.songGenerationService!.getSongs(
       input.prompt,
       input.lyric ?? undefined,
       input.title ?? undefined

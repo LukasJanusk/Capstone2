@@ -1,5 +1,5 @@
 import { it, describe, vi } from 'vitest'
-import { createStravaService } from '../strava'
+import { createStravaService } from '..'
 import {
   mockStravaResponse,
   fakeStravaAccessTokens,
@@ -109,7 +109,6 @@ describe('getUser', async () => {
 })
 describe('getActivityById', async () => {
   it('returns activity data', async () => {
-    // TODO:
     const athlete = { id: 222, first_name: 'Mark' }
     vi.stubGlobal(
       'fetch',
@@ -125,7 +124,20 @@ describe('getActivityById', async () => {
     const response = await stravaService.getActivityById(123, 'userToken')
     expect(response.athlete.id).toEqual(athlete.id)
   })
-  it.skip('throws an error when activity wrong format', async () => {
-    // TODO:
+  it('throws an error when activity wrong format', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() =>
+        mockActivityResponse({
+          id: 123,
+          athlete: { user: 1 },
+          start_date: '2018-02-16T14:52:54Z',
+          start_date_local: '2018-02-16T14:52:54Z',
+        })
+      )
+    )
+    await expect(stravaService.getActivityById(1, 'userToken')).rejects.toThrow(
+      /athlete/i
+    )
   })
 })

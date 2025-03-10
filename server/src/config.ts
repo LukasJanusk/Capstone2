@@ -18,13 +18,7 @@ const schema = z
     isCi: z.preprocess(coerceBoolean, z.boolean().default(false)),
     port: z.coerce.number().default(3000),
     auth: z.object({
-      tokenKey: z.string().default(() => {
-        if (isDevTest) {
-          return 'supersecretkey'
-        }
-
-        throw new Error('You must provide a TOKEN_KEY in a production env!')
-      }),
+      tokenKey: z.string(),
       expiresIn: z.string().default('7d'),
       passwordCost: z.coerce.number().default(isDevTest ? 6 : 12),
     }),

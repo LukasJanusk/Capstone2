@@ -78,6 +78,13 @@ export function userRepository(db: Database) {
         .returningAll()
         .executeTakeFirstOrThrow()
     },
+    async getTokens(userId: number): Promise<Selectable<StravaTokens>> {
+      return db
+        .selectFrom('stravaTokens')
+        .selectAll()
+        .where('stravaTokens.userId', '=', userId)
+        .executeTakeFirstOrThrow()
+    },
   }
 }
 

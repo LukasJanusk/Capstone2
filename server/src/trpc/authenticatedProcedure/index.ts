@@ -1,18 +1,17 @@
 import config from '@server/config'
+import jsonwebtoken from 'jsonwebtoken'
 import { TRPCError } from '@trpc/server'
 import { parseTokenPayload } from '@server/trpc/tokenPayload'
-import jsonwebtoken from 'jsonwebtoken'
 import { publicProcedure } from '..'
 
-const { tokenKey } = config.auth
-
 function verify(token: string) {
-  return jsonwebtoken.verify(token, tokenKey)
+  return jsonwebtoken.verify(token, config.auth.tokenKey)
 }
 
 function getUserFromToken(token: string) {
   try {
     const tokenVerified = verify(token)
+
     const tokenParsed = parseTokenPayload(tokenVerified)
 
     return tokenParsed.user
@@ -41,8 +40,7 @@ export const authenticatedProcedure = publicProcedure.use(({ ctx, next }) => {
       message,
     })
   }
-  const token = ctx.req.header('Authorization')?.replace('Bearer', '')
-
+  const token = ctx.req.header('Authorization')?.replace('Bearer', '').trim()
   if (!token)
     throw new TRPCError({
       message: 'Unauthorized, please login',

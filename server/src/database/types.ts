@@ -18,9 +18,9 @@ export interface Genre {
 }
 
 export interface StravaTokens {
-  accessToken: string | null
+  accessToken: string
   id: Generated<number>
-  refreshToken: string | null
+  refreshToken: string
   stravaUserId: number
   userId: number
 }

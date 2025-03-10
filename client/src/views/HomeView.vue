@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { StravaUser } from '../strava/index'
-import { authUser } from '../user'
+import { authUserId, logout } from '../user'
 import HeaderMain from '@/components/HeaderMain.vue'
 import router from '@/router'
 
@@ -35,8 +35,9 @@ const authorizeUser = () => {
   <HeaderMain
     @signup="router.push({ name: 'SignUp' })"
     @signin="router.push({ name: 'SignIn' })"
+    @signout="(logout(), router.push({ name: 'SignIn' }))"
   ></HeaderMain>
-  <div v-if="authUser" id="authorized">
+  <div v-if="authUserId" id="authorized">
     <div><img id="logo" src="../assets/icon.png" /></div>
     <H2 id="instruction">To start using our app click bellow</H2>
     <button @click="authorizeUser()">Authorize</button>
