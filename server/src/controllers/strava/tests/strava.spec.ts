@@ -15,7 +15,11 @@ const caller = createCaller(authContext({ db, stravaService }, user))
 
 it('returns object with user id when tokens are accessed', async () => {
   const response = await caller.getAccess({ code: 'valid_code' })
-  expect(response.id).toEqual(user.id)
+  expect(response).toEqual({
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  })
 })
 it('throws an error, when invalid code is provided', async () => {
   await expect(caller.getAccess({ code: 'invalid_code' })).rejects.toThrow(

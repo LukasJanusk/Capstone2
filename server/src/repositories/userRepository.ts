@@ -85,6 +85,24 @@ export function userRepository(db: Database) {
         .where('stravaTokens.userId', '=', userId)
         .executeTakeFirstOrThrow()
     },
+    async updateTokens(
+      userId: number,
+      tokens: Partial<Insertable<StravaTokens>>
+    ): Promise<Selectable<StravaTokens>> {
+      return db
+        .updateTable('stravaTokens')
+        .set(tokens)
+        .where('stravaTokens.userId', '=', userId)
+        .returningAll()
+        .executeTakeFirstOrThrow()
+    },
+    async getUserPublic(userId: number): Promise<UserPublic> {
+      return db
+        .selectFrom('user')
+        .where('user.id', '=', userId)
+        .select(userKeysPublic)
+        .executeTakeFirstOrThrow()
+    },
   }
 }
 

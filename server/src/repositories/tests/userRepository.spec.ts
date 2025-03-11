@@ -148,3 +148,18 @@ describe('getTokens', () => {
     expect(stored).toEqual(tokensInDb)
   })
 })
+describe('updateTokens', () => {
+  it('updates tokens', async () => {
+    const [user] = await insertAll(db, 'user', fakeUser())
+    const tokens = fakeStravaTokens({ userId: user.id })
+    await insertAll(db, 'stravaTokens', tokens)
+
+    const updated = await repository.updateTokens(user.id, {
+      accessToken: 'updatedAccess',
+      refreshToken: 'updatedRefresh',
+    })
+
+    expect(updated.accessToken).toEqual('updatedAccess')
+    expect(updated.refreshToken).toEqual('updatedRefresh')
+  })
+})

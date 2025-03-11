@@ -8,7 +8,8 @@
     "dev": "tsx watch src",
     "migrate:latest": "tsx src/database/migrate/latest",
     "migrate:new": "tsx ./src/database/migrate/new",
-    "gen:types": "kysely-codegen --camel-case --dialect postgres --out-file src/database/types.ts && prettier --write src/database/types.ts"
+    "gen:types": "kysely-codegen --camel-case --dialect postgres --out-file src/database/types.ts && prettier --write src/database/types.ts",
+    "coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,8 @@
     "@types/pg": "^8.11.11",
     "@typescript-eslint/eslint-plugin": "^7.5.0",
     "@typescript-eslint/parser": "^7.5.0",
+    "@vitest/coverage-v8": "^3.0.7",
+    "coverage": "^0.4.1",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",

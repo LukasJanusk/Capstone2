@@ -15,8 +15,10 @@ export default authenticatedProcedure
       stravaUserId: data.athlete.id,
     }
 
-    const savedTokens = await ctx.repos.userRepository.storeTokens(tokensData)
-
-    // returns object of user id
-    return { id: savedTokens.userId }
+    await ctx.repos.userRepository.storeTokens(tokensData)
+    const publicUser = await ctx.repos.userRepository.getUserPublic(
+      ctx.authUser.id
+    )
+    // returns object of public User
+    return publicUser
   })

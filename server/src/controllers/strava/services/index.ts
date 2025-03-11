@@ -74,7 +74,7 @@ export const createStravaService = (
         method: 'GET',
       })
       const data = await response.json()
-
+      console.log(data)
       return parseStravaAthlete(data)
     } catch (error) {
       console.error(

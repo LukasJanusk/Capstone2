@@ -7,12 +7,12 @@ export default authenticatedProcedure
   .query(async ({ ctx }) => {
     // TODO: Error handling
     const tokens = await ctx.repos.userRepository.getTokens(ctx.authUser.id)
-    const data = await ctx.stravaService!.getUser(tokens.accessToken)
+    const athlete = await ctx.stravaService!.getUser(tokens.accessToken)
 
     // returns object of user id
     return {
       id: ctx.authUser.id,
-      stravaName: data.firstname,
-      stravaLastName: data.lastname,
+      stravaName: athlete.firstname,
+      stravaLastName: athlete.lastname,
     }
   })

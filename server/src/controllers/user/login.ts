@@ -29,8 +29,10 @@ export default publicProcedure
       })
 
     const tokenPayload = prepareTokenPayload(user)
+
     const accessToken = jsonwebtoken.sign(tokenPayload, tokenKey, {
       expiresIn: '7d',
     })
+
     return { accessToken }
   })
