@@ -121,5 +121,5 @@ The project requires the following environment variables:
 
 Additional Notes
 
-    Ensure your database is properly set up with the appropriate schema and environment variables.
-    For trying app, you will need a valid Strava account and API keys. Tests should still pass since they dont use or use mocked strava service. However databas and token key are required since current tests use same key and database. Project still is in early stages of develoment so there will be bugs. There are still quite some unhappy path error handling and testing to be done. Keeping that in mind, im looking forward for further impovements and suggestions for the project.
+Ensure your database is properly set up with the appropriate schema and environment variables.
+For trying app, you will need a valid Strava account and API keys. Tests should still pass since they dont use or use mocked strava service. However databas and token key are required since current tests use same key and database. Project still is in early stages of develoment so there will be bugs. There are still quite some unhappy path error handling and testing to be done. Keeping that in mind, im looking forward for further impovements and suggestions for the project.
