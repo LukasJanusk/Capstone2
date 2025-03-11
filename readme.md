@@ -68,23 +68,30 @@ Trait Endpoints
         Function: Used during user registration to later create a user-trait relationship.
 
 Running the Project
+
 Server
 
 To start the server, run:
 
+```bash
 npm run dev -w server
+```
 
 Client
 
 To start the client, run:
 
+```bash
 npm run dev -w client
+```
 
 Server Tests
 
 To run the server tests, use:
 
+```bash
 npm run test -w server
+```
 
 Environment Variables
 
