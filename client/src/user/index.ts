@@ -9,6 +9,7 @@ import {
 } from '@/utils/auth'
 
 export const authUser = ref<null | AuthUser>(null)
+export const stravaAuthenticated = ref<boolean>(false)
 
 const authToken = ref<string | null>(getStoredAccessToken(localStorage))
 
@@ -28,5 +29,6 @@ export const signin = async (data: UserSignin) => {
 }
 export function logout() {
   authToken.value = null
+  stravaAuthenticated.value = false
   clearStoredAccessToken(localStorage)
 }

@@ -1,29 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { StravaUser } from '../strava/index'
-import { authUserId, logout } from '../user'
+import { authUserId, logout, stravaAuthenticated } from '../user'
 import HeaderMain from '@/components/HeaderMain.vue'
 import router from '@/router'
 
-const urlParams = new URLSearchParams(window.location.search)
-const code = urlParams.get('code')
-const stravaUser = new StravaUser()
-stravaUser.accessToken = '252163ba4d9756934f7ae0e8287ca3fbdb0158b1'
-const body = ref('')
-const authenticated = ref('')
-const firstName = ref('')
-const lastName = ref('')
-const id = ref('')
-const clientId = 148802
-const getBody = async () => {
-  const data = await stravaUser.getAthlete()
-  body.value = data
-  console.log(data)
-  firstName.value = data.firstname
-  lastName.value = data.lastname
-  id.value = data.id
-}
-
+const clientId = import.meta.env.VITE_CLIENT_ID
 const authorizeUser = () => {
   const redirectUri = 'http://localhost:5173/authenticated'
   const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}/&approval_prompt=force&scope=read,activity:read_all`
@@ -39,12 +19,8 @@ const authorizeUser = () => {
   ></HeaderMain>
   <div v-if="authUserId" id="authorized">
     <div><img id="logo" src="../assets/icon.png" /></div>
-    <H2 id="instruction">To start using our app click bellow</H2>
-    <button @click="authorizeUser()">Authorize</button>
-    <div class="box" v-if="authenticated">
-      <p>{{ authenticated }}</p>
-      <button class="logo" @click="authenticated = ''">Close</button>
-    </div>
+    <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
+    <button v-if="!stravaAuthenticated" @click="authorizeUser()">Authorize Strava</button>
   </div>
 </template>
 

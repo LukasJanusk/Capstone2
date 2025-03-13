@@ -26,9 +26,4 @@ export class StravaUser {
     console.log(toJson)
     return toJson
   }
-  async getActivities(accessToken: string) {
-    const response = await fetch(
-      `https://www.strava.com/api/v3/activities/{id}?include_all_efforts=" "Authorization: Bearer [[token]]`
-    )
-  }
 }

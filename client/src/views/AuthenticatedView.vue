@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { trpc } from '@/trpc'
 import router from '@/router'
-import { access } from 'fs'
+import { stravaAuthenticated } from '@/user'
 
 const authCode = ref('')
 const accessGranter = ref(false)
@@ -19,6 +19,7 @@ onMounted(async () => {
     if (user) {
       userName.value = user.firstName
       accessGranter.value = true
+      stravaAuthenticated.value = true
     }
   }
 })
@@ -29,7 +30,7 @@ onMounted(async () => {
     <div>
       <h2>Hello, {{ userName }}</h2>
     </div>
-    <div><h1>Access granted!</h1></div>
+    <div><h1>Strava access granted!</h1></div>
     <div><h2>Thank you for choosing us!</h2></div>
     <div @click="returnHome()"><button>Return home</button></div>
   </div>
