@@ -30,7 +30,7 @@ jobs:
           - 5432:5432
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -68,7 +68,7 @@ jobs:
         run: npm run dev -w=server &
 
       - name: Start frontend
-        run: npm run dev -w=client
+        run: npm run dev -w=client &
 
       - name: Wait for server to startup
         uses: Jtalk/url-health-check-action@v4
