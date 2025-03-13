@@ -5,13 +5,12 @@ name: Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    env:  
+    env:
       DATABASE_URL: postgres://turing:turing@localhost:5432/testdb
     services:
       postgress:
@@ -28,27 +27,26 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Lint server
-      run: npm run lint -w=server
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
 
-    - name: Lint client
-      run: npm run lint -w=client
-      
-    - name: Run server database migrations
-      run: npm run migrate:latest -w=server
-      
-    - name: Test server
-      run: npm run test -w=server
+      - name: Install dependencies
+        run: npm ci
 
+      - name: Lint server
+        run: npm run lint -w=server
+
+      - name: Lint client
+        run: npm run lint -w=client
+
+      - name: Run server database migrations
+        run: npm run migrate:latest -w=server
+
+      - name: Test server
+        run: npm run test -w=server
