@@ -76,6 +76,6 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:5173',
     timeout: 5 * 1000,
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: true,
   },
 })
