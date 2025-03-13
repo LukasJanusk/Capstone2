@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { trpc } from '@/trpc'
 
+// URL to a song will be received from backend
 const songUrl = ref(
   'https://files.topmediai.com/aimusic/api/6ad2dc9a-ee46-4d83-8d1f-682efe46c1f9-audio.mp3'
 )
@@ -15,7 +16,6 @@ const getSong = async () => {
       'Verse 1 🔥 Push it to the limit, feel the fire rise No looking back now, see it in my eyes Heartbeat racing, I’m breaking throughStronger than ever, nothing I can’t do Pre-Chorus ⚡ Run, jump, sweat, let it all igniteTurn up the volume, feel the bass take flight One more rep, one more mile Keep it going, make it worthwhile Chorus 🚀 Rise up, no stopping now Feel the power, shake the ground Lights flash, we own the night Keep on moving, reach new heights Drop (Instrumental Build-Up)',
     title: 'Boss rhymes',
   })
-
   songUrl.value = songs[0].audio_file
   waiting.value = false
 }

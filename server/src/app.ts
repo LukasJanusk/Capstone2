@@ -20,7 +20,6 @@ export default function createApp(db: Database) {
   const topmediaaiService = createMusicGenerationService(config.topmediaiKey)
   app.use(cors())
   app.use(express.json())
-
   app.use('/api/trpc', (req, res, next) => {
     // eslint-disable-next-line no-console
     console.log(`Incoming request: ${req.method} ${req.originalUrl}`)

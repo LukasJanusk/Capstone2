@@ -13,10 +13,7 @@ beforeEach(() => {
 
 const CLIENT_SECRET_TEST = 'testsecret'
 const CLIENT_ID_TEST = 'test_id'
-vi.stubGlobal(
-  'fetch',
-  vi.fn(() => mockStravaResponse())
-)
+vi.stubGlobal('fetch', () => mockStravaResponse())
 const stravaService = createStravaService(CLIENT_ID_TEST, CLIENT_SECRET_TEST)
 
 describe('getUserTokens', () => {

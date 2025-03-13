@@ -10,8 +10,8 @@ export default publicProcedure
       // if "object_type": "athlete" update or delete
       // get access token from db
       if (input.aspect_type === 'create' && input.object_type === 'activity') {
-        const activityData = await ctx.stravaService.getActivityById(
-          String(input.object_id),
+        const activityData = await ctx.stravaService!.getActivityById(
+          input.object_id,
           'f4a9609543dc2f282b4f5e8b18bbfb14f7f65e74' // !!!PLACEHOLDER ---- This will be received from DB
         )
         // TODO: get user traits from db

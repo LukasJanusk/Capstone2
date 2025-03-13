@@ -19,6 +19,6 @@ export default authenticatedProcedure
     const publicUser = await ctx.repos.userRepository.getUserPublic(
       ctx.authUser.id
     )
-    // returns object of public User
+
     return publicUser
   })

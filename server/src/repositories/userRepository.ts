@@ -7,7 +7,7 @@ import {
   type ApplicationUser,
   type UserPublic,
 } from '@server/entities/user'
-import type { Insertable, Selectable } from 'kysely'
+import type { Insertable, Selectable, Updateable } from 'kysely'
 
 export function userRepository(db: Database) {
   return {
@@ -101,6 +101,17 @@ export function userRepository(db: Database) {
         .selectFrom('user')
         .where('user.id', '=', userId)
         .select(userKeysPublic)
+        .executeTakeFirstOrThrow()
+    },
+    async updateEmail(
+      userId: number,
+      user: Updateable<User>
+    ): Promise<Updateable<User>> {
+      return db
+        .updateTable('user')
+        .set(user)
+        .where('user.id', '=', userId)
+        .returning(['user.email', 'user.id'])
         .executeTakeFirstOrThrow()
     },
   }

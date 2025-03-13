@@ -163,3 +163,15 @@ describe('updateTokens', () => {
     expect(updated.refreshToken).toEqual('updatedRefresh')
   })
 })
+describe('updateEmail', () => {
+  it('updates', async () => {
+    const user = fakeUser()
+    const [newUser] = await insertAll(db, 'user', user)
+
+    const newEmail = { ...user, email: 'new@mail.com' }
+
+    const changed = await repository.updateEmail(newUser.id, newEmail)
+
+    expect(changed).toEqual({ id: newUser.id, email: 'new@mail.com' })
+  })
+})

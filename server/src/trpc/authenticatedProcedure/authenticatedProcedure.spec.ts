@@ -1,4 +1,5 @@
 import { vi } from 'vitest'
+// import jsonwebtoken from 'jsonwebtoken'
 import { authContext, requestContext } from '@tests/utils/context'
 
 import { createCallerFactory, router } from '..'
@@ -7,9 +8,11 @@ import { authenticatedProcedure } from '.'
 const VALID_TOKEN = 'valid-token'
 
 vi.mock('jsonwebtoken', () => ({
-  verify: (token: string) => {
-    if (token !== VALID_TOKEN) throw new Error('Invalid token')
-    return { user: { id: 2, email: 'valid@email.com' } }
+  default: {
+    verify: (token: string) => {
+      if (token !== VALID_TOKEN) throw new Error('Invalid token')
+      return { user: { id: 2, email: 'valid@email.com' } }
+    },
   },
 }))
 const routes = router({
