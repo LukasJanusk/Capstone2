@@ -26,6 +26,10 @@ export default function createApp(db: Database) {
     next()
   })
 
+  app.use('/api/health', (_, res) => {
+    res.status(200).send('OK')
+  })
+
   app.use(
     '/api/trpc',
     createExpressMiddleware({
