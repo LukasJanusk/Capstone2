@@ -1,0 +1,54 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Tests
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    env:  
+      DATABASE_URL: postgres://turing:turing@localhost:5432/testdb
+    services:
+      postgress:
+        image: postgres:16.1-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: capstone2
+        ports:
+          - 5432:5432
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        
+    - name: Install dependencies
+    - run: npm ci
+    
+    - name: Lint server
+      run: npm run lint -w=server
+
+    - name: Lint client
+      run: npm run lint -w=client
+      
+    - name: Run server database migrations
+      run: npm run migrate:latest -w=server
+      
+    - name: Test server
+      run: npm run test -w=server
+
