@@ -4,6 +4,7 @@ import {
   type CreateExpressContextOptions,
 } from '@trpc/server/adapters/express'
 import cors from 'cors'
+import { renderTrpcPanel } from 'trpc-panel'
 import config from './config'
 import { type Context } from './trpc'
 import { appRouter } from './controllers'
@@ -43,5 +44,14 @@ export default function createApp(db: Database) {
       router: appRouter,
     })
   )
+  if (config.env === 'development') {
+    app.use('/api/v1/trpc-panel', (_, res) => {
+      res.send(
+        renderTrpcPanel(appRouter, {
+          url: `http://localhost:${config.port}/api/trpc`,
+        })
+      )
+    })
+  }
   return app
 }
