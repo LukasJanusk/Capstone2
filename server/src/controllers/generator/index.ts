@@ -1,4 +1,4 @@
 import { router } from '@server/trpc'
-import getSongs from './getSongs'
+import requestSong from './requestSong'
 
-export default router({ getSongs })
+export default router({ requestSong })

@@ -1,17 +1,18 @@
 /* eslint-disable no-console */
 import { type MusicGenerationService } from '@server/entities/services/MusicGenerationService'
-import { parseGenerationTaskResponse } from './schema'
+import { TRPCError } from '@trpc/server'
+import { parseGenerationTaskResponse, type SongGenerationTask } from './schema'
 
 export default function createMusicGenerationService(
   apiKey: string
 ): MusicGenerationService {
-  const getSongs = async (
+  const requestSong = async (
     title: string, // 80 max
     style: string, // 200 max
     prompt: string, // 3000 max
     model: string = 'V3_5',
     callBackUrl: string = 'url' // !!! ADD port from config later
-  ): Promise<string> => {
+  ): Promise<SongGenerationTask> => {
     try {
       const response = await fetch(
         'https://apibox.erweima.ai/api/v1/generate',
@@ -34,19 +35,20 @@ export default function createMusicGenerationService(
       )
 
       const data = await response.json()
-      const parsed = parseGenerationTaskResponse(data)
 
-      if (parsed.data && parsed.data.taskId) return parsed.data.taskId
-      throw new Error('Failed to start start Song generation')
+      return parseGenerationTaskResponse(data)
     } catch (error) {
       console.error(
         error instanceof Error
           ? error.message
           : 'Unexpected error occured creating song generation request'
       )
-      throw error
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Music API failed to generate a new task',
+      })
     }
   }
 
-  return { getSongs }
+  return { requestSong }
 }

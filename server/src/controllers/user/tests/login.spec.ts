@@ -3,11 +3,18 @@ import { fakeUser } from '@server/entities/tests/fakes'
 import { createCallerFactory } from '@server/trpc'
 import { wrapInRollbacks } from '@tests/utils/transactions'
 import { insertAll } from '@tests/utils/records'
+import { createFakeStravaService } from '@server/controllers/strava/services/tests/utils/fakeService'
+import createMusicGenerationService from '@server/controllers/generator/model'
 import userRouter from '..'
 
 const db = await wrapInRollbacks(createTestDatabase())
 const createCaller = createCallerFactory(userRouter)
-const caller = createCaller({ db })
+const stravaService = createFakeStravaService(
+  'valid_client_id',
+  'valid_client_secret'
+)
+const songGenerationService = createMusicGenerationService('valid_api_key')
+const caller = createCaller({ db, stravaService, songGenerationService })
 
 it('returns webtoken when signed in', async () => {
   const user = fakeUser({

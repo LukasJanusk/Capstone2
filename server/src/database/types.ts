@@ -12,6 +12,12 @@ export type Generated<T> =
 
 export type Numeric = ColumnType<string, number | string, number | string>
 
+export interface GenerationTask {
+  id: Generated<number>
+  taskId: string
+  userId: number
+}
+
 export interface Genre {
   id: Generated<number>
   name: string
@@ -51,6 +57,7 @@ export interface UserTraits {
 }
 
 export interface DB {
+  generationTask: GenerationTask
   genre: Genre
   stravaTokens: StravaTokens
   trait: Trait

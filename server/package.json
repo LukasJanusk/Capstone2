@@ -4,6 +4,8 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "vitest",
+    "build": "tsc && npx tsc-alias",
+    "prod": "npm run migrate:latest:prod && npm run start",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx --fix",
     "dev": "tsx watch src",
     "migrate:latest": "tsx src/database/migrate/latest",
