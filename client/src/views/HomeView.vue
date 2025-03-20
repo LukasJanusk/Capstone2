@@ -2,11 +2,11 @@
 import { authUserId, logout, stravaAuthenticated } from '../user'
 import HeaderMain from '@/components/HeaderMain.vue'
 import router from '@/router'
+import { REDIRECT_URI } from '@/config'
 
 const clientId = import.meta.env.VITE_CLIENT_ID
 const authorizeUser = () => {
-  const redirectUri = 'http://localhost:5173/authenticated'
-  const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${redirectUri}/&approval_prompt=force&scope=read,activity:read_all`
+  const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${REDIRECT_URI}/&approval_prompt=force&scope=read,activity:read_all`
   window.location.href = authUrl
 }
 </script>

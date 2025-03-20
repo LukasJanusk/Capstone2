@@ -4,14 +4,17 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "vitest",
-    "build": "tsc && npx tsc-alias",
+    "build": "tsc -p tsconfig.build.json && npx tsc-alias",
     "prod": "npm run migrate:latest:prod && npm run start",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx --fix",
     "dev": "tsx watch src",
+    "start": "npm run node-es ./dist/index.js",
     "migrate:latest": "tsx src/database/migrate/latest",
+    "migrate:latest:prod": "npm run node-es dist/database/migrate/latest.js",
     "migrate:new": "tsx ./src/database/migrate/new",
     "gen:types": "kysely-codegen --camel-case --dialect postgres --out-file src/database/types.ts && prettier --write src/database/types.ts",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "node-es": "node --import 'data:text/javascript,import { register } from \"node:module\"; import { pathToFileURL } from \"node:url\"; register(\"./loader.js\", pathToFileURL(\"./\"));'"
   },
   "keywords": [],
   "author": "",
@@ -39,13 +42,13 @@
     "prettier": "^3.2.5",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.7",
+    "chance": "^1.1.12"
   },
   "dependencies": {
     "@trpc/server": "^10.45.2",
     "@types/chance": "^1.1.6",
     "bcrypt": "^5.1.1",
-    "chance": "^1.1.12",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",

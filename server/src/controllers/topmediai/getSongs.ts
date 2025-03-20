@@ -10,13 +10,6 @@ export default publicProcedure
       title: z.string().min(1).max(100),
     })
   )
-  .mutation(async ({ input, ctx }) => {
+  .mutation(async () => {
     console.log('trying to access songs in api')
-    const songs = await ctx.songGenerationService!.getSongs(
-      input.prompt,
-      input.lyric,
-      input.title
-    )
-    console.log(songs)
-    return songs
   })

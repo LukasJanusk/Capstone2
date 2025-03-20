@@ -1,9 +1,16 @@
 import { vi } from 'vitest'
-// import jsonwebtoken from 'jsonwebtoken'
 import { authContext, requestContext } from '@tests/utils/context'
 
+import createMusicGenerationService from '@server/controllers/generator/model'
+import { createFakeStravaService } from '@server/controllers/strava/services/tests/utils/fakeService'
 import { createCallerFactory, router } from '..'
 import { authenticatedProcedure } from '.'
+
+const stravaService = createFakeStravaService(
+  'valid_client_id',
+  'valid_client_secret'
+)
+const songGenerationService = createMusicGenerationService('valid_api_key')
 
 const VALID_TOKEN = 'valid-token'
 
@@ -33,6 +40,8 @@ it('should pass if user is already authenticated', async () => {
 it('should pass if user provides a valid token', async () => {
   const usingValidToken = createCaller({
     db,
+    stravaService,
+    songGenerationService,
     req: {
       header: () => `Bearer ${VALID_TOKEN}`,
     } as any,

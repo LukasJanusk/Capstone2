@@ -1,6 +1,14 @@
 import { fakeAuthUser } from '@server/entities/tests/fakes'
 import { authUserSchema, type AuthUser } from '@server/entities/user'
 import type { Context, ContextMinimal } from '@server/trpc'
+import createMusicGenerationService from '@server/controllers/generator/model'
+import { createFakeStravaService } from '@server/controllers/strava/services/tests/utils/fakeService'
+
+const stravaService = createFakeStravaService(
+  'valid_client_id',
+  'valid_client_secret'
+)
+const songGenerationService = createMusicGenerationService('valid_api_key')
 
 export const requestContext = (
   context: Partial<Context> & ContextMinimal
@@ -12,6 +20,8 @@ export const requestContext = (
   res: {
     cookie: () => undefined,
   } as any,
+  stravaService,
+  songGenerationService,
   ...context,
 })
 
@@ -20,6 +30,8 @@ export const authContext = (
   user: AuthUser = fakeAuthUser()
 ): Context => ({
   authUser: authUserSchema.parse(user),
+  stravaService,
+  songGenerationService,
   ...context,
 })
 

@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server'
 import { parseResponse, type Song } from './schema'
 
 export default function createTopmediaiService(apiKey: string) {
@@ -23,11 +24,10 @@ export default function createTopmediaiService(apiKey: string) {
     if (!response.ok) {
       throw new Error(`Failed to fetch songs: ${response.statusText}`)
     }
-    console.log('response from api received')
     const data = await response.json()
-    console.log(data.message)
+    if (!data)
+      throw new TRPCError({ code: 'BAD_REQUEST', message: 'API call failed' })
     const parsed = parseResponse(data).data
-    console.log(`parsed now returning: ${parsed}`)
 
     return parsed
   }

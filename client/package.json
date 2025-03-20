@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "build": "vite build",
     "dev": "vite",
-    "build": "vue-tsc -b && vite build",
     "preview": "vite preview",
     "format": "prettier --write src/",
     "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx --fix",
@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@trpc/client": "^10.45.2",
-    "jsonwebtoken": "^9.0.2",
     "kysely": "^0.27.5",
     "kysely-codegen": "^0.17.0",
     "playwright": "^1.51.0",
