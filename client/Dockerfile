@@ -16,8 +16,6 @@ COPY . .
 # If we want to have custom env variables passed to the client build
 # we would need to set them here as build args.
 # ARG VITE_MY_CUSTOM_FRONT_END_ENV_VARIABLE
-ENV VITE_CLIENT_ID=148802
-
 # Switch to the client folder
 WORKDIR /app/client
 
@@ -25,7 +23,7 @@ WORKDIR /app/client
 RUN npm run build
 
 # Stage 2: Serve the application with Nginx
-FROM nginx:1.27.0-alpine3.19 as nginx
+FROM nginx:1.27.0-alpine3.19 AS nginx
 
 # Delete the default welcome page.
 RUN rm /usr/share/nginx/html/* -rf
@@ -39,7 +37,7 @@ COPY --from=builder /app/client/dist /usr/share/nginx/html
 # that can be used to generate the actual configuration file. Here we will set
 # an NGINX-specific environment variable that will be used to specify the output directory,
 # which is the default NGINX config directory.
-ENV NGINX_ENVSUBST_OUTPUT_DIR '/etc/nginx/conf.d'
+ENV NGINX_ENVSUBST_OUTPUT_DIR='/etc/nginx/conf.d'
 
 # Copy the Nginx configuration
 COPY client/nginx/default.conf.template /etc/nginx/templates/default.conf.template

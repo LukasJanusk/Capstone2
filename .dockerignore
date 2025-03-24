@@ -24,3 +24,6 @@
 # Temporary files
 **/tmp
 **/temp
+
+containers.json
+public-endpoint.json
