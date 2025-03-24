@@ -31,8 +31,14 @@ describe('getAll', () => {
 
     const inDb = await repository.getAllPublic()
     expect(inDb.length).toEqual(2 + currentTraits.length)
-    expect(inDb[0]).toEqual({ id: expect.any(Number), name: traits[0].name })
-    expect(inDb[1]).toEqual({ id: expect.any(Number), name: traits[1].name })
+    expect(inDb).toContainEqual({
+      id: expect.any(Number),
+      name: traits[0].name,
+    })
+    expect(inDb).toContainEqual({
+      id: expect.any(Number),
+      name: traits[1].name,
+    })
   })
 })
 describe('findByIdPublic', () => {
