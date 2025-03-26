@@ -5,6 +5,7 @@ import { wrapInRollbacks } from '@tests/utils/transactions'
 import { insertAll } from '@tests/utils/records'
 import { createFakeStravaService } from '@server/controllers/strava/services/tests/utils/fakeService'
 import createMusicGenerationService from '@server/controllers/generator/model'
+import { logger } from '@server/logger'
 import userRouter from '..'
 
 const db = await wrapInRollbacks(createTestDatabase())
@@ -14,7 +15,12 @@ const stravaService = createFakeStravaService(
   'valid_client_secret'
 )
 const songGenerationService = createMusicGenerationService('valid_api_key')
-const caller = createCaller({ db, stravaService, songGenerationService })
+const caller = createCaller({
+  db,
+  stravaService,
+  songGenerationService,
+  logger,
+})
 
 it('returns webtoken when signed in', async () => {
   const user = fakeUser({

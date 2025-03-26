@@ -15,19 +15,21 @@ export default publicProcedure
   .input(userSigninSchema)
   .mutation(async ({ input: { email, password }, ctx }) => {
     const user = await ctx.repos.userRepository.findByEmail(email)
-    if (!user)
+    if (!user) {
+      ctx.logger.info({ email }, 'POST user.login email not found')
       throw new TRPCError({
         code: 'UNAUTHORIZED',
         message: 'Email not found',
       })
-
+    }
     const match = await compare(password, user.password)
-    if (!match)
+    if (!match) {
+      ctx.logger.info({ email }, 'POST user.login Incorrect password')
       throw new TRPCError({
         code: 'UNAUTHORIZED',
         message: 'Incorrect password',
       })
-
+    }
     const tokenPayload = prepareTokenPayload(user)
 
     const accessToken = jsonwebtoken.sign(tokenPayload, tokenKey, {

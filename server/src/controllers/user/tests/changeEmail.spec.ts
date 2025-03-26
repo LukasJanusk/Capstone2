@@ -4,13 +4,14 @@ import { fakeUser } from '@server/entities/tests/fakes'
 import { insertAll } from '@tests/utils/records'
 import { authContext } from '@tests/utils/context'
 import { createTestDatabase } from '@tests/utils/database'
+import { logger } from '@server/logger'
 import userRouter from '../index'
 
 const db = await wrapInRollbacks(createTestDatabase())
 const createCaller = createCallerFactory(userRouter)
 
 const [user] = await insertAll(db, 'user', fakeUser())
-const caller = createCaller(authContext({ db }, user))
+const caller = createCaller(authContext({ db, logger }, user))
 
 it('returns user id and email changed', async () => {
   const changedEmail = await caller.changeEmail({

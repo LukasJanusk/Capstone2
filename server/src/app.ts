@@ -11,6 +11,7 @@ import { appRouter } from './controllers'
 import { createStravaService } from './controllers/strava/services'
 import createMusicGenerationService from './controllers/generator/model'
 import type { Database } from './database'
+import { logger } from './logger'
 
 export default function createApp(db: Database) {
   const app = express()
@@ -18,7 +19,9 @@ export default function createApp(db: Database) {
     config.stravaClientId,
     config.stravaClientSecret
   )
+  logger.info('Strava service created')
   const topmediaaiService = createMusicGenerationService(config.topmediaiKey)
+  logger.info('Music generation service created')
   app.use(cors())
   app.use(express.json())
   app.use('/api/trpc', (req, res, next) => {
@@ -40,6 +43,7 @@ export default function createApp(db: Database) {
         res,
         stravaService,
         songGenerationService: topmediaaiService,
+        logger,
       }),
       router: appRouter,
     })

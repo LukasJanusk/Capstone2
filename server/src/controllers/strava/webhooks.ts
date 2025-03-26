@@ -1,18 +1,30 @@
+import provideRepos from '@server/trpc/provideRepos'
+import { userRepository } from '@server/repositories/userRepository'
+import { traitRepository } from '@server/repositories/traitRepository'
 import { publicProcedure } from '../../trpc'
 import { webhookSchema } from './services/schema'
 
 export default publicProcedure
+  .use(provideRepos({ userRepository, traitRepository }))
   .input(webhookSchema)
   .mutation(async ({ input, ctx }) => {
     if (ctx.req?.method === 'POST') {
       // TODO: Process the webhook payload (e.g., save to DB)
       // if "object_type": "activity" get activity data
       // if "object_type": "athlete" update or delete
-      // get access token from db
+
       if (input.aspect_type === 'create' && input.object_type === 'activity') {
-        const activityData = await ctx.stravaService!.getActivityById(
+        const stravaUserId = input.owner_id
+        ctx.logger.info(
+          { id: stravaUserId },
+          'GET strava.webhooks received new activity'
+        )
+        const tokens =
+          await ctx.repos.userRepository.getTokensByStravaUserId(stravaUserId)
+
+        const activityData = await ctx.stravaService.getActivityById(
           input.object_id,
-          'f4a9609543dc2f282b4f5e8b18bbfb14f7f65e74' // !!!PLACEHOLDER ---- This will be received from DB
+          tokens.accessToken
         )
         // TODO: get user traits from db
         // TODO: Pass user trait data and workout data to process promt. Might need to send request to one of other routers to handle AI api logic

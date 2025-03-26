@@ -15,6 +15,6 @@ export default authenticatedProcedure
       ctx.authUser.id,
       input
     )
-
+    ctx.logger.info({ userId: updated.id }, 'User email updated')
     return updated
   })

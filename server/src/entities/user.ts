@@ -18,7 +18,7 @@ export const userSchema = z.object({
       /[!@#$%^&*(),.?":{}|<>]/,
       'Password must contain at least one special character'
     ),
-  traits: z.array(traitSchema),
+  traits: z.array(traitSchema).min(3, 'Must provide at least 3 traits'),
   strava: z.object({
     accessToken: z.string().nullable().default(null),
     refreshToken: z.string().nullable().default(null),

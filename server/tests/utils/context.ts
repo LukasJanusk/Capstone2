@@ -3,6 +3,7 @@ import { authUserSchema, type AuthUser } from '@server/entities/user'
 import type { Context, ContextMinimal } from '@server/trpc'
 import createMusicGenerationService from '@server/controllers/generator/model'
 import { createFakeStravaService } from '@server/controllers/strava/services/tests/utils/fakeService'
+import { logger } from '@server/logger'
 
 const stravaService = createFakeStravaService(
   'valid_client_id',
@@ -22,6 +23,7 @@ export const requestContext = (
   } as any,
   stravaService,
   songGenerationService,
+  logger,
   ...context,
 })
 
@@ -32,6 +34,7 @@ export const authContext = (
   authUser: authUserSchema.parse(user),
   stravaService,
   songGenerationService,
+  logger,
   ...context,
 })
 

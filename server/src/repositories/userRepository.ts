@@ -85,6 +85,15 @@ export function userRepository(db: Database) {
         .where('stravaTokens.userId', '=', userId)
         .executeTakeFirstOrThrow()
     },
+    async getTokensByStravaUserId(
+      stravaUserId: number
+    ): Promise<Selectable<StravaTokens>> {
+      return db
+        .selectFrom('stravaTokens')
+        .selectAll()
+        .where('stravaTokens.stravaUserId', '=', stravaUserId)
+        .executeTakeFirstOrThrow()
+    },
     async updateTokens(
       userId: number,
       tokens: Partial<Insertable<StravaTokens>>

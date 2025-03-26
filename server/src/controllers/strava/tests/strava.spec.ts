@@ -4,6 +4,7 @@ import { fakeUser } from '@server/entities/tests/fakes'
 import { insertAll } from '@tests/utils/records'
 import { wrapInRollbacks } from '@tests/utils/transactions'
 import { createTestDatabase } from '@tests/utils/database'
+import { logger } from '@server/logger'
 import stravaRouter from '..'
 import { createFakeStravaService } from '../services/tests/utils/fakeService'
 
@@ -11,7 +12,7 @@ const createCaller = createCallerFactory(stravaRouter)
 const db = await wrapInRollbacks(createTestDatabase())
 const stravaService = createFakeStravaService('valid_id', 'valid_secret')
 const [user] = await insertAll(db, 'user', fakeUser())
-const caller = createCaller(authContext({ db, stravaService }, user))
+const caller = createCaller(authContext({ db, stravaService, logger }, user))
 
 it('returns object with user id when tokens are accessed', async () => {
   const response = await caller.getAccess({ code: 'valid_code' })
