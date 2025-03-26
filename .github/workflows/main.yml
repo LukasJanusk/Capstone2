@@ -160,7 +160,7 @@ jobs:
               },
               "environment": {
                 "API_PROXY_PASS": "http://localhost:3000",
-                "STRAVA_CLIENT_ID": "${{secrets.STRAVA_CLIENT_ID}}"
+                "VITE_CLIENT_ID": "${{secrets.STRAVA_CLIENT_ID}}"
               }
             },
             "server": {
