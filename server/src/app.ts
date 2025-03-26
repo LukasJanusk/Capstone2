@@ -20,7 +20,9 @@ export default function createApp(db: Database) {
     config.stravaClientSecret
   )
   logger.info('Strava service created')
-  const topmediaaiService = createMusicGenerationService(config.topmediaiKey)
+  const songGenerationService = createMusicGenerationService(
+    config.topmediaiKey
+  )
   logger.info('Music generation service created')
   app.use(cors())
   app.use(express.json())
@@ -42,7 +44,7 @@ export default function createApp(db: Database) {
         req,
         res,
         stravaService,
-        songGenerationService: topmediaaiService,
+        songGenerationService,
         logger,
       }),
       router: appRouter,

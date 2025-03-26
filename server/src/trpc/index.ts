@@ -14,7 +14,7 @@ export type Context = {
   authUser?: AuthUser
   repos?: Partial<Repositories>
   stravaService: StravaService
-  songGenerationService: Partial<MusicGenerationService>
+  songGenerationService: MusicGenerationService
   logger: Logger
 }
 export type ContextMinimal = Pick<Context, 'db'>
