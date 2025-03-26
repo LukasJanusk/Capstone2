@@ -2,11 +2,18 @@
 import { authUserId, logout, stravaAuthenticated } from '../user'
 import HeaderMain from '@/components/HeaderMain.vue'
 import router from '@/router'
-import { REDIRECT_URI } from '@/config'
+import { trpc } from '../trpc/index'
+import { onMounted, ref } from 'vue'
 
-const clientId = import.meta.env.VITE_CLIENT_ID
+const clientId = ref('')
+onMounted(async () => {
+  clientId.value = await trpc.strava.getClientId.query()
+})
+
 const authorizeUser = () => {
-  const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=${REDIRECT_URI}/&approval_prompt=force&scope=read,activity:read_all`
+  const currentUrl = window.location.href
+  const redirectUrl = currentUrl + 'authenticated'
+  const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId.value}&response_type=code&redirect_uri=${redirectUrl}/&approval_prompt=force&scope=read,activity:read_all`
   window.location.href = authUrl
 }
 </script>
