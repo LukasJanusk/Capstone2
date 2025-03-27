@@ -136,6 +136,23 @@ describe('storeTokens', () => {
 
     expect(stored).toEqual({ id: expect.any(Number), ...tokens })
   })
+  it('updates tokens if user already has stored tokens', async () => {
+    const [user] = await insertAll(db, 'user', fakeUser())
+    const tokens = fakeStravaTokens({ userId: user.id })
+    await insertAll(db, 'stravaTokens', tokens)
+    const updatedTokens = {
+      ...tokens,
+      accessToken: '123312312312',
+      refreshToken: '3123123123',
+    }
+
+    const updated = await repository.storeTokens(updatedTokens)
+
+    expect(updated).toEqual({
+      id: expect.any(Number),
+      ...updatedTokens,
+    })
+  })
 })
 describe('getTokens', () => {
   it('returns stored tokens', async () => {

@@ -39,7 +39,7 @@ export async function up(db: Kysely<any>) {
     )
     .addColumn('access_token', 'text')
     .addColumn('refresh_token', 'text')
-    .addColumn('user_id', 'integer', (c) => c.notNull())
+    .addColumn('user_id', 'integer', (c) => c.notNull().unique())
     .execute()
 
   await db.schema

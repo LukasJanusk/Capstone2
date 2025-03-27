@@ -44,7 +44,7 @@ const config = schema.parse({
   stravaClientSecret: env.STRAVA_CLIENT_SECRET,
   stravaSubscribtionKey: env.STRAVA_SUBSCRIBTION_SECRET,
   database: {
-    connectionString: env.DATABASE_URL,
+    connectionString: isDevTest ? env.DEV_DATABASE_URL : env.DATABASE_URL,
   },
   topmediaiKey: env.TOP_MEDIAI_KEY,
 })

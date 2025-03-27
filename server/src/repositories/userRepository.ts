@@ -75,6 +75,12 @@ export function userRepository(db: Database) {
       return db
         .insertInto('stravaTokens')
         .values(tokens)
+        .onConflict((oc) =>
+          oc.column('userId').doUpdateSet({
+            accessToken: tokens.accessToken,
+            refreshToken: tokens.refreshToken,
+          })
+        )
         .returningAll()
         .executeTakeFirstOrThrow()
     },
