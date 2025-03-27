@@ -3,6 +3,7 @@ import { userRepository } from '@server/repositories/userRepository'
 import { traitRepository } from '@server/repositories/traitRepository'
 import { publicProcedure } from '../../trpc'
 import { webhookSchema } from './services/schema'
+import { isExpired } from './services/tests/utils/isExipred'
 
 export default publicProcedure
   .use(provideRepos({ userRepository, traitRepository }))
@@ -16,12 +17,20 @@ export default publicProcedure
       if (input.aspect_type === 'create' && input.object_type === 'activity') {
         const stravaUserId = input.owner_id
         ctx.logger.info(
-          { id: stravaUserId },
-          'GET strava.webhooks received new activity'
+          { activityId: input.object_id },
+          'POST strava.webhooks received new activity'
         )
-        const tokens =
+        let tokens =
           await ctx.repos.userRepository.getTokensByStravaUserId(stravaUserId)
-
+        if (isExpired(tokens.expiresAt)) {
+          const refreshedTokens =
+            await ctx.stravaService.refreshUserAccessToken(tokens.refreshToken)
+          tokens = await ctx.repos.userRepository.storeTokens({
+            ...tokens,
+            accessToken: refreshedTokens.access_token,
+            refreshToken: refreshedTokens.refresh_token,
+          })
+        }
         const activityData = await ctx.stravaService.getActivityById(
           input.object_id,
           tokens.accessToken

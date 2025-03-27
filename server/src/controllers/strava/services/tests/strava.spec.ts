@@ -119,7 +119,7 @@ describe('getActivityById', async () => {
       )
     )
     const response = await stravaService.getActivityById(123, 'userToken')
-    expect(response.athlete.id).toEqual(athlete.id)
+    expect(response!.athlete.id).toEqual(athlete.id)
   })
   it('throws an error when activity wrong format', async () => {
     vi.stubGlobal(
@@ -133,8 +133,6 @@ describe('getActivityById', async () => {
         })
       )
     )
-    await expect(stravaService.getActivityById(1, 'userToken')).rejects.toThrow(
-      /athlete/i
-    )
+    expect(await stravaService.getActivityById(1, 'userToken')).toBeNull()
   })
 })

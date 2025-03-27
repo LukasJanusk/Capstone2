@@ -1,4 +1,10 @@
-import type { User, Trait, Genre, StravaTokens } from '@server/database'
+import type {
+  User,
+  Trait,
+  Genre,
+  StravaTokens,
+  Activity,
+} from '@server/database'
 import { random } from '@server/tests/utils/random'
 import type { Insertable } from 'kysely'
 import type { AuthUser } from '../user'
@@ -65,5 +71,25 @@ export const fakeStravaTokens = <T extends Partial<Insertable<StravaTokens>>>(
     accessToken: random.string(),
     refreshToken: random.string(),
     stravaUserId: random.integer({ min: 1, max: 100 }),
+    expiresAt: random.integer({ min: 1, max: 100 }),
     ...overrides,
   }) satisfies Insertable<StravaTokens>
+
+export const fakeActivity = <T extends Partial<Insertable<Activity>>>(
+  overrides: T = {} as T
+) =>
+  ({
+    userId: random.integer({ min: 1, max: 1000 }),
+    type: random.pickone(['ride', 'static', 'run']),
+    origin: 'strava',
+    originId: random.string({ length: 20 }),
+    title: random.string({ length: 30 }),
+    duration: random.integer({ min: 1, max: 200000 }),
+    heartrate: random.integer({ min: 1, max: 300 }),
+    calories: random.integer({ min: 1, max: 20000 }),
+    speedAverage: random.integer({ min: 1, max: 1000 }),
+    distance: random.integer({ min: 1, max: 20000 }),
+    cadence: random.integer({ min: 1, max: 150 }),
+    startTime: new Date().toISOString(),
+    ...overrides,
+  }) satisfies Insertable<Activity>

@@ -15,7 +15,7 @@ const tokenSchema = z.object({
   access_token: z.string(),
   athlete: stravaUserSchema,
 })
-
+const refreshTokenSchema = tokenSchema.omit({ athlete: true })
 export const webhookSchema = z.object({
   aspect_type: z.enum(['update', 'create', 'delete']),
   event_time: z.coerce.number().int().positive(),
@@ -54,6 +54,7 @@ export const stravaActivitySchema = z.object({
   kilojoules: z.number().positive().optional().nullable(),
   device_watts: z.boolean().optional().nullable(),
   has_heartrate: z.boolean().optional().nullable(),
+  average_heartrate: z.number().optional().nullable(),
   max_watts: z.number().optional().nullable(),
   elev_high: z.number().optional().nullable(),
   elev_low: z.number().optional().nullable(),
@@ -73,3 +74,6 @@ export const parseWebhook = (data: unknown) => webhookSchema.parse(data)
 export type StravaActivity = z.infer<typeof stravaActivitySchema>
 export const parseStravaActivity = (data: unknown) =>
   stravaActivitySchema.parse(data)
+
+export const parseRefreshTokenResponse = (data: unknown) =>
+  refreshTokenSchema.parse(data)

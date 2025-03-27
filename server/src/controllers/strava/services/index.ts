@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { TRPCError } from '@trpc/server'
 import {
+  parseRefreshTokenResponse,
   parseStravaActivity,
   parseStravaAthlete,
   parseTokenResponse,
@@ -55,7 +56,7 @@ export const createStravaService = (
 
       const data = await response.json()
 
-      return parseTokenResponse(data)
+      return parseRefreshTokenResponse(data)
     } catch (error) {
       console.error(
         error instanceof Error ? error.message : 'Unknown error occurred'
@@ -90,7 +91,7 @@ export const createStravaService = (
   async getActivityById(
     activityId: number,
     userAccessToken: string
-  ): Promise<StravaActivity> {
+  ): Promise<StravaActivity | null> {
     try {
       const response = await fetch(
         `https://www.strava.com/api/v3/activities/${activityId}`,
@@ -115,7 +116,7 @@ export const createStravaService = (
       console.error(
         error instanceof Error ? error.message : 'Unknown error occurred'
       )
-      throw error
+      return null
     }
   },
 })

@@ -8,6 +8,10 @@ export const logger = pino({
     'refresh_token',
     'firstName',
     'lastName',
+    'lastname',
+    'firstname',
+    'first_name',
+    'last_name',
   ],
   transport: {
     target: 'pino-pretty',

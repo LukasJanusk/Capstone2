@@ -12,6 +12,22 @@ export type Generated<T> =
 
 export type Numeric = ColumnType<string, number | string, number | string>
 
+export interface Activity {
+  cadence: number | null
+  calories: number | null
+  distance: number | null
+  duration: number | null
+  heartrate: number | null
+  id: Generated<number>
+  origin: string
+  originId: string
+  speedAverage: number | null
+  startTime: string
+  title: string | null
+  type: string
+  userId: number
+}
+
 export interface GenerationTask {
   id: Generated<number>
   taskId: string
@@ -25,6 +41,7 @@ export interface Genre {
 
 export interface StravaTokens {
   accessToken: string
+  expiresAt: number
   id: Generated<number>
   refreshToken: string
   stravaUserId: number
@@ -57,6 +74,7 @@ export interface UserTraits {
 }
 
 export interface DB {
+  activity: Activity
   generationTask: GenerationTask
   genre: Genre
   stravaTokens: StravaTokens

@@ -14,6 +14,7 @@ export default authenticatedProcedure
         accessToken: data.access_token,
         refreshToken: data.refresh_token,
         stravaUserId: data.athlete.id,
+        expiresAt: data.expires_at,
       }
 
       await ctx.repos.userRepository.storeTokens(tokensData)
