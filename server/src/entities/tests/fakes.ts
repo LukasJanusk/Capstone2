@@ -71,7 +71,7 @@ export const fakeStravaTokens = <T extends Partial<Insertable<StravaTokens>>>(
     accessToken: random.string(),
     refreshToken: random.string(),
     stravaUserId: random.integer({ min: 1, max: 100 }),
-    expiresAt: random.integer({ min: 1, max: 100 }),
+    expiresAt: Math.floor(Date.now() / 1000) + 86400, // always a day in the future
     ...overrides,
   }) satisfies Insertable<StravaTokens>
 
@@ -82,7 +82,7 @@ export const fakeActivity = <T extends Partial<Insertable<Activity>>>(
     userId: random.integer({ min: 1, max: 1000 }),
     type: random.pickone(['ride', 'static', 'run']),
     origin: 'strava',
-    originId: random.string({ length: 20 }),
+    originId: random.integer({ min: 1, max: 10000 }),
     title: random.string({ length: 30 }),
     duration: random.integer({ min: 1, max: 200000 }),
     heartrate: random.integer({ min: 1, max: 300 }),

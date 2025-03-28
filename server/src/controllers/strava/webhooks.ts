@@ -1,12 +1,14 @@
 import provideRepos from '@server/trpc/provideRepos'
 import { userRepository } from '@server/repositories/userRepository'
 import { traitRepository } from '@server/repositories/traitRepository'
+import { activityRepository } from '@server/repositories/activityRepository'
+import { TRPCError } from '@trpc/server'
 import { publicProcedure } from '../../trpc'
-import { webhookSchema } from './services/schema'
+import { transformActivityFromStrava, webhookSchema } from './services/schema'
 import { isExpired } from './services/tests/utils/isExipred'
 
 export default publicProcedure
-  .use(provideRepos({ userRepository, traitRepository }))
+  .use(provideRepos({ userRepository, traitRepository, activityRepository }))
   .input(webhookSchema)
   .mutation(async ({ input, ctx }) => {
     if (ctx.req?.method === 'POST') {
@@ -35,14 +37,27 @@ export default publicProcedure
           input.object_id,
           tokens.accessToken
         )
-        // TODO: get user traits from db
-        // TODO: Pass user trait data and workout data to process promt. Might need to send request to one of other routers to handle AI api logic
-        // WE Will process data and use our formula to set values for prompt based on user traits and activity data
-
-        // eslint-disable-next-line no-console
-        console.log(activityData)
+        if (!activityData) {
+          ctx.logger.error(
+            activityData,
+            'POST strava.webhooks failed to fetch activity from strava API'
+          )
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Activity not found',
+          })
+        }
+        const activityStored = await ctx.repos.activityRepository.create({
+          userId: tokens.userId,
+          ...transformActivityFromStrava(activityData),
+        })
       }
+      // get user traits
+      // form prompt
+      // send reques to music generation api
+
       // TODO: handle errors if something went wrong getting request
+
       return { status: 'EVENT_RECEIVED' }
     }
     return { status: 'Unknown request method' }

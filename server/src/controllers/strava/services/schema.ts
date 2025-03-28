@@ -6,7 +6,6 @@ const stravaUserSchema = z.object({
   lastname: z.string(),
   weight: z.number().optional().nullable(),
 })
-
 const tokenSchema = z.object({
   token_type: z.literal('Bearer'),
   expires_at: z.coerce.number().int().positive(),
@@ -23,7 +22,6 @@ export const webhookSchema = z.object({
   object_type: z.enum(['activity', 'athlete']),
   owner_id: z.coerce.number().int().positive(),
   subscription_id: z.coerce.number().int().positive(),
-  updates: z.record(z.unknown()),
 })
 
 export const stravaActivitySchema = z.object({
@@ -77,3 +75,44 @@ export const parseStravaActivity = (data: unknown) =>
 
 export const parseRefreshTokenResponse = (data: unknown) =>
   refreshTokenSchema.parse(data)
+
+export const transformActivity = stravaActivitySchema.transform(
+  ({
+    id,
+    type,
+    name,
+    elapsed_time,
+    average_heartrate,
+    calories,
+    average_speed,
+    distance,
+    average_cadence,
+    start_date,
+  }) => {
+    let activityType = 'static'
+
+    if (type) {
+      if (/ride|bike/i.test(type)) {
+        activityType = 'ride'
+      } else if (/run|jog|walk/i.test(type)) {
+        activityType = 'run'
+      }
+    }
+
+    return {
+      originId: id,
+      origin: 'strava',
+      type: activityType,
+      title: name,
+      duration: elapsed_time,
+      heartrate: average_heartrate,
+      calories,
+      speedAverage: average_speed,
+      distance,
+      cadence: average_cadence,
+      startTime: start_date,
+    }
+  }
+)
+export const transformActivityFromStrava = (data: StravaActivity) =>
+  transformActivity.parse(data)

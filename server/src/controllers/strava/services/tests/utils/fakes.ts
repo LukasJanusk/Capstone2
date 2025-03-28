@@ -1,5 +1,10 @@
 import { random } from '@server/tests/utils/random'
-import type { StravaActivity, StravaAthlete, TokensSchema } from '../../schema'
+import type {
+  StravaActivity,
+  StravaAthlete,
+  TokensSchema,
+  Webhook,
+} from '../../schema'
 
 export const fakeStravaAthlete = {
   id: random.integer({ min: 1, max: 10 }),
@@ -42,7 +47,7 @@ export const stravaActivityResponse = <T extends Partial<StravaActivity>>(
   overrides: T = {} as T
 ) =>
   ({
-    id: random.integer({ min: 1, max: 999 }),
+    id: random.integer({ min: 1, max: 100000 }),
     athlete: {
       id: random.integer({ min: 1, max: 999 }),
       first_name: random.name(),
@@ -89,3 +94,16 @@ export const mockActivityResponse = <T extends Partial<StravaAthlete>>(
       headers: { 'Content-Type': 'application/json' },
     })
   )
+
+export const fakeWebhook = <T extends Partial<Webhook>>(
+  overrides: T = {} as T
+): Webhook & T =>
+  ({
+    aspect_type: 'create',
+    event_time: random.integer({ min: 1, max: 10000 }),
+    object_id: random.integer({ min: 1, max: 10000 }),
+    object_type: 'activity',
+    owner_id: random.integer({ min: 1, max: 10000 }),
+    subscription_id: random.integer({ min: 1, max: 10000 }),
+    ...overrides,
+  }) satisfies Webhook
