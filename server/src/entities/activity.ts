@@ -17,3 +17,4 @@ export const activitySchema = z.object({
 })
 
 export type ActivityFull = z.infer<typeof activitySchema>
+export const parseActivity = (data: unknown) => activitySchema.parse(data)

@@ -16,4 +16,4 @@ export function songRepository(db: Database) {
   }
 }
 
-export type TraitRepository = ReturnType<typeof songRepository>
+export type SongRepository = ReturnType<typeof songRepository>

@@ -2,13 +2,26 @@ import provideRepos from '@server/trpc/provideRepos'
 import { userRepository } from '@server/repositories/userRepository'
 import { traitRepository } from '@server/repositories/traitRepository'
 import { activityRepository } from '@server/repositories/activityRepository'
+import { genreRepository } from '@server/repositories/genreRepository'
 import { TRPCError } from '@trpc/server'
+import { generatePrompt } from '@server/promt'
+import { parseGenre } from '@server/entities/genre'
 import { publicProcedure } from '../../trpc'
+
+import { parseActivity } from '../../entities/activity'
+import { parseTrait } from '../../entities/traits'
 import { transformActivityFromStrava, webhookSchema } from './services/schema'
 import { isExpired } from './services/tests/utils/isExipred'
 
 export default publicProcedure
-  .use(provideRepos({ userRepository, traitRepository, activityRepository }))
+  .use(
+    provideRepos({
+      userRepository,
+      traitRepository,
+      activityRepository,
+      genreRepository,
+    })
+  )
   .input(webhookSchema)
   .mutation(async ({ input, ctx }) => {
     if (ctx.req?.method === 'POST') {
@@ -47,12 +60,26 @@ export default publicProcedure
             message: 'Activity not found',
           })
         }
+        const transActivity = transformActivityFromStrava(activityData)
         const activityStored = await ctx.repos.activityRepository.create({
           userId: tokens.userId,
-          ...transformActivityFromStrava(activityData),
+          ...transActivity,
         })
+        const userTraits = await ctx.repos.traitRepository.getUserTraitsFull(
+          tokens.userId
+        )
+        const genres = (await ctx.repos.genreRepository.getAll()).map((g) =>
+          parseGenre(g)
+        )
+        const traits = userTraits.map((t) => parseTrait(t))
+        const prompt = generatePrompt(
+          parseActivity(activityStored),
+          traits,
+          genres
+        )
+        console.log(`Generated prompt: ${prompt}`)
       }
-      // get user traits
+
       // form prompt
       // send reques to music generation api
 

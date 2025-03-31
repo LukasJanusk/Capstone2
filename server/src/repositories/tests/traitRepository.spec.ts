@@ -2,7 +2,7 @@ import { expect, describe, it } from 'vitest'
 import { createTestDatabase } from '@tests/utils/database'
 import { wrapInRollbacks } from '@tests/utils/transactions'
 import { insertAll, selectAll } from '@tests/utils/records'
-import { fakeTrait, fakeGenre } from '@server/entities/tests/fakes'
+import { fakeTrait, fakeGenre, fakeUser } from '@server/entities/tests/fakes'
 import { traitRepository } from '../traitRepository'
 
 const db = await wrapInRollbacks(createTestDatabase())
@@ -62,5 +62,31 @@ describe('findByIdFull', () => {
     const fullTrait = await repository.findByIdFull(trait.id)
 
     expect(fullTrait).toEqual({ id: expect.any(Number), ...fake })
+  })
+})
+describe('getUserTraitsFull', () => {
+  it('returns array of user traits', async () => {
+    const [user] = await insertAll(db, 'user', fakeUser())
+    const allTraits = await selectAll(db, 'trait')
+    await insertAll(db, 'userTraits', [
+      { userId: user.id, traitId: allTraits[0].id },
+      { userId: user.id, traitId: allTraits[1].id },
+      { userId: user.id, traitId: allTraits[2].id },
+    ])
+
+    const allUserTraits = await repository.getUserTraitsFull(user.id)
+
+    expect(allUserTraits.length).toEqual(3)
+    expect(allUserTraits).toContainEqual(allTraits[0])
+    expect(allUserTraits).toContainEqual(allTraits[1])
+    expect(allUserTraits).toContainEqual(allTraits[2])
+  })
+  it('returns empty array when there are no user traits', async () => {
+    //
+    const [user] = await insertAll(db, 'user', fakeUser())
+
+    const allUserTraits = await repository.getUserTraitsFull(user.id)
+
+    expect(allUserTraits).toEqual([])
   })
 })

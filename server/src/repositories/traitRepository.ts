@@ -1,5 +1,9 @@
 import type { Database, Trait } from '@server/database'
-import { type TraitPublic, traitKeysPublic } from '@server/entities/traits'
+import {
+  type TraitPublic,
+  traitKeys,
+  traitKeysPublic,
+} from '@server/entities/traits'
 import type { Insertable, Selectable } from 'kysely'
 
 export function traitRepository(db: Database) {
@@ -27,6 +31,14 @@ export function traitRepository(db: Database) {
         .selectAll()
         .where('trait.id', '=', id)
         .executeTakeFirstOrThrow()
+    },
+    async getUserTraitsFull(userId: number): Promise<Selectable<Trait>[]> {
+      return db
+        .selectFrom('trait')
+        .innerJoin('userTraits', 'trait.id', 'userTraits.traitId')
+        .where('userTraits.userId', '=', userId)
+        .select(['trait.id', ...traitKeys.filter((key) => key !== 'id')])
+        .execute()
     },
   }
 }
