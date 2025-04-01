@@ -9,7 +9,7 @@ const generationTaskSchema = z.object({
 export const parseGenerationTaskResponse = (data: unknown) =>
   generationTaskSchema.parse(data)
 
-const songItemSchema = z.object({
+export const songItemSchema = z.object({
   id: z.string(),
   audio_url: z.string().url(),
   source_audio_url: z.string().url(),
@@ -23,6 +23,18 @@ const songItemSchema = z.object({
   tags: z.string().optional().nullable(),
   createTime: z.string(),
   duration: z.number(),
+})
+
+const callbackDataSchema = z.object({
+  callbackType: z.string(),
+  task_id: z.string(),
+  data: z.array(songItemSchema),
+})
+
+export const callbackSchema = z.object({
+  code: z.number(),
+  msg: z.string(),
+  data: callbackDataSchema,
 })
 
 const responseSchema = z.object({

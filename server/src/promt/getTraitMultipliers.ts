@@ -1,4 +1,3 @@
-import { omit } from 'lodash'
 import type { Trait } from '@server/entities/traits'
 
 export const defaultMultipliers = {
@@ -11,7 +10,12 @@ export const defaultMultipliers = {
 }
 
 export function updateMultipliersTraits(traits: Trait[]) {
-  const multiplier = { ...omit(defaultMultipliers, ['genreBias', 'genreId']) }
+  const multiplier = {
+    complexityMultiplier: 1,
+    energyMultiplier: 1,
+    moodMultiplier: 1,
+    tempoMultiplier: 1,
+  }
   traits.forEach((t) =>
     Object.keys(t).forEach((key) => {
       if (key in multiplier) {

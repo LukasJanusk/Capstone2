@@ -41,6 +41,7 @@ export function generatePrompt(
   genres: Genre[]
 ) {
   const promptData = getPromptData(activity, traits)
+  const activityName = activity.title ? activity.title : 'workout song'
   const genre = genres.find((g) => Number(g.id) === promptData.genreId)
   const genreText = genre ? genre.name : 'pick random'
   const genreMultiplierText = genre ? promptData.genreBias : 0
@@ -52,5 +53,5 @@ export function generatePrompt(
   - **Genre:** ${genreText} (Multiplier: ${genreMultiplierText})
 Ensure the song is engaging, motivating, and fits the workout intensity.`
 
-  return promptText
+  return { promt: promptText, style: genreText, title: activityName }
 }

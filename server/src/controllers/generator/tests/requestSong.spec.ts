@@ -32,7 +32,7 @@ it('successfuly returns song request object', async () => {
 
   const songRequest = await caller.requestSong({
     prompt: 'Generate me a nice song',
-    lyric: 'Dance dance dolphin',
+    style: 'rock',
     title: 'dolphin song',
   })
 
@@ -53,7 +53,7 @@ it('throws an error when API does not generate taskId', async () => {
   await expect(
     caller.requestSong({
       prompt: 'Generate me a nice song',
-      lyric: 'Dance dance dolphin',
+      style: 'Rock',
       title: 'dolphin song',
     })
   ).rejects.toThrow(/API failed/i)

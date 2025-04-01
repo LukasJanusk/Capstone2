@@ -13,6 +13,13 @@ export function songRepository(db: Database) {
         .returningAll()
         .executeTakeFirstOrThrow()
     },
+    async getByTaskId(taskId: string): Promise<Selectable<GenerationTask>> {
+      return db
+        .selectFrom('generationTask')
+        .where('generationTask.taskId', '=', taskId)
+        .selectAll()
+        .executeTakeFirstOrThrow()
+    },
   }
 }
 

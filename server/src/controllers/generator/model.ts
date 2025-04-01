@@ -1,17 +1,14 @@
 /* eslint-disable no-console */
-import { type MusicGenerationService } from '@server/entities/services/MusicGenerationService'
 import { TRPCError } from '@trpc/server'
 import { parseGenerationTaskResponse, type SongGenerationTask } from './schema'
 
-export default function createMusicGenerationService(
-  apiKey: string
-): MusicGenerationService {
+export default function createMusicGenerationService(apiKey: string) {
   const requestSong = async (
     title: string, // 80 max
     style: string, // 200 max
     prompt: string, // 3000 max
-    model: string = 'V3_5',
-    callBackUrl: string = 'url' // !!! ADD port from config later
+    callBackUrl: string, // !!! ADD port from config later
+    model: string = 'V3_5'
   ): Promise<SongGenerationTask> => {
     try {
       const response = await fetch(
@@ -52,3 +49,7 @@ export default function createMusicGenerationService(
 
   return { requestSong }
 }
+
+export type SongGenerationService = ReturnType<
+  typeof createMusicGenerationService
+>
