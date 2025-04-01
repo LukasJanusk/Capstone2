@@ -12,6 +12,7 @@ import { createStravaService } from './controllers/strava/services'
 import createMusicGenerationService from './controllers/generator/model'
 import type { Database } from './database'
 import { logger } from './logger'
+import { subscriptionSchema } from './controllers/strava/services/schema'
 
 export default function createApp(db: Database) {
   const app = express()
@@ -35,7 +36,22 @@ export default function createApp(db: Database) {
   app.use('/api/health', (_, res) => {
     res.status(200).send('OK')
   })
+  // This is necessary for webhook subscription validation
+  app.get('/api/trpc/strava.webhooks', (req, res) => {
+    try {
+      const params = subscriptionSchema.parse(req.query)
 
+      if (params['hub.challenge']) {
+        res.status(200).json({ 'hub.challenge': params['hub.challenge'] })
+      } else {
+        res.status(400).json({ error: 'Missing hub_challenge parameter' })
+      }
+    } catch (error) {
+      res.status(400).json({
+        error: 'Invalid request',
+      })
+    }
+  })
   app.use(
     '/api/trpc',
     createExpressMiddleware({

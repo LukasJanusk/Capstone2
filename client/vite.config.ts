@@ -14,4 +14,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      '/api/trpc': {
+        target: 'http://server:3000', // Proxy backend calls
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
 })

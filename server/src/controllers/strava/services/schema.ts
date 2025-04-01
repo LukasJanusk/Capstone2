@@ -1,4 +1,5 @@
 import z from 'zod'
+import config from '@server/config'
 
 const stravaUserSchema = z.object({
   id: z.number().int().positive(),
@@ -24,6 +25,11 @@ export const webhookSchema = z.object({
   subscription_id: z.coerce.number().int().positive(),
 })
 
+export const subscriptionSchema = z.object({
+  'hub.mode': z.literal('subscribe'),
+  'hub.challenge': z.string(),
+  'hub.verify_token': z.literal(config.stravaSubscribtionKey),
+})
 export const stravaActivitySchema = z.object({
   id: z.coerce.number().positive().int(),
   athlete: z.object({

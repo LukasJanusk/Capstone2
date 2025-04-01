@@ -176,7 +176,8 @@ jobs:
                 "API_BOX_KEY": "${{secrets.API_BOX_KEY}}",
                 "TOP_MEDIAI_KEY": "${{secrets.TOP_MEDIAI_KEY}}",
                 "DATABASE_URL": "${{ secrets.PROD_DATABASE_URL }}",
-                "TOKEN_KEY": "${{ secrets.PROD_TOKEN_KEY }}"
+                "TOKEN_KEY": "${{ secrets.PROD_TOKEN_KEY }}",
+                "PUBLIC_DOMAIN": "${{ secrets.PUBLIC_DOMAIN }}"
               }
             }
           }' > containers.json
