@@ -5,7 +5,9 @@ export type GenreSelection = {
   genreBias: number
 }
 
-function getWeightedRandomGenre(items: Array<GenreSelection>): GenreSelection {
+export function getWeightedRandomGenre(
+  items: Array<GenreSelection>
+): GenreSelection {
   const weights = items.reduce((acc, item, i) => {
     const previousWeight = acc[i - 1] ?? 0
     acc.push(previousWeight + item.genreBias)

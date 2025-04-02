@@ -32,6 +32,7 @@ it('stores activity into db', async () => {
   const fakeTokens = fakeStravaTokens({ userId: user.id })
   const [tokens] = await insertAll(db, 'stravaTokens', fakeTokens)
   const data = stravaActivityResponse({ athlete: { id: tokens.stravaUserId } })
+  const activitiesInDb = await selectAll(db, 'activity')
   const mockResponse = mockActivityResponse(data)
   vi.stubGlobal(
     'fetch',
@@ -44,7 +45,7 @@ it('stores activity into db', async () => {
   expect(result).toEqual({ status: 'EVENT_RECEIVED' })
   const storedActivities = await selectAll(db, 'activity')
 
-  expect(storedActivities.length).toEqual(1)
+  expect(storedActivities.length).toEqual(activitiesInDb.length + 1)
 })
 // it.skip('refreshes userTokens when expired', async () => {
 //   const [user] = await insertAll(db, 'user', fakeUser())

@@ -42,7 +42,7 @@ export const fakeTrait = <T extends Partial<Insertable<Trait>>>(
     energyMultiplier: random.integer({ min: 1, max: 3 }),
     complexityMultiplier: random.integer({ min: 1, max: 3 }),
     genreId: random.integer({ min: 1, max: 3 }),
-    genreBias: random.integer({ min: 1, max: 3 }),
+    genreBias: random.integer({ min: 0, max: 3 }),
     ...overrides,
   }) satisfies Insertable<Trait>
 
