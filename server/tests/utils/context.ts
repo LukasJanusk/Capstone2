@@ -12,11 +12,14 @@ const stravaService = createFakeStravaService(
 const songGenerationService = createMusicGenerationService('valid_api_key')
 
 export const requestContext = (
-  context: Partial<Context> & ContextMinimal
+  context: Partial<Context> & ContextMinimal,
+  method: string = 'POST'
 ): Context => ({
   req: {
     header: () => undefined,
     get: () => undefined,
+    post: () => undefined,
+    method,
   } as any,
   res: {
     cookie: () => undefined,

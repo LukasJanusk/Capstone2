@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { publicProcedure } from '@server/trpc'
 import { TRPCError } from '@trpc/server'
 

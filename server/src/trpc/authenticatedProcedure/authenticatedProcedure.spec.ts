@@ -1,8 +1,8 @@
 import { vi } from 'vitest'
 import { authContext, requestContext } from '@tests/utils/context'
-
 import createMusicGenerationService from '@server/controllers/generator/model'
 import { createFakeStravaService } from '@server/controllers/strava/services/tests/utils/fakeService'
+import { logger } from '@server/logger'
 import { createCallerFactory, router } from '..'
 import { authenticatedProcedure } from '.'
 
@@ -42,6 +42,7 @@ it('should pass if user provides a valid token', async () => {
     db,
     stravaService,
     songGenerationService,
+    logger,
     req: {
       header: () => `Bearer ${VALID_TOKEN}`,
     } as any,
