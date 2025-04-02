@@ -1,7 +1,7 @@
 import type { ActivityFull } from '@server/entities/activity'
 import type { Multipliers } from '.'
 
-function cadenceUpdate(
+export function cadenceUpdate(
   multipliers: Multipliers,
   activity: ActivityFull
 ): Multipliers {
@@ -31,7 +31,10 @@ function cadenceUpdate(
   return updated
 }
 
-function heartRateUpdate(multipliers: Multipliers, activity: ActivityFull) {
+export function heartRateUpdate(
+  multipliers: Multipliers,
+  activity: ActivityFull
+) {
   // Low HR: 95-133 bpm, Mid HR: 133-162 bpm, High HR: 162-190 bpm
   const low = 125
   const average = 160
@@ -56,7 +59,10 @@ function heartRateUpdate(multipliers: Multipliers, activity: ActivityFull) {
 
   return updated
 }
-function caloriesUpdate(multipliers: Multipliers, activity: ActivityFull) {
+export function caloriesUpdate(
+  multipliers: Multipliers,
+  activity: ActivityFull
+) {
   const low = 250
   const average = 500
   const updated = multipliers
@@ -79,23 +85,20 @@ function caloriesUpdate(multipliers: Multipliers, activity: ActivityFull) {
 
   return updated
 }
-function speedUpdate(multipliers: Multipliers, activity: ActivityFull) {
+export function speedUpdate(multipliers: Multipliers, activity: ActivityFull) {
   if (!activity.speedAverage) {
     return multipliers
   }
-  const updated = multipliers
+  const updated = { ...multipliers }
   if (activity.type === 'ride') {
-    // run multipliers for ride
-    // Low Speed: 16-24 km/h, Average Speed: 24-32 km/h, High Speed: 32-48+ km/h
-    const low = 24
-    const average = 32
+    const low = 6
+    const average = 9
     if (activity.speedAverage <= low) {
       updated.complexityMultiplier *= 0.9
       updated.energyMultiplier *= 0.8
       updated.moodMultiplier *= 0.8
       updated.tempoMultiplier *= 0.8
-    }
-    if (activity.speedAverage <= average) {
+    } else if (activity.speedAverage <= average) {
       updated.complexityMultiplier *= 1
       updated.energyMultiplier *= 1.1
       updated.moodMultiplier *= 1
@@ -109,17 +112,14 @@ function speedUpdate(multipliers: Multipliers, activity: ActivityFull) {
     return updated
   }
   if (activity.type === 'run') {
-    // run multipliers for run/walk
-    // Low Speed: 6-8 km/h, Average Speed: 8-12 km/h, High Speed: 12-20+ km/h
-    const low = 8
-    const average = 12
+    const low = 2
+    const average = 5
     if (activity.speedAverage <= low) {
       updated.complexityMultiplier *= 0.9
       updated.energyMultiplier *= 0.8
       updated.moodMultiplier *= 0.8
       updated.tempoMultiplier *= 0.8
-    }
-    if (activity.speedAverage <= average) {
+    } else if (activity.speedAverage <= average) {
       updated.complexityMultiplier *= 1
       updated.energyMultiplier *= 1.1
       updated.moodMultiplier *= 1
@@ -130,21 +130,23 @@ function speedUpdate(multipliers: Multipliers, activity: ActivityFull) {
       updated.moodMultiplier *= 1.2
       updated.tempoMultiplier *= 1.5
     }
-    return updated
   }
   if (activity.type === 'static') {
     return multipliers
   }
   return updated
 }
-function distanceUpdate(multipliers: Multipliers, activity: ActivityFull) {
+export function distanceUpdate(
+  multipliers: Multipliers,
+  activity: ActivityFull
+) {
   if (!activity.distance || activity.type === 'static') {
     return multipliers
   }
   const updated = multipliers
   if (activity.type === 'ride') {
-    const low = 15
-    const average = 25
+    const low = 15000
+    const average = 25000
     if (activity.distance <= low) {
       updated.complexityMultiplier *= 0.9
     } else if (activity.distance <= average) {
@@ -153,8 +155,8 @@ function distanceUpdate(multipliers: Multipliers, activity: ActivityFull) {
       updated.complexityMultiplier *= 1.2
     }
   } else if (activity.type === 'run') {
-    const low = 5
-    const average = 8
+    const low = 5000
+    const average = 8000
     if (activity.distance <= low) {
       updated.complexityMultiplier *= 0.9
     } else if (activity.distance <= average) {

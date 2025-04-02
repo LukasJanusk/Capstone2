@@ -80,7 +80,10 @@ export const fakeActivity = <T extends Partial<Insertable<Activity>>>(
 ) =>
   ({
     userId: random.integer({ min: 1, max: 1000 }),
-    type: random.pickone(['ride', 'static', 'run']),
+    type: random.pickone(['ride', 'static', 'run']) as
+      | 'ride'
+      | 'static'
+      | 'run',
     origin: 'strava',
     originId: random.integer({ min: 1, max: 10000 }),
     title: random.string({ length: 30 }),
