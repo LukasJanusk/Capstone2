@@ -126,7 +126,7 @@ describe('speedUpdate for activity type: "static"', () => {
   it('returns unchanged multipliers when activity type is static', () => {
     const multipliers = defaultMultipliers()
     const runActivityStatic = {
-      ...(fakeActivity({ type: 'static', speedAverage: null }) as ActivityFull),
+      ...(fakeActivity({ type: 'static', speedAverage: 1 }) as ActivityFull),
       id: 3,
     }
     const unupdated = speedUpdate(multipliers, runActivityStatic)

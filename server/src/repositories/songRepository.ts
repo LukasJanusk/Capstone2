@@ -1,6 +1,6 @@
 import type { Insertable, Selectable } from 'kysely'
 
-import type { Database, GenerationTask } from '../database'
+import type { Database, GenerationTask, Song } from '../database'
 
 export function songRepository(db: Database) {
   return {
@@ -19,6 +19,11 @@ export function songRepository(db: Database) {
         .where('generationTask.taskId', '=', taskId)
         .selectAll()
         .executeTakeFirstOrThrow()
+    },
+    async createSong(
+      song: Insertable<Song> | Insertable<Song>[]
+    ): Promise<Selectable<Song>[]> {
+      return db.insertInto('song').values(song).returningAll().execute()
     },
   }
 }

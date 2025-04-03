@@ -1,14 +1,5 @@
 import type { Trait } from '@server/entities/traits'
 
-export const defaultMultipliers = {
-  complexityMultiplier: 1,
-  energyMultiplier: 1,
-  genreBias: 1,
-  genreId: null,
-  moodMultiplier: 1,
-  tempoMultiplier: 1,
-}
-
 export function updateMultipliersTraits(traits: Trait[]) {
   const multiplier = {
     complexityMultiplier: 1,
@@ -29,5 +20,12 @@ export function updateMultipliersTraits(traits: Trait[]) {
       }
     })
   )
-  return multiplier
+  return {
+    complexityMultiplier: parseFloat(
+      multiplier.complexityMultiplier.toFixed(2)
+    ),
+    energyMultiplier: parseFloat(multiplier.energyMultiplier.toFixed(2)),
+    moodMultiplier: parseFloat(multiplier.moodMultiplier.toFixed(2)),
+    tempoMultiplier: parseFloat(multiplier.tempoMultiplier.toFixed(2)),
+  }
 }

@@ -3,7 +3,9 @@ import type { Kysely } from 'kysely'
 export async function up(db: Kysely<any>) {
   db.schema
     .createTable('activity')
-    .addColumn('id', 'integer', (c) => c.generatedAlwaysAsIdentity().notNull())
+    .addColumn('id', 'integer', (c) =>
+      c.generatedAlwaysAsIdentity().notNull().primaryKey()
+    )
     .addColumn('user_id', 'integer', (c) => c.references('user.id').notNull())
     .addColumn('origin', 'text', (c) => c.notNull())
     .addColumn('origin_id', 'integer', (c) => c.notNull())

@@ -12,6 +12,7 @@ export default authenticatedProcedure
       prompt: z.string().max(200).min(1),
       style: z.string().min(1).max(1000),
       title: z.string().min(1).max(100),
+      activityId: z.number().int().positive(),
     })
   )
   .mutation(async ({ input, ctx }) => {
@@ -32,6 +33,7 @@ export default authenticatedProcedure
       await ctx.repos.songRepository.createGenerationTask({
         userId: ctx.authUser.id,
         taskId: task.data.task_id,
+        activityId: input.activityId,
       })
 
     return songGenerationTask

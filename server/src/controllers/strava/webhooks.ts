@@ -74,7 +74,7 @@ export default webhookProcedure
         const task = await ctx.songGenerationService.requestSong(
           prompt.title,
           prompt.style,
-          prompt.promt,
+          prompt.prompt,
           `${config.publicDomain}/api/trpc/generator.storeGenerated`
         )
         if (task.code !== 200 || !task.data) {
@@ -88,6 +88,7 @@ export default webhookProcedure
           await ctx.repos.songRepository.createGenerationTask({
             userId: tokens.userId,
             taskId: task.data.task_id,
+            activityId: activityStored.id,
           })
         ctx.logger.info(
           generationTask,

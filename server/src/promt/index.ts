@@ -53,5 +53,5 @@ export function generatePrompt(
   - **Genre:** ${genreText} (Multiplier: ${genreMultiplierText})
 Ensure the song is engaging, motivating, and fits the workout intensity.`
 
-  return { promt: promptText, style: genreText, title: activityName }
+  return { prompt: promptText, style: genreText, title: activityName }
 }

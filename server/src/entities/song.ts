@@ -1,12 +1,21 @@
 import z from 'zod'
 
 const songSchema = z.object({
-  audio_file: z.string().url(),
-  image_file: z.string().url().optional().nullable(),
-  item_uuid: z.string(),
+  audioUrl: z.string().url(),
+  imageUrl: z.string().url().optional().nullable(),
+  taskId: z.number().int().positive(),
+  activityId: z.number().int().positive(),
+  userId: z.number().int().positive(),
   title: z.string().optional().nullable(),
-  lyric: z.string().optional().nullable(),
-  tags: z.string().optional().nullable(),
+  prompt: z.string().optional().nullable(),
 })
-
+// activityId: number
+// audioUrl: string
+// id: Generated<number>
+// imageUrl: string | null
+// prompt: string | null
+// taskId: number
+// title: string | null
+// userId: number
 export type Song = z.infer<typeof songSchema>
+export const parseSong = (data: unknown) => songSchema.parse(data)

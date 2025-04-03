@@ -179,5 +179,10 @@ export function updateMultipliersActivity(
   updated = speedUpdate(updated, activity)
   updated = distanceUpdate(updated, activity)
 
-  return updated
+  return {
+    complexityMultiplier: parseFloat(updated.complexityMultiplier.toFixed(2)),
+    energyMultiplier: parseFloat(updated.energyMultiplier.toFixed(2)),
+    moodMultiplier: parseFloat(updated.moodMultiplier.toFixed(2)),
+    tempoMultiplier: parseFloat(updated.tempoMultiplier.toFixed(2)),
+  }
 }

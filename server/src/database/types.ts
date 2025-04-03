@@ -29,6 +29,7 @@ export interface Activity {
 }
 
 export interface GenerationTask {
+  activityId: number
   id: Generated<number>
   taskId: string
   userId: number
@@ -37,6 +38,17 @@ export interface GenerationTask {
 export interface Genre {
   id: Generated<number>
   name: string
+}
+
+export interface Song {
+  activityId: number
+  audioUrl: string
+  id: Generated<number>
+  imageUrl: string | null
+  prompt: string | null
+  taskId: number
+  title: string | null
+  userId: number
 }
 
 export interface StravaTokens {
@@ -77,6 +89,7 @@ export interface DB {
   activity: Activity
   generationTask: GenerationTask
   genre: Genre
+  song: Song
   stravaTokens: StravaTokens
   trait: Trait
   user: User
