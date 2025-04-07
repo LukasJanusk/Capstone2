@@ -9,12 +9,28 @@ const clientId = ref('')
 onMounted(async () => {
   clientId.value = await trpc.strava.getClientId.query()
 })
-
-const authorizeUser = () => {
-  const currentUrl = window.location.href
-  const redirectUrl = currentUrl + 'authenticated'
-  const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId.value}&response_type=code&redirect_uri=${redirectUrl}/&approval_prompt=force&scope=read,activity:read_all`
-  window.location.href = authUrl
+const errorMessage = ref('')
+const error = ref<boolean>(false)
+const authorizeUser = async () => {
+  try {
+    const currentUrl = window.location.href
+    const redirectUrl = currentUrl + 'authenticated'
+    if (!clientId.value) {
+      error.value = true
+      errorMessage.value = 'Unable to reach server, please try again later'
+      clientId.value = await trpc.strava.getClientId.query()
+      return
+    }
+    const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId.value}&response_type=code&redirect_uri=${redirectUrl}/&approval_prompt=force&scope=read,activity:read_all`
+    window.location.href = authUrl
+  } catch (err) {
+    errorMessage.value = 'Something went wrong'
+    error.value = true
+  }
+}
+const resetError = () => {
+  errorMessage.value = ''
+  error.value = false
 }
 </script>
 
@@ -28,6 +44,10 @@ const authorizeUser = () => {
     <div><img id="logo" src="../assets/icon.png" /></div>
     <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
     <button v-if="!stravaAuthenticated" @click="authorizeUser()">Authorize Strava</button>
+  </div>
+  <div @click="resetError" class="toast" v-if="error">
+    <h2>{{ errorMessage }}</h2>
+    <button>Close</button>
   </div>
 </template>
 
@@ -57,5 +77,17 @@ const authorizeUser = () => {
 }
 #instruction {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+.toast {
+  border-radius: 10px;
+  padding: 15px;
+  border: 3px solid black;
+  background-color: rgba(60, 2, 1, 1);
+  box-shadow: 6px 6px 10px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
 }
 </style>

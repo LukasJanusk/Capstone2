@@ -17,7 +17,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/trpc': {
-        target: 'http://server:3000', // Proxy backend calls
+        target: 'http://server:3000',
         changeOrigin: true,
         secure: false,
       },
