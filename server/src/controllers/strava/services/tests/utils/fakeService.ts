@@ -45,7 +45,12 @@ export const createFakeStravaService = (
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Error accessing Strava servers',
       })
-    return Promise.resolve(fakeStravaAccessTokens())
+    return Promise.resolve(
+      fakeStravaAccessTokens({
+        refresh_token: 'refreshed_token',
+        access_token: 'refreshed_token',
+      })
+    )
   },
   async getActivityById(
     activityId: number,

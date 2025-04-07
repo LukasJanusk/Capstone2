@@ -58,9 +58,45 @@ describe('getUserTokens', () => {
   })
 })
 
-describe.skip('refreshUserAccessToken', () => {
+describe('refreshUserAccessToken', () => {
   it('returns refreshed access token', async () => {
-    // TODO:
+    const fakeData = fakeStravaAccessTokens() as any
+    fakeData.token_type = 'Bearer'
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Response(JSON.stringify(fakeStravaAccessTokens(fakeData)), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+      )
+    )
+
+    const result = await stravaService.refreshUserAccessToken('valid_token')
+
+    expect(result).toEqual({
+      token_type: 'Bearer',
+      access_token: fakeData.access_token,
+      expires_at: fakeData.expires_at,
+      expires_in: fakeData.expires_in,
+      refresh_token: fakeData.refresh_token,
+    })
+  })
+  it('it throws an error when fails to fetch tokens', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Response(JSON.stringify({ code: 400, msg: 'bad request' }), {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+          })
+      )
+    )
+    await expect(
+      stravaService.refreshUserAccessToken('valid_token')
+    ).rejects.toThrow(/Error accessing Strava servers/i)
   })
 })
 describe('getUser', async () => {

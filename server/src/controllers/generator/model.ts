@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { TRPCError } from '@trpc/server'
+import config from '@server/config'
 import { parseGenerationTaskResponse, type SongGenerationTask } from './schema'
 
 export default function createMusicGenerationService(apiKey: string) {
@@ -7,7 +8,7 @@ export default function createMusicGenerationService(apiKey: string) {
     title: string, // 80 max
     style: string, // 200 max
     prompt: string, // 3000 max
-    callBackUrl: string, // !!! ADD port from config later
+    callBackUrl = `${config.publicDomain}/api/trpc/generator.storeGenerated`,
     model: string = 'V3_5'
   ): Promise<SongGenerationTask> => {
     try {

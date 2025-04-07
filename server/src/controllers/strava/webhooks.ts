@@ -6,7 +6,6 @@ import { genreRepository } from '@server/repositories/genreRepository'
 import { TRPCError } from '@trpc/server'
 import { generatePrompt } from '@server/promt'
 import { parseGenre } from '@server/entities/genre'
-import config from '@server/config'
 import { songRepository } from '@server/repositories/songRepository'
 import { webhookProcedure } from '@server/trpc/webhookProcedure'
 import { parseActivity } from '../../entities/activity'
@@ -70,31 +69,29 @@ export default webhookProcedure
         traits,
         genres
       )
-      if (config.env === 'production') {
-        const task = await ctx.songGenerationService.requestSong(
-          prompt.title,
-          prompt.style,
-          prompt.prompt,
-          `${config.publicDomain}/api/trpc/generator.storeGenerated`
+
+      const task = await ctx.songGenerationService.requestSong(
+        prompt.title,
+        prompt.style,
+        prompt.prompt
+      )
+      if (task.code !== 200 || !task.data) {
+        ctx.logger.error(
+          task,
+          'POST strava.webhooks External API failed create Song genration task'
         )
-        if (task.code !== 200 || !task.data) {
-          ctx.logger.error(
-            task,
-            'POST strava.webhooks External API failed create Song genration task'
-          )
-          return { status: 'EVENT_RECEIVED' }
-        }
-        const generationTask =
-          await ctx.repos.songRepository.createGenerationTask({
-            userId: tokens.userId,
-            taskId: task.data.task_id,
-            activityId: activityStored.id,
-          })
-        ctx.logger.info(
-          generationTask,
-          'POST strava.webhooks Song generation task created'
-        )
+        return { status: 'EVENT_RECEIVED' }
       }
+      const generationTask =
+        await ctx.repos.songRepository.createGenerationTask({
+          userId: tokens.userId,
+          taskId: task.data.task_id,
+          activityId: activityStored.id,
+        })
+      ctx.logger.info(
+        generationTask,
+        'POST strava.webhooks Song generation task created'
+      )
     }
 
     return { status: 'EVENT_RECEIVED' }

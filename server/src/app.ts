@@ -21,22 +21,15 @@ export default function createApp(db: Database) {
     config.stravaClientSecret
   )
   logger.info('Strava service created')
-  const songGenerationService = createMusicGenerationService(
-    config.topmediaiKey
-  )
+  const songGenerationService = createMusicGenerationService(config.apiBoxKey)
   logger.info('Music generation service created')
   app.use(cors())
   app.use(express.json())
-  app.use('/api/trpc', (req, res, next) => {
-    // eslint-disable-next-line no-console
-    console.log(`Incoming request: ${req.method} ${req.originalUrl}`)
-    next()
-  })
-
   app.use('/api/health', (_, res) => {
     res.status(200).send('OK')
   })
-  // This is necessary for webhook subscription validation
+  // This is necessary for webhook subscribtion validation since TRPC does not support
+  // different HTTP methods for the same endpoint
   app.get('/api/trpc/strava.webhooks', (req, res) => {
     try {
       const params = subscriptionSchema.parse(req.query)

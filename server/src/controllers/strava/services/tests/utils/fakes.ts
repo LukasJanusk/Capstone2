@@ -16,7 +16,7 @@ export const fakeStravaAccessTokens = <T extends Partial<TokensSchema>>(
   overrides: T = {} as T
 ): TokensSchema & T => ({
   token_type: 'Bearer',
-  expires_at: random.integer({ min: 1, max: 10 }),
+  expires_at: Math.floor(Date.now() / 1000) + 86400,
   expires_in: random.integer({ min: 1, max: 10 }),
   refresh_token: random.string(),
   access_token: random.string(),

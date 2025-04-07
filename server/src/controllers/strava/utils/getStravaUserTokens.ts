@@ -29,6 +29,7 @@ export default async (
     )
     tokens = await userRepository.storeTokens({
       ...tokens,
+      expiresAt: refreshedTokens.expires_at,
       accessToken: refreshedTokens.access_token,
       refreshToken: refreshedTokens.refresh_token,
     })

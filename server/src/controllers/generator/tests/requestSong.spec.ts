@@ -65,3 +65,42 @@ it('throws an error when API does not generate taskId', async () => {
     })
   ).rejects.toThrow(/API failed/i)
 })
+it('throws an error wehn task.ok is not true', async () => {
+  vi.stubGlobal('fetch', () =>
+    Promise.resolve({
+      json: () =>
+        Promise.resolve({
+          code: 400,
+          msg: 'failure',
+          data: { task_id: '5c79****be8e' },
+        }),
+    })
+  )
+  await expect(
+    caller.requestSong({
+      prompt: 'Generate me a nice song',
+      style: 'Rock',
+      title: 'dolphin song',
+      activityId: activity.id,
+    })
+  ).rejects.toThrow(/API failed/i)
+})
+it('throws an error when there is no task.data', async () => {
+  vi.stubGlobal('fetch', () =>
+    Promise.resolve({
+      json: () =>
+        Promise.resolve({
+          code: 200,
+          msg: 'success',
+        }),
+    })
+  )
+  await expect(
+    caller.requestSong({
+      prompt: 'Generate me a nice song',
+      style: 'Rock',
+      title: 'dolphin song',
+      activityId: activity.id,
+    })
+  ).rejects.toThrow(/API failed/i)
+})

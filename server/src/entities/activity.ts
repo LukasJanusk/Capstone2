@@ -1,4 +1,5 @@
 import z from 'zod'
+import { songSchema } from './song'
 
 export const activitySchema = z.object({
   id: z.coerce.number().positive().int(),
@@ -15,6 +16,10 @@ export const activitySchema = z.object({
   cadence: z.coerce.number().positive().nullable().optional(), // Low Cadence: 50-70 RPM, Average Cadence: 70-90 RPM, High Cadence: 90-110+ RPM
   startTime: z.string(),
 })
-
+export const activityWithSongSchema = z.object({
+  activity: activitySchema,
+  songs: z.array(songSchema),
+})
 export type ActivityFull = z.infer<typeof activitySchema>
 export const parseActivity = (data: unknown) => activitySchema.parse(data)
+export type ActivityWithSong = z.infer<typeof activityWithSongSchema>

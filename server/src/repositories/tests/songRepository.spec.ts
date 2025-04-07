@@ -90,3 +90,36 @@ describe('createSong', () => {
     expect(insertedSongs).toContainEqual({ id: expect.any(Number), ...song2 })
   })
 })
+describe('getSongByUserId', () => {
+  it('returns song when found', async () => {
+    const [user] = await insertAll(db, 'user', fakeUser())
+    const [activity] = await insertAll(
+      db,
+      'activity',
+      fakeActivity({ userId: user.id })
+    )
+    const [generationTask] = await insertAll(db, 'generationTask', {
+      taskId: '123',
+      activityId: activity.id,
+      userId: user.id,
+    })
+    const [songInDb] = await insertAll(db, 'song', {
+      userId: user.id,
+      activityId: activity.id,
+      taskId: generationTask.id,
+      audioUrl: 'url.example.com',
+      imageUrl: 'url.example.com',
+      title: 'workout song',
+      prompt: 'Generate nice song',
+    })
+
+    const [found] = await repository.getSongByUserId(user.id)
+
+    expect(found).toEqual(songInDb)
+  })
+  it('returns an empty array when no songs were found', async () => {
+    const notFound = await repository.getSongByUserId(999999)
+
+    expect(notFound).toEqual([])
+  })
+})

@@ -13,6 +13,13 @@ export function activityRepository(db: Database) {
         .returningAll()
         .executeTakeFirstOrThrow()
     },
+    getActivitiesByUserId(userId: number): Promise<Selectable<Activity>[]> {
+      return db
+        .selectFrom('activity')
+        .where('activity.userId', '=', userId)
+        .selectAll()
+        .execute()
+    },
   }
 }
 

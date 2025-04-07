@@ -17,3 +17,22 @@ describe('create', () => {
     expect(inserted).toEqual({ id: expect.any(Number), ...activity })
   })
 })
+describe('getActivitiesByUserId', () => {
+  it('returns activities when found', async () => {
+    const [user] = await insertAll(db, 'user', fakeUser())
+    const [activity] = await insertAll(
+      db,
+      'activity',
+      fakeActivity({ userId: user.id })
+    )
+
+    const [inserted] = await repository.getActivitiesByUserId(user.id)
+
+    expect(inserted).toEqual(activity)
+  })
+  it('returns an empty array when no activities were found', async () => {
+    const notFound = await repository.getActivitiesByUserId(99999)
+
+    expect(notFound).toEqual([])
+  })
+})

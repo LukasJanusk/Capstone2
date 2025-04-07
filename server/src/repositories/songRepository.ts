@@ -25,6 +25,13 @@ export function songRepository(db: Database) {
     ): Promise<Selectable<Song>[]> {
       return db.insertInto('song').values(song).returningAll().execute()
     },
+    async getSongByUserId(userId: number): Promise<Selectable<Song>[]> {
+      return db
+        .selectFrom('song')
+        .where('song.userId', '=', userId)
+        .selectAll()
+        .execute()
+    },
   }
 }
 

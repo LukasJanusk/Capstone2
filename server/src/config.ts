@@ -29,6 +29,7 @@ const schema = z
       connectionString: z.string().url(),
     }),
     topmediaiKey: z.string(),
+    apiBoxKey: z.string(),
     publicDomain: z.string().default('http://localhost:5173/'),
   })
   .readonly()
@@ -47,6 +48,7 @@ const config = schema.parse({
   database: {
     connectionString: isDevTest ? env.DEV_DATABASE_URL : env.DATABASE_URL,
   },
+  apiBoxKey: env.API_BOX_KEY,
   topmediaiKey: env.TOP_MEDIAI_KEY,
   publicDomain: env.PUBLIC_DOMAIN,
 })
