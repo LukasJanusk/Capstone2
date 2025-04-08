@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { signup } from '../user'
-import { onMounted, ref, defineEmits } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getTraits } from '../traits'
 import type { TraitPublic } from '@server/shared/trpc'
+import ErrorBox from '@/components/ErrorBox.vue'
+import { errorMessage, error, setError, resetError, parseErrorMessage } from '../errors/index'
 
 const traits = ref<TraitPublic[]>([])
 const emit = defineEmits<{ (event: 'signup', user: any): void }>()
@@ -16,12 +18,26 @@ const userData = ref({
 })
 
 const signUp = async () => {
-  const user = await signup(userData.value)
-  if (user) emit('signup', user)
+  try {
+    const user = await signup(userData.value)
+    if (!user) {
+      setError('Something went wrong signing up, please try again later')
+      return
+    }
+    resetError()
+    emit('signup', user)
+  } catch (err) {
+    setError(parseErrorMessage(err))
+    return
+  }
 }
 onMounted(async () => {
-  traits.value = await getTraits()
-  // should throw an error if no traits were loaded
+  try {
+    traits.value = await getTraits()
+  } catch (err) {
+    setError(parseErrorMessage(err))
+    return
+  }
 })
 </script>
 
@@ -36,7 +52,7 @@ onMounted(async () => {
       <input id="email" type="email" required v-model="userData.email" />
       <label for="password">Password*</label>
       <input id="password" type="password" v-model="userData.password" />
-      <label for="traits">Traits*</label>
+      <label for="traits" title="Select 3 or more traits that defines you the best">Traits*</label>
 
       <div id="selected-traits">
         <span
@@ -65,6 +81,7 @@ onMounted(async () => {
       <button type="submit">Sign Up</button>
     </form>
   </div>
+  <ErrorBox v-if="error" :message="errorMessage" @close="resetError"></ErrorBox>
 </template>
 <style lang="css" scoped>
 form {

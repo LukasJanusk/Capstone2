@@ -14,7 +14,6 @@ export default publicProcedure
   )
   .input(userSignupSchema)
   .mutation(async ({ input, ctx: { repos, logger } }) => {
-    // TODO: Error handling
     const { traits, ...user } = input
     if (traits.length < 3) {
       logger.warn(traits, 'POST user.signup User selected less than 3 traits')

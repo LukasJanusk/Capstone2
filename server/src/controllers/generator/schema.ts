@@ -26,19 +26,11 @@ export const songItemSchema = z
     duration: z.number(),
   })
   .transform((s) => ({
-    id: s.id,
+    originId: s.id,
     audioUrl: s.audio_url,
-    sourceAudioUrl: s.source_audio_url,
-    streamAudioUrl: s.stream_audio_url,
-    sourceStreamAudioUrl: s.source_stream_audio_url,
     imageUrl: s.image_url,
-    sourceImageUrl: s.source_image_url,
     prompt: s.prompt,
-    modelName: s.model_name,
     title: s.title,
-    tags: s.tags,
-    createTime: s.createTime,
-    duration: s.duration,
   }))
 
 const callbackDataSchema = z

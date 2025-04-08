@@ -1,4 +1,3 @@
-// Sharing our API interface type and entities
 export type { AppRouter } from '../controllers'
 export type {
   UserPublic,
@@ -7,3 +6,5 @@ export type {
   AuthUser,
 } from '../entities/user'
 export type { Trait, TraitPublic } from '../entities/traits'
+export type { ActivityFull, ActivityWithSong } from '../entities/activity'
+export type { Song } from '../entities/song'

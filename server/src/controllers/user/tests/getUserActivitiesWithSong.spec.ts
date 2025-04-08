@@ -26,6 +26,7 @@ it('returns activities with songs', async () => {
     userId: user.id,
   })
   const [songInDb] = await insertAll(db, 'song', {
+    originId: 'someId',
     userId: user.id,
     activityId: activity.id,
     taskId: generationTask.id,

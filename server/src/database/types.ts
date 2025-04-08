@@ -45,6 +45,7 @@ export interface Song {
   audioUrl: string
   id: Generated<number>
   imageUrl: string | null
+  originId: string
   prompt: string | null
   taskId: number
   title: string | null

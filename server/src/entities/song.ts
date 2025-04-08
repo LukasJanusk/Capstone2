@@ -1,6 +1,8 @@
 import z from 'zod'
 
 export const songSchema = z.object({
+  id: z.number().int().positive(),
+  originId: z.string(),
   audioUrl: z.string().url(),
   imageUrl: z.string().url().optional().nullable(),
   taskId: z.number().int().positive(),

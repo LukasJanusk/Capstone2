@@ -66,6 +66,7 @@ describe('createSong', () => {
       userId: user.id,
     })
     const song1 = {
+      originId: 'someId',
       userId: user.id,
       taskId: generationTask.id,
       activityId: activity.id,
@@ -75,6 +76,7 @@ describe('createSong', () => {
       prompt: 'This was the prompt to generate song',
     }
     const song2 = {
+      originId: 'someOtherId',
       userId: user.id,
       taskId: generationTask.id,
       activityId: activity.id,
@@ -104,6 +106,7 @@ describe('getSongByUserId', () => {
       userId: user.id,
     })
     const [songInDb] = await insertAll(db, 'song', {
+      originId: 'someId',
       userId: user.id,
       activityId: activity.id,
       taskId: generationTask.id,

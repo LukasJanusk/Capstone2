@@ -1,7 +1,6 @@
 import provideRepos from '@server/trpc/provideRepos'
 import { songRepository } from '@server/repositories/songRepository'
 import { webhookProcedure } from '@server/trpc/webhookProcedure'
-import { parseSong } from '@server/entities/song'
 import { callbackSchema } from './schema'
 
 export default webhookProcedure
@@ -34,14 +33,12 @@ export default webhookProcedure
         'POST generator.StoreGenerated song generated for task'
       )
       if (input.data.data) {
-        const songs = input.data.data.map((s) =>
-          parseSong({
-            userId: task.userId,
-            activityId: task.activityId,
-            taskId: task.id,
-            ...s,
-          })
-        )
+        const songs = input.data.data.map((s) => ({
+          userId: task.userId,
+          activityId: task.activityId,
+          taskId: task.id,
+          ...s,
+        }))
         const stored = await ctx.repos.songRepository.createSong(songs)
         stored.forEach((s) =>
           ctx.logger.info(

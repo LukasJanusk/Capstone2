@@ -101,6 +101,7 @@ it('logs when all songs are generated and stores songs to db, returns callback r
   const [song] = await selectAll(db, 'song')
   expect(song).toEqual({
     id: expect.any(Number),
+    originId: webhook.data.data[0].id,
     audioUrl: webhook.data.data[0].audio_url,
     imageUrl: null,
     prompt: webhook.data.data[0].prompt,
