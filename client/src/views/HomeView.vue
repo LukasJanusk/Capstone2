@@ -1,24 +1,26 @@
 <script setup lang="ts">
-import { authUserId, logout, stravaAuthenticated } from '../user'
-import HeaderMain from '@/components/HeaderMain.vue'
+import { authUserId, stravaAuthenticated } from '../user'
 import router from '@/router'
 import { trpc } from '../trpc/index'
 import { onMounted, ref } from 'vue'
 import { errorMessage, setError, resetError, error, parseErrorMessage } from '../errors/index'
 import ErrorBox from '@/components/ErrorBox.vue'
+import MainContainer from '@/components/MainContainer.vue'
 
 const clientId = ref('')
 onMounted(async () => {
   clientId.value = await trpc.strava.getClientId.query()
 })
+const returnHome = () => {
+  router.push({ name: 'Home' })
+}
 const authorizeUser = async () => {
   try {
+    if (!clientId.value) {
+      clientId.value = await trpc.strava.getClientId.query()
+    }
     const currentUrl = window.location.href
     const redirectUrl = currentUrl + 'authenticated'
-    if (!clientId.value) {
-      setError('Unable to reach server, please try again later')
-      return
-    }
     const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId.value}&response_type=code&redirect_uri=${redirectUrl}/&approval_prompt=force&scope=read,activity:read_all`
     window.location.href = authUrl
   } catch (err) {
@@ -28,17 +30,15 @@ const authorizeUser = async () => {
 </script>
 
 <template>
-  <HeaderMain
-    @signup="router.push({ name: 'SignUp' })"
-    @signin="router.push({ name: 'SignIn' })"
-    @signout="(logout(), router.push({ name: 'SignIn' }))"
-  ></HeaderMain>
-  <div v-if="authUserId" id="authorized">
-    <div><img id="logo" src="../assets/icon.png" /></div>
-    <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
-    <button v-if="!stravaAuthenticated" @click="authorizeUser()">Authorize Strava</button>
-  </div>
-  <ErrorBox v-if="error" :message="errorMessage" @close="resetError"></ErrorBox>
+  <MainContainer>
+    <div v-if="authUserId" id="authorized">
+      <div><img id="logo" src="../assets/icon.png" /></div>
+      <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
+      <button v-if="!stravaAuthenticated" @click="authorizeUser()">Authorize Strava</button>
+    </div>
+  </MainContainer>
+
+  <ErrorBox v-if="error" :message="errorMessage" @close="(resetError, returnHome)"></ErrorBox>
 </template>
 
 <style scoped>

@@ -6,5 +6,9 @@ export type {
   AuthUser,
 } from '../entities/user'
 export type { Trait, TraitPublic } from '../entities/traits'
-export type { ActivityFull, ActivityWithSong } from '../entities/activity'
-export type { Song } from '../entities/song'
+export type {
+  ActivityFull,
+  ActivityWithSong,
+  ActivityPublic,
+} from '../entities/activity'
+export type { Song, SongPublic } from '../entities/song'

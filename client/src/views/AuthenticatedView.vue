@@ -4,15 +4,18 @@ import { trpc } from '@/trpc'
 import router from '@/router'
 import { stravaAuthenticated } from '@/user'
 import ErrorBox from '@/components/ErrorBox.vue'
-import { errorMessage, setError, resetError, error } from '../errors/index'
+import { errorMessage, setError, resetError, error, parseErrorMessage } from '../errors/index'
+import MainContainer from '@/components/MainContainer.vue'
 
 const authCode = ref('')
 const accessGranter = ref(false)
 const userName = ref('')
+const returnToDashboard = () => {
+  router.push({ name: 'Dashboard' })
+}
 const returnHome = () => {
   router.push({ name: 'Home' })
 }
-
 onMounted(async () => {
   try {
     const urlParams = new URLSearchParams(window.location.search)
@@ -27,21 +30,23 @@ onMounted(async () => {
       }
     }
   } catch (err) {
-    setError('Something went getting Strava Access')
+    setError(parseErrorMessage(err))
   }
 })
 </script>
 
 <template>
-  <div v-if="accessGranter" class="main-container">
-    <div>
-      <h2>Hello, {{ userName }}</h2>
+  <MainContainer>
+    <div v-if="accessGranter" class="main-container">
+      <div>
+        <h2>Hello, {{ userName }}</h2>
+      </div>
+      <div><h1>Strava access granted!</h1></div>
+      <div><h2>Thank you for choosing us!</h2></div>
+      <div @click="returnToDashboard()"><button>To Dashboard</button></div>
     </div>
-    <div><h1>Strava access granted!</h1></div>
-    <div><h2>Thank you for choosing us!</h2></div>
-    <div @click="returnHome()"><button>Return home</button></div>
-  </div>
-  <ErrorBox v-if="error" :message="errorMessage" @close="resetError"> </ErrorBox>
+  </MainContainer>
+  <ErrorBox v-if="error" :message="errorMessage" @close="(resetError, returnHome)"> </ErrorBox>
 </template>
 
 <style scoped>

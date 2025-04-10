@@ -4,6 +4,7 @@ import { signin } from '../user'
 import router from '../router'
 import { parseErrorMessage, setError, error, errorMessage, resetError } from '@/errors'
 import ErrorBox from '@/components/ErrorBox.vue'
+import MainContainer from '@/components/MainContainer.vue'
 
 const userData = ref({ email: '', password: '' })
 
@@ -19,7 +20,7 @@ const signIn = async () => {
 </script>
 
 <template>
-  <div class="main-container">
+  <MainContainer>
     <form @submit.prevent="signIn">
       <label for="email">Email</label>
       <input v-model="userData.email" type="email" required />
@@ -27,7 +28,7 @@ const signIn = async () => {
       <input v-model="userData.password" type="password" required />
       <button type="submit">Sign in</button>
     </form>
-  </div>
+  </MainContainer>
   <ErrorBox v-if="error" :message="errorMessage" @close="resetError"></ErrorBox>
 </template>
 
@@ -38,6 +39,6 @@ form {
   flex-direction: column;
 }
 button {
-  margin: 4px;
+  margin: 5px;
 }
 </style>

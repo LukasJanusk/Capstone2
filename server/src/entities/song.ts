@@ -11,5 +11,12 @@ export const songSchema = z.object({
   title: z.string().optional().nullable(),
   prompt: z.string().optional().nullable(),
 })
+export const songPublicSchema = songSchema.pick({
+  id: true,
+  audioUrl: true,
+  imageUrl: true,
+  title: true,
+})
 export type Song = z.infer<typeof songSchema>
+export type SongPublic = z.infer<typeof songPublicSchema>
 export const parseSong = (data: unknown) => songSchema.parse(data)

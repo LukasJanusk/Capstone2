@@ -1,5 +1,5 @@
 import z from 'zod'
-import { songSchema } from './song'
+import { songPublicSchema } from './song'
 
 export const activitySchema = z.object({
   id: z.coerce.number().positive().int(),
@@ -16,10 +16,23 @@ export const activitySchema = z.object({
   cadence: z.coerce.number().positive().nullable().optional(), // Low Cadence: 50-70 RPM, Average Cadence: 70-90 RPM, High Cadence: 90-110+ RPM
   startTime: z.string(),
 })
+export const activitySchemaPublic = activitySchema.pick({
+  id: true,
+  type: true,
+  title: true,
+  duration: true,
+  heartrate: true,
+  calories: true,
+  speedAverage: true,
+  distance: true,
+  cadence: true,
+  startTime: true,
+})
 export const activityWithSongSchema = z.object({
-  activity: activitySchema,
-  songs: z.array(songSchema),
+  activity: activitySchemaPublic,
+  songs: z.array(songPublicSchema),
 })
 export type ActivityFull = z.infer<typeof activitySchema>
+export type ActivityPublic = z.infer<typeof activitySchemaPublic>
 export const parseActivity = (data: unknown) => activitySchema.parse(data)
 export type ActivityWithSong = z.infer<typeof activityWithSongSchema>

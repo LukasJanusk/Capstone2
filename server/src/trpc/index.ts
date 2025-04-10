@@ -5,7 +5,6 @@ import type { Repositories } from '@server/repositories'
 import type { Database } from '@server/database'
 import type { SongGenerationService } from '@server/controllers/generator/model'
 import { ZodError } from 'zod'
-import { fromZodError } from 'zod-validation-error'
 import type { Logger } from '../logger'
 import type { AuthUser } from '../entities/user'
 
