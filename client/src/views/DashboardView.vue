@@ -6,7 +6,6 @@ import { onMounted, ref } from 'vue'
 import { trpc } from '@/trpc'
 import ActivityList from '@/components/ActivityList/ActivityList.vue'
 import { errorMessage, setError, resetError, error, parseErrorMessage } from '../errors/index'
-import { type } from '../../../server/src/shared/trpc'
 
 const testActivity = {
   id: 1,
@@ -29,20 +28,28 @@ const testSong = {
 const fakeActivities = ref<ActivityWithSong[]>([
   { activity: testActivity, songs: [testSong, { testSong, title: 'Super Vibes' }] },
   {
-    activity: { ...testActivity, type: 'static' },
+    activity: { ...testActivity, type: 'static', id: 2 },
     songs: [testSong, { testSong, title: 'Super Vibes' }],
   },
   {
-    activity: { ...testActivity, type: 'run' },
+    activity: { ...testActivity, type: 'run', id: 3 },
     songs: [testSong, { testSong, title: 'Super Vibes' }],
   },
   {
-    activity: { ...testActivity, type: 'run' },
+    activity: { ...testActivity, type: 'run', id: 4 },
     songs: [testSong, { testSong, title: 'Super Vibes' }],
   },
   {
-    activity: { ...testActivity, type: 'run' },
-    songs: [testSong, { testSong, title: 'Super Vibes' }],
+    activity: { ...testActivity, type: 'ride', id: 5 },
+    songs: [testSong, { testSong, title: 'Super duper Vibes' }],
+  },
+  {
+    activity: { ...testActivity, type: 'ride', id: 6 },
+    songs: [testSong, { testSong, title: 'Super duper Vibes' }],
+  },
+  {
+    activity: { ...testActivity, type: 'run', id: 7 },
+    songs: [testSong, { testSong, title: 'Super duper Vibes' }],
   },
 ])
 const activities = ref<ActivityWithSong[]>([])
