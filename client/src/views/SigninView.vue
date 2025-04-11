@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { signin } from '../user'
 import router from '../router'
-import { parseErrorMessage, setError, error, errorMessage, resetError } from '@/errors'
+import { parseErrorMessage, setError, errorMessage, resetError } from '@/errors'
 import ErrorBox from '@/components/ErrorBox.vue'
 import MainContainer from '@/components/MainContainer.vue'
 
@@ -29,7 +29,7 @@ const signIn = async () => {
       <button type="submit">Sign in</button>
     </form>
   </MainContainer>
-  <ErrorBox v-if="error" :message="errorMessage" @close="resetError"></ErrorBox>
+  <ErrorBox :message="errorMessage" @close="resetError"></ErrorBox>
 </template>
 
 <style lang="css" scoped>

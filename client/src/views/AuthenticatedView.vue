@@ -4,7 +4,7 @@ import { trpc } from '@/trpc'
 import router from '@/router'
 import { stravaAuthenticated } from '@/user'
 import ErrorBox from '@/components/ErrorBox.vue'
-import { errorMessage, setError, resetError, error, parseErrorMessage } from '../errors/index'
+import { errorMessage, setError, parseErrorMessage } from '../errors/index'
 import MainContainer from '@/components/MainContainer.vue'
 
 const authCode = ref('')
@@ -46,7 +46,7 @@ onMounted(async () => {
       <div @click="returnToDashboard()"><button>To Dashboard</button></div>
     </div>
   </MainContainer>
-  <ErrorBox v-if="error" :message="errorMessage" @close="(resetError, returnHome)"> </ErrorBox>
+  <ErrorBox :message="errorMessage" @close="returnHome"> </ErrorBox>
 </template>
 
 <style scoped>

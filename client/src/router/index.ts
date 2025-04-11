@@ -22,8 +22,17 @@ const router = createRouter({
       component: AuthenticatedView,
     },
     {
-      path: '/playback',
+      path: '/playback/:activityId',
       name: 'Playback',
+      props: (route) => ({
+        activityId: parseInt(
+          Array.isArray(route.params.activityId)
+            ? route.params.activityId[0]
+            : route.params.activityId,
+          10
+        ),
+      }),
+
       component: PlaybackView,
     },
     { path: '/dashboard', name: 'Dashboard', component: DashboardView },

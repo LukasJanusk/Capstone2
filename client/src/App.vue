@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import HeaderMain from './components/HeaderMain.vue'
+import HeaderMain from './components/HeaderMain/HeaderMain.vue'
 import router from './router'
 import { logout } from './user'
 </script>

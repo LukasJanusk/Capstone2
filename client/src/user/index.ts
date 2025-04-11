@@ -10,6 +10,7 @@ import {
 
 export const authUser = ref<null | AuthUser>(null)
 export const stravaAuthenticated = ref<boolean>(false)
+export const showHeader = ref<boolean>(true)
 
 const authToken = ref<string | null>(getStoredAccessToken(localStorage))
 

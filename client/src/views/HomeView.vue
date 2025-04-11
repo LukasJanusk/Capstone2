@@ -37,8 +37,7 @@ const authorizeUser = async () => {
       <button v-if="!stravaAuthenticated" @click="authorizeUser()">Authorize Strava</button>
     </div>
   </MainContainer>
-
-  <ErrorBox v-if="error" :message="errorMessage" @close="(resetError, returnHome)"></ErrorBox>
+  <ErrorBox :message="errorMessage" @close="returnHome"></ErrorBox>
 </template>
 
 <style scoped>

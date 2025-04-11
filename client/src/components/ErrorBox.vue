@@ -1,18 +1,29 @@
 <script setup lang="ts">
-const props = defineProps<{ message: string }>()
-const emit = defineEmits<{
-  (e: 'close'): void
-}>()
+import { error, errorMessage, resetError } from '../errors'
+const props = defineProps<{ message?: string }>()
 </script>
 
 <template>
-  <div class="toast-error">
-    <h2>{{ props.message }}</h2>
-    <button @click="emit('close')">Close</button>
-  </div>
+  <Transition name="fade">
+    <div class="toast-error" v-if="error">
+      <h2>
+        {{ props.message ? props.message : errorMessage ? errorMessage : 'Unknown Error occured' }}
+      </h2>
+      <button @click="(resetError, $emit('close'))">Close</button>
+    </div>
+  </Transition>
 </template>
 
 <style lang="css" scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 .toast-error {
   border-radius: 10px;
   padding: 15px;
