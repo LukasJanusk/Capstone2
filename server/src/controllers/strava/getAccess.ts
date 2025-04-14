@@ -8,7 +8,7 @@ export default authenticatedProcedure
   .input(z.object({ code: z.string() }))
   .mutation(async ({ input, ctx }) => {
     try {
-      const data = await ctx.stravaService.getUserTokens(input.code)
+      const data = await ctx.stravaService.getUserTokens(input.code, ctx.logger)
       const tokensData = {
         userId: ctx.authUser.id,
         accessToken: data.access_token,

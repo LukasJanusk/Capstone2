@@ -7,7 +7,6 @@ import ErrorBox from '@/components/ErrorBox.vue'
 import { errorMessage, setError, parseErrorMessage } from '../errors/index'
 import MainContainer from '@/components/MainContainer.vue'
 
-const authCode = ref('')
 const accessGranter = ref(false)
 const userName = ref('')
 const returnToDashboard = () => {
@@ -21,7 +20,6 @@ onMounted(async () => {
     const urlParams = new URLSearchParams(window.location.search)
     const code = urlParams.get('code')
     if (code) {
-      authCode.value = code
       const user = await trpc.strava.getAccess.mutate({ code })
       if (user) {
         userName.value = user.firstName
@@ -37,7 +35,7 @@ onMounted(async () => {
 
 <template>
   <MainContainer>
-    <div v-if="accessGranter" class="main-container">
+    <div v-if="accessGranter" class="message-container">
       <div>
         <h2>Hello, {{ userName }}</h2>
       </div>
@@ -50,7 +48,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-.main-container {
+.message-container {
   border-radius: 10px;
   padding: 15px;
   border: 3px solid black;

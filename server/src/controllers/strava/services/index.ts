@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
 import { TRPCError } from '@trpc/server'
+import type { Logger } from '@server/logger'
 import {
   parseRefreshTokenResponse,
   parseStravaActivity,
@@ -14,8 +14,10 @@ export const createStravaService = (
   client_id: string,
   client_secret: string
 ) => ({
-  // one time code is received from client
-  async getUserTokens(oneTimeCode: string): Promise<TokensSchema> {
+  async getUserTokens(
+    oneTimeCode: string,
+    logger?: Logger
+  ): Promise<TokensSchema> {
     try {
       const response = await fetch('https://www.strava.com/oauth/token', {
         method: 'POST',
@@ -31,17 +33,16 @@ export const createStravaService = (
 
       return parseTokenResponse(data)
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Unknown error occured'
-      console.error(message)
+      if (logger)
+        logger.error(error, 'Failed to receive user tokens from Strava')
       throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message,
+        code: 'BAD_REQUEST',
+        message: 'Failed to receive user tokens from Strava',
       })
     }
   },
 
-  async refreshUserAccessToken(refreshToken: string) {
+  async refreshUserAccessToken(refreshToken: string, logger?: Logger) {
     try {
       const response = await fetch('https://www.strava.com/oauth/token', {
         method: 'POST',
@@ -58,9 +59,9 @@ export const createStravaService = (
 
       return parseRefreshTokenResponse(data)
     } catch (error) {
-      console.error(
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      )
+      if (logger) {
+        logger.error(error, 'Failed to refresh user Tokens')
+      }
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Error accessing Strava servers',
@@ -68,19 +69,21 @@ export const createStravaService = (
     }
   },
 
-  async getUser(userAccessToken: string): Promise<StravaAthlete> {
+  async getUser(
+    userAccessToken: string,
+    logger?: Logger
+  ): Promise<StravaAthlete> {
     try {
       const response = await fetch('https://www.strava.com/api/v3/athlete', {
         headers: { Authorization: `Bearer ${userAccessToken}` },
         method: 'GET',
       })
       const data = await response.json()
-      console.log(data)
       return parseStravaAthlete(data)
     } catch (error) {
-      console.error(
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      )
+      if (logger) {
+        logger.error(error, 'Failed to get user data from Strava')
+      }
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Error accessing Strava servers',
@@ -90,7 +93,8 @@ export const createStravaService = (
 
   async getActivityById(
     activityId: number,
-    userAccessToken: string
+    userAccessToken: string,
+    logger?: Logger
   ): Promise<StravaActivity | null> {
     try {
       const response = await fetch(
@@ -113,9 +117,9 @@ export const createStravaService = (
 
       return parseStravaActivity(data)
     } catch (error) {
-      console.error(
-        error instanceof Error ? error.message : 'Unknown error occurred'
-      )
+      if (logger) {
+        logger.error(error, 'Failed to refresh user Tokens')
+      }
       return null
     }
   },

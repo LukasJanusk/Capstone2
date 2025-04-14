@@ -3,29 +3,21 @@ import { authUserId, stravaAuthenticated } from '../user'
 import router from '@/router'
 import { trpc } from '../trpc/index'
 import { onMounted, ref } from 'vue'
-import { errorMessage, setError, resetError, error, parseErrorMessage } from '../errors/index'
+import { errorMessage } from '../errors/index'
 import ErrorBox from '@/components/ErrorBox.vue'
 import MainContainer from '@/components/MainContainer.vue'
+import { authorizeUser } from '@/strava'
 
 const clientId = ref('')
 onMounted(async () => {
   clientId.value = await trpc.strava.getClientId.query()
+  if (authUserId.value) {
+    const response = await trpc.user.stravaAuthenticated.query()
+    stravaAuthenticated.value = response.authenticated
+  }
 })
 const returnHome = () => {
   router.push({ name: 'Home' })
-}
-const authorizeUser = async () => {
-  try {
-    if (!clientId.value) {
-      clientId.value = await trpc.strava.getClientId.query()
-    }
-    const currentUrl = window.location.href
-    const redirectUrl = currentUrl + 'authenticated'
-    const authUrl = `https://www.strava.com/oauth/authorize?client_id=${clientId.value}&response_type=code&redirect_uri=${redirectUrl}/&approval_prompt=force&scope=read,activity:read_all`
-    window.location.href = authUrl
-  } catch (err) {
-    setError(parseErrorMessage(err))
-  }
 }
 </script>
 
@@ -34,7 +26,7 @@ const authorizeUser = async () => {
     <div v-if="authUserId" id="authorized">
       <div><img id="logo" src="../assets/icon.png" /></div>
       <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
-      <button v-if="!stravaAuthenticated" @click="authorizeUser()">Authorize Strava</button>
+      <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">Authorize Strava</button>
     </div>
   </MainContainer>
   <ErrorBox :message="errorMessage" @close="returnHome"></ErrorBox>

@@ -36,7 +36,7 @@ describe('getUserTokens', () => {
       })
     )
     await expect(stravaService.getUserTokens('codeString')).rejects.toThrow(
-      /timeout/i
+      /Failed to receive user tokens from Strava/i
     )
   })
   it('throws Error schema missmatch', async () => {
@@ -53,7 +53,7 @@ describe('getUserTokens', () => {
       )
     )
     await expect(stravaService.getUserTokens('codeString')).rejects.toThrow(
-      /bearer/i
+      /Failed to receive user tokens from Strava/i
     )
   })
 })

@@ -46,8 +46,6 @@ const goToPlayback = (id: number) => {
 .main-container {
   display: flex;
   flex-wrap: wrap;
-  min-width: 800px;
-  height: 600px;
 }
 .activity-box {
   margin: 1px;

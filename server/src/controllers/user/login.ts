@@ -1,18 +1,18 @@
 import { publicProcedure } from '@server/trpc'
 import provideRepos from '@server/trpc/provideRepos'
 import { userRepository } from '@server/repositories/userRepository'
-import { userSigninSchema } from '@server/entities/user'
 import { TRPCError } from '@trpc/server'
 import { compare } from 'bcrypt'
 import jsonwebtoken from 'jsonwebtoken'
 import config from '@server/config'
 import { prepareTokenPayload } from '@server/trpc/tokenPayload'
+import { z } from 'zod'
 
 const { tokenKey } = config.auth
 
 export default publicProcedure
   .use(provideRepos({ userRepository }))
-  .input(userSigninSchema)
+  .input(z.object({ email: z.string(), password: z.string() }))
   .mutation(async ({ input: { email, password }, ctx }) => {
     const user = await ctx.repos.userRepository.findByEmail(email)
     if (!user) {

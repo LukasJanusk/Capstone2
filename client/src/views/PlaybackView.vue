@@ -6,7 +6,7 @@ import MainContainer from '@/components/MainContainer.vue'
 import ActivityItem from '@/components/ActivityList/ActivityItem.vue'
 import { userActivitiesWithSong } from '@/activities'
 import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 // const songUrl = ref(
 //   'https://files.topmediai.com/aimusic/api/6ad2dc9a-ee46-4d83-8d1f-682efe46c1f9-audio.mp3'
@@ -15,7 +15,6 @@ const props = defineProps<{ activityId: number }>()
 const returnToDashboard = () => {
   router.push({ name: 'Dashboard' })
 }
-const route = useRoute()
 const activityWithSong = ref<ActivityWithSong>()
 const router = useRouter()
 onMounted(() => {
