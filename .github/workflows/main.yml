@@ -62,7 +62,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Start server for E2E tests
-        run: npm run start -w=server &
+        run: npm run prod -w=server &
 
       - name: Build frontend
         run: npm run build -w=client
