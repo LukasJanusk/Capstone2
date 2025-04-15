@@ -118,7 +118,7 @@ export const createStravaService = (
       return parseStravaActivity(data)
     } catch (error) {
       if (logger) {
-        logger.error(error, 'Failed to refresh user Tokens')
+        logger.error(error, 'Failed to fetch activity')
       }
       return null
     }

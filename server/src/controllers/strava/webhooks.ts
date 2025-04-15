@@ -42,7 +42,8 @@ export default webhookProcedure
       )
       const activityData = await ctx.stravaService.getActivityById(
         input.object_id,
-        tokens.accessToken
+        tokens.accessToken,
+        ctx.logger
       )
       if (!activityData) {
         ctx.logger.error(

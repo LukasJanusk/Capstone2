@@ -55,14 +55,14 @@ onMounted(async () => {
       <label for="traits" title="Select 3 or more traits that defines you the best">Traits*</label>
 
       <div id="selected-traits">
-        <span
+        <div
           @click="userData.traits = userData.traits.filter((t) => t.id !== trait.id)"
           v-for="trait in userData.traits"
           :key="trait.id"
           class="trait-tag"
         >
-          | {{ trait.name }} ❌ |
-        </span>
+          {{ trait.name }} ❌
+        </div>
       </div>
 
       <select multiple>
@@ -91,9 +91,10 @@ form {
   padding: 2px;
 }
 #selected-traits {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr;
   max-width: 100%;
-  flex-wrap: wrap;
+  text-align: start;
 }
 button {
   margin: 5px;
