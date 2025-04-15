@@ -8,6 +8,9 @@ import { generatePrompt } from '@server/promt'
 import { parseGenre } from '@server/entities/genre'
 import { songRepository } from '@server/repositories/songRepository'
 import { webhookProcedure } from '@server/trpc/webhookProcedure'
+
+import type { Activity } from '@server/database'
+import type { Insertable } from 'kysely'
 import { parseActivity } from '../../entities/activity'
 import { parseTrait } from '../../entities/traits'
 import { transformActivityFromStrava, webhookSchema } from './services/schema'
@@ -55,48 +58,63 @@ export default webhookProcedure
           message: 'Activity not found',
         })
       }
-      const activityStored = await ctx.repos.activityRepository.create({
+      const activityToStore: Insertable<Activity> = {
         userId: tokens.userId,
         ...transformActivityFromStrava(activityData),
-      })
+      }
       ctx.logger.info(
-        activityStored,
-        'POST strava.webhooks activity saved to db'
+        activityToStore,
+        'POST strava.webhooks activity parsed for storing'
       )
-      const genres = (await ctx.repos.genreRepository.getAll()).map((g) =>
-        parseGenre(g)
-      )
-      const traits = (
-        await ctx.repos.traitRepository.getUserTraitsFull(tokens.userId)
-      ).map((t) => parseTrait(t))
-      const prompt = generatePrompt(
-        parseActivity(activityStored),
-        traits,
-        genres
-      )
-
-      const task = await ctx.songGenerationService.requestSong(
-        prompt.title,
-        prompt.style,
-        prompt.prompt
-      )
-      if (task.code !== 200 || !task.data) {
-        ctx.logger.error(
-          task,
-          'POST strava.webhooks External API failed create Song genration task'
+      try {
+        const activityStored =
+          await ctx.repos.activityRepository.create(activityToStore)
+        ctx.logger.info(
+          activityStored,
+          'POST strava.webhooks activity saved to db'
         )
+
+        const genres = (await ctx.repos.genreRepository.getAll()).map((g) =>
+          parseGenre(g)
+        )
+        const traits = (
+          await ctx.repos.traitRepository.getUserTraitsFull(tokens.userId)
+        ).map((t) => parseTrait(t))
+        const prompt = generatePrompt(
+          parseActivity(activityStored),
+          traits,
+          genres
+        )
+        ctx.logger.info(
+          prompt,
+          'POST strava.webhooks prompt generated successfully'
+        )
+        const task = await ctx.songGenerationService.requestSong(
+          prompt.title,
+          prompt.style,
+          prompt.prompt
+        )
+        if (task.code !== 200 || !task.data) {
+          ctx.logger.error(
+            task,
+            'POST strava.webhooks External API failed create Song genration task'
+          )
+          return { status: 'EVENT_RECEIVED' }
+        }
+        const generationTask =
+          await ctx.repos.songRepository.createGenerationTask({
+            userId: tokens.userId,
+            taskId: task.data.task_id,
+            activityId: activityStored.id,
+          })
+        ctx.logger.info(
+          generationTask,
+          'POST strava.webhooks Song generation task created'
+        )
+      } catch (err) {
+        ctx.logger.error(err, 'POST strava.webhooks error occured:')
         return { status: 'EVENT_RECEIVED' }
       }
-      const generationTask =
-        await ctx.repos.songRepository.createGenerationTask({
-          userId: tokens.userId,
-          taskId: task.data.task_id,
-          activityId: activityStored.id,
-        })
-      ctx.logger.info(
-        generationTask,
-        'POST strava.webhooks Song generation task created'
-      )
     }
 
     return { status: 'EVENT_RECEIVED' }
