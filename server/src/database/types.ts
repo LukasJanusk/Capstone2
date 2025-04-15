@@ -20,7 +20,7 @@ export interface Activity {
   heartrate: number | null
   id: Generated<number>
   origin: string
-  originId: number
+  originId: string
   speedAverage: number | null
   startTime: string
   title: string | null

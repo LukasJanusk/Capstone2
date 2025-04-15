@@ -56,7 +56,7 @@ it('transforms activity from strava activity response to application default for
   const transformed = transformActivityFromStrava(data)
 
   expect(transformed).toEqual({
-    originId: 123,
+    originId: '123',
     origin: 'strava',
     startTime: '2018-02-16T14:52:54Z',
     calories: 555,

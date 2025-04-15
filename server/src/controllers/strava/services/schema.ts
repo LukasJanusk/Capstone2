@@ -100,7 +100,7 @@ export const transformActivity = stravaActivitySchema.transform(
       }
     }
     return {
-      originId: id,
+      originId: String(id),
       origin: 'strava',
       type: activityType,
       title: name ?? null,

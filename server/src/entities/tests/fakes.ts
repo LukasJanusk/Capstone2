@@ -85,7 +85,7 @@ export const fakeActivity = <T extends Partial<Insertable<Activity>>>(
       | 'static'
       | 'run',
     origin: 'strava',
-    originId: random.integer({ min: 1, max: 10000 }),
+    originId: String(random.integer({ min: 1, max: 10000 })),
     title: random.string({ length: 30 }),
     duration: random.integer({ min: 1, max: 200000 }),
     heartrate: random.integer({ min: 1, max: 300 }),

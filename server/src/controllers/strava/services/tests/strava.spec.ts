@@ -162,7 +162,7 @@ describe('getActivityById', async () => {
       'fetch',
       vi.fn(() =>
         mockActivityResponse({
-          id: 123,
+          id: '123',
           athlete: { user: 1 },
           start_date: '2018-02-16T14:52:54Z',
           start_date_local: '2018-02-16T14:52:54Z',
