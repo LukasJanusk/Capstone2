@@ -59,6 +59,10 @@ export default webhookProcedure
         userId: tokens.userId,
         ...transformActivityFromStrava(activityData),
       })
+      ctx.logger.info(
+        activityStored,
+        'POST strava.webhooks activity saved to db'
+      )
       const genres = (await ctx.repos.genreRepository.getAll()).map((g) =>
         parseGenre(g)
       )

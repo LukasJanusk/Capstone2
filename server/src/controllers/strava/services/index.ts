@@ -114,8 +114,9 @@ export const createStravaService = (
       }
 
       const data = await response.json()
-
-      return parseStravaActivity(data)
+      const activityParsed = parseStravaActivity(data)
+      logger?.info(activityParsed, 'Activity data raceived from Strava')
+      return activityParsed
     } catch (error) {
       if (logger) {
         logger.error(error, 'Failed to fetch activity')
