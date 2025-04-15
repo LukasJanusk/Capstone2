@@ -62,5 +62,10 @@ it('transforms activity from strava activity response to application default for
     calories: 555,
     type: 'static',
     speedAverage: 25.5,
+    cadence: null,
+    distance: null,
+    duration: null,
+    title: null,
+    heartrate: null,
   })
 })

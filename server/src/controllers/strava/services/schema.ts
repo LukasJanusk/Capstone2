@@ -99,18 +99,17 @@ export const transformActivity = stravaActivitySchema.transform(
         activityType = 'run'
       }
     }
-
     return {
       originId: id,
       origin: 'strava',
       type: activityType,
-      title: name,
-      duration: elapsed_time,
-      heartrate: average_heartrate,
-      calories,
-      speedAverage: average_speed,
-      distance,
-      cadence: average_cadence,
+      title: name ?? null,
+      duration: elapsed_time ?? null,
+      heartrate: average_heartrate ?? null,
+      calories: calories ?? null,
+      speedAverage: average_speed ?? null,
+      distance: distance ?? null,
+      cadence: average_cadence ?? null,
       startTime: start_date,
     }
   }
