@@ -5,9 +5,9 @@ export const activitySchema = z.object({
   id: z.coerce.number().positive().int(),
   userId: z.coerce.number().positive().int(),
   type: z.enum(['ride', 'static', 'run']).default('static'),
-  origin: z.string().min(1).max(100).default('strava'),
-  originId: z.coerce.number().min(1).optional(),
-  title: z.string().min(1).max(100),
+  origin: z.string().default('strava'),
+  originId: z.string().nullable(),
+  title: z.string().max(100).nullable(),
   duration: z.coerce.number().positive(), // Low 20 min, Average 40 min, Long 60+ min
   heartrate: z.coerce.number().int().positive().nullable().optional(), // Low HR: 95-133 bpm, Mid HR: 133-162 bpm, High HR: 162-190 bpm
   calories: z.coerce.number().int().positive().nullable().optional(),
