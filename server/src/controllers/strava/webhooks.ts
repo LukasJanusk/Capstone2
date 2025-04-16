@@ -88,12 +88,10 @@ export default webhookProcedure
           prompt,
           'POST strava.webhooks prompt generated successfully'
         )
-        const task = await ctx.songGenerationService.requestSong(
-          prompt.title,
-          prompt.style,
-          prompt.prompt,
-          ctx.logger
-        )
+        const task = await ctx.songGenerationService.requestSong({
+          prompt: prompt.prompt,
+          logger: ctx.logger,
+        })
         if (task.code !== 200 || !task.data) {
           ctx.logger.error(
             task,
@@ -104,7 +102,7 @@ export default webhookProcedure
         const generationTask =
           await ctx.repos.songRepository.createGenerationTask({
             userId: tokens.userId,
-            taskId: task.data.task_id,
+            taskId: task.data.taskId,
             activityId: activityStored.id,
           })
         ctx.logger.info(

@@ -15,9 +15,9 @@ import {
 import { createStravaService } from '../services'
 
 const songGenerationService = {
-  requestSong: (title: string, style: string, prompt: string) => {
-    if (title && style && prompt) {
-      return { code: 200, msg: 'success', data: { task_id: '123' } }
+  requestSong: (prompt: any) => {
+    if (prompt as any) {
+      return { code: 200, msg: 'success', data: { taskId: '123' } }
     }
     return { code: 400, msg: 'fail' }
   },

@@ -13,6 +13,15 @@ export function songRepository(db: Database) {
         .returningAll()
         .executeTakeFirstOrThrow()
     },
+    async getGenerationTaskByUserId(
+      userId: number
+    ): Promise<Selectable<GenerationTask>[]> {
+      return db
+        .selectFrom('generationTask')
+        .selectAll()
+        .where('generationTask.userId', '=', userId)
+        .execute()
+    },
     async getByTaskId(taskId: string): Promise<Selectable<GenerationTask>> {
       return db
         .selectFrom('generationTask')

@@ -3,7 +3,7 @@ import z from 'zod'
 const generationTaskSchema = z.object({
   code: z.number().int().positive(),
   msg: z.string(),
-  data: z.object({ task_id: z.string() }).optional().nullable(),
+  data: z.object({ taskId: z.string() }).optional().nullable(),
 })
 
 export const parseGenerationTaskResponse = (data: unknown) =>
@@ -61,5 +61,38 @@ const responseSchema = z.object({
   }),
 })
 
+const sunoDataItemSchema = z.object({
+  id: z.string(),
+  audioUrl: z.string().url(),
+  streamAudioUrl: z.string().url(),
+  imageUrl: z.string().url(),
+  prompt: z.string(),
+  modelName: z.string(),
+  title: z.string(),
+  tags: z.string(),
+  createTime: z.string(),
+  duration: z.number(),
+})
+
+const songGenerationResponseSchema = z.object({
+  code: z.number(),
+  msg: z.string(),
+  data: z.object({
+    taskId: z.string(),
+    parentMusicId: z.string(),
+    param: z.string(),
+    response: z.object({
+      taskId: z.string(),
+      sunoData: z.array(sunoDataItemSchema),
+    }),
+    status: z.string(),
+    type: z.string(),
+    errorCode: z.string().nullable(),
+    errorMessage: z.string().nullable(),
+  }),
+})
 export const parseSongResponse = (data: unknown) => responseSchema.parse(data)
 export type SongGenerationTask = z.infer<typeof generationTaskSchema>
+export const parseGenerationDetails = (data: unknown) =>
+  songGenerationResponseSchema.parse(data)
+export type SongGenerationDetails = z.infer<typeof songGenerationResponseSchema>

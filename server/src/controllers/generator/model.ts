@@ -2,17 +2,31 @@
 
 import config from '@server/config'
 import type { Logger } from '@server/logger'
-import { parseGenerationTaskResponse, type SongGenerationTask } from './schema'
+import {
+  parseGenerationDetails,
+  parseGenerationTaskResponse,
+  type SongGenerationTask,
+} from './schema'
 
+type RequestSongParams = {
+  prompt: string
+  style?: string
+  title?: string
+  logger?: Logger
+  callBackUrl?: string
+  model?: string
+}
 export default function createMusicGenerationService(apiKey: string) {
-  const requestSong = async (
-    title: string, // 80 max
-    style: string, // 200 max
-    prompt: string, // 3000 max
-    logger?: Logger,
-    callBackUrl = `${config.publicDomain}/api/trpc/generator.storeGenerated`,
-    model: string = 'V3_5'
-  ): Promise<SongGenerationTask> => {
+  const requestSong = async ({
+    prompt,
+    style,
+    title,
+    logger,
+    callBackUrl = `${config.publicDomain}/api/trpc/generator.storeGenerated`.trim(),
+    model = 'V3_5',
+  }: RequestSongParams): Promise<SongGenerationTask> => {
+    const t = title || ''
+    const s = style || ''
     try {
       const response = await fetch(
         'https://apibox.erweima.ai/api/v1/generate',
@@ -24,12 +38,12 @@ export default function createMusicGenerationService(apiKey: string) {
           },
           body: JSON.stringify({
             prompt,
-            style,
-            title,
-            customMode: true,
+            style: s,
+            title: t,
+            customMode: false,
             instrumental: false,
             model,
-            callBackUrl, // Callback process has three stages: text (text generation), first (first track complete), complete (all tracks complete)
+            callBackUrl,
           }),
         }
       )
@@ -43,8 +57,30 @@ export default function createMusicGenerationService(apiKey: string) {
       throw error
     }
   }
+  const requestSongByTaskId = async (taskId: string, logger?: Logger) => {
+    try {
+      const response = await fetch(
+        `https://apibox.erweima.ai/api/v1/generate/record-info?taskId=${taskId}`,
+        {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${apiKey}`,
+          },
+        }
+      )
 
-  return { requestSong }
+      const data = await response.json()
+      const generationDetails = parseGenerationDetails(data)
+      logger?.info(generationDetails, 'Song generation task received')
+      return generationDetails
+    } catch (error) {
+      logger?.error(error, 'Error occured requesting song generation')
+      throw error
+    }
+  }
+
+  return { requestSong, requestSongByTaskId }
 }
 
 export type SongGenerationService = ReturnType<

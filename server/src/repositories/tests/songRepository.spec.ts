@@ -126,3 +126,32 @@ describe('getSongByUserId', () => {
     expect(notFound).toEqual([])
   })
 })
+describe('getGenerationTaskByUserId', () => {
+  it('returns generation tasks when found', async () => {
+    const [user] = await insertAll(db, 'user', fakeUser())
+    const [activity] = await insertAll(
+      db,
+      'activity',
+      fakeActivity({ userId: user.id })
+    )
+    const generationTasks = await insertAll(db, 'generationTask', [
+      {
+        taskId: '123',
+        activityId: activity.id,
+        userId: user.id,
+      },
+      {
+        taskId: '124',
+        activityId: activity.id,
+        userId: user.id,
+      },
+    ])
+
+    const inDb = await repository.getGenerationTaskByUserId(user.id)
+    expect(inDb.length).toEqual(2)
+    expect(inDb[0]).toEqual(generationTasks[0])
+    expect(inDb[1]).toEqual(generationTasks[1])
+  })
+
+  it('returns an empty array when no generation task was found', async () => {})
+})

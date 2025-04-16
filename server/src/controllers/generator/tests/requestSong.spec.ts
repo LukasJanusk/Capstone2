@@ -30,7 +30,7 @@ it('successfuly returns song request object', async () => {
         Promise.resolve({
           code: 200,
           msg: 'success',
-          data: { task_id: '5c79****be8e' },
+          data: { taskId: '5c79****be8e' },
         }),
     })
   )
@@ -72,7 +72,7 @@ it('throws an error wehn task.ok is not true', async () => {
         Promise.resolve({
           code: 400,
           msg: 'failure',
-          data: { task_id: '5c79****be8e' },
+          data: { taskId: '5c79****be8e' },
         }),
     })
   )

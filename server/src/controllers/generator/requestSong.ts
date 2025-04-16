@@ -15,11 +15,9 @@ export default authenticatedProcedure
     })
   )
   .mutation(async ({ input, ctx }) => {
-    const task = await ctx.songGenerationService.requestSong(
-      input.title,
-      input.style,
-      input.prompt
-    )
+    const task = await ctx.songGenerationService.requestSong({
+      prompt: input.prompt,
+    })
 
     if (task.code !== 200 || !task.data)
       throw new TRPCError({
@@ -30,7 +28,7 @@ export default authenticatedProcedure
     const songGenerationTask =
       await ctx.repos.songRepository.createGenerationTask({
         userId: ctx.authUser.id,
-        taskId: task.data.task_id,
+        taskId: task.data.taskId,
         activityId: input.activityId,
       })
 
