@@ -8,7 +8,6 @@ import { generatePrompt } from '@server/promt'
 import { parseGenre } from '@server/entities/genre'
 import { songRepository } from '@server/repositories/songRepository'
 import { webhookProcedure } from '@server/trpc/webhookProcedure'
-
 import type { Activity } from '@server/database'
 import type { Insertable } from 'kysely'
 import { parseActivity } from '../../entities/activity'
@@ -92,7 +91,8 @@ export default webhookProcedure
         const task = await ctx.songGenerationService.requestSong(
           prompt.title,
           prompt.style,
-          prompt.prompt
+          prompt.prompt,
+          ctx.logger
         )
         if (task.code !== 200 || !task.data) {
           ctx.logger.error(

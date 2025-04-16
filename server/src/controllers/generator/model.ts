@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
-import { TRPCError } from '@trpc/server'
+
 import config from '@server/config'
+import type { Logger } from '@server/logger'
 import { parseGenerationTaskResponse, type SongGenerationTask } from './schema'
 
 export default function createMusicGenerationService(apiKey: string) {
@@ -8,6 +9,7 @@ export default function createMusicGenerationService(apiKey: string) {
     title: string, // 80 max
     style: string, // 200 max
     prompt: string, // 3000 max
+    logger?: Logger,
     callBackUrl = `${config.publicDomain}/api/trpc/generator.storeGenerated`,
     model: string = 'V3_5'
   ): Promise<SongGenerationTask> => {
@@ -33,18 +35,12 @@ export default function createMusicGenerationService(apiKey: string) {
       )
 
       const data = await response.json()
-
-      return parseGenerationTaskResponse(data)
+      const parsedGenerationTask = parseGenerationTaskResponse(data)
+      logger?.info(parsedGenerationTask, 'Song generation task received')
+      return parsedGenerationTask
     } catch (error) {
-      console.error(
-        error instanceof Error
-          ? error.message
-          : 'Unexpected error occured creating song generation request'
-      )
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'Music API failed to generate a new task',
-      })
+      logger?.error(error, 'Error occured requesting song generation')
+      throw error
     }
   }
 
