@@ -8,12 +8,12 @@ export const activitySchema = z.object({
   origin: z.string().default('strava'),
   originId: z.string().nullable(),
   title: z.string().max(100).nullable(),
-  duration: z.coerce.number().positive(), // Low 20 min, Average 40 min, Long 60+ min
-  heartrate: z.coerce.number().int().positive().nullable().optional(), // Low HR: 95-133 bpm, Mid HR: 133-162 bpm, High HR: 162-190 bpm
-  calories: z.coerce.number().int().positive().nullable().optional(),
-  speedAverage: z.coerce.number().positive().nullable().optional(), // Low Speed: 16-24 km/h, Average Speed: 24-32 km/h, High Speed: 32-48+ km/h
-  distance: z.coerce.number().positive().nullable().optional(),
-  cadence: z.coerce.number().positive().nullable().optional(), // Low Cadence: 50-70 RPM, Average Cadence: 70-90 RPM, High Cadence: 90-110+ RPM
+  duration: z.coerce.number(), // Low 20 min, Average 40 min, Long 60+ min
+  heartrate: z.coerce.number().int().nullable(), // Low HR: 95-133 bpm, Mid HR: 133-162 bpm, High HR: 162-190 bpm
+  calories: z.coerce.number().int().nullable(),
+  speedAverage: z.coerce.number().nullable(), // Low Speed: 16-24 km/h, Average Speed: 24-32 km/h, High Speed: 32-48+ km/h
+  distance: z.coerce.number().nullable(),
+  cadence: z.coerce.number().nullable(), // Low Cadence: 50-70 RPM, Average Cadence: 70-90 RPM, High Cadence: 90-110+ RPM
   startTime: z.string(),
 })
 export const activitySchemaPublic = activitySchema.pick({
