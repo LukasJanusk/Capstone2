@@ -49,7 +49,7 @@ it('successfuly returns song request object', async () => {
     activityId: activity.id,
   })
 })
-it('throws an error when API does not generate taskId', async () => {
+it('throws an error when API does not receive 200 code', async () => {
   vi.stubGlobal('fetch', () =>
     Promise.resolve({
       json: () => Promise.resolve({ code: 400, message: 'UNAUTHORIZED' }),
@@ -63,7 +63,7 @@ it('throws an error when API does not generate taskId', async () => {
       title: 'dolphin song',
       activityId: activity.id,
     })
-  ).rejects.toThrow(/API failed/i)
+  ).rejects.toThrow(/required/i)
 })
 it('throws an error wehn task.ok is not true', async () => {
   vi.stubGlobal('fetch', () =>

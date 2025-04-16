@@ -3,7 +3,6 @@ import provideRepos from '@server/trpc/provideRepos'
 import { songRepository } from '@server/repositories/songRepository'
 import { TRPCError } from '@trpc/server'
 import { authenticatedProcedure } from '@server/trpc/authenticatedProcedure'
-import config from '@server/config'
 
 export default authenticatedProcedure
   .use(provideRepos({ songRepository }))
@@ -19,8 +18,7 @@ export default authenticatedProcedure
     const task = await ctx.songGenerationService.requestSong(
       input.title,
       input.style,
-      input.prompt,
-      `${config.publicDomain}/api/trpc/generator.storeGenerated`
+      input.prompt
     )
 
     if (task.code !== 200 || !task.data)
