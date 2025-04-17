@@ -9,14 +9,11 @@ export default authenticatedProcedure
       const stravaTokens = await ctx.repos.userRepository.getTokens(
         ctx.authUser.id
       )
-      if (stravaTokens) {
-        ctx.logger.info(
-          { userId: stravaTokens.userId },
-          'GET user.stravaAuthenticated user is authenticated by Strava'
-        )
-        return { authenticated: true }
-      }
-      return { authenticated: false }
+      ctx.logger.info(
+        { userId: stravaTokens.userId },
+        'GET user.stravaAuthenticated user is authenticated by Strava'
+      )
+      return { authenticated: true }
     } catch (err) {
       ctx.logger.info(
         err,
