@@ -20,6 +20,15 @@ export function activityRepository(db: Database) {
         .selectAll()
         .execute()
     },
+    getActivityByOriginId(
+      originId: string
+    ): Promise<Selectable<Activity> | undefined> {
+      return db
+        .selectFrom('activity')
+        .selectAll()
+        .where('activity.originId', '=', originId)
+        .executeTakeFirst()
+    },
   }
 }
 

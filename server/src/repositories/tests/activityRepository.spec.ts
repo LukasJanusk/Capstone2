@@ -36,3 +36,20 @@ describe('getActivitiesByUserId', () => {
     expect(notFound).toEqual([])
   })
 })
+describe('getActivityByOriginId', () => {
+  it('returns undefined when no activities found', async () => {
+    const notFound = await repository.getActivityByOriginId('12333332323232323')
+
+    expect(notFound).toBeUndefined()
+  })
+  it('returns activity that is already in db', async () => {
+    const [user] = await insertAll(db, 'user', fakeUser())
+    const originId = '123444'
+    const activity = fakeActivity({ userId: user.id, originId })
+    const [inserted] = await insertAll(db, 'activity', activity)
+
+    const found = await repository.getActivityByOriginId(originId)
+
+    expect(inserted).toEqual(found)
+  })
+})

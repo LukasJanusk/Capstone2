@@ -37,6 +37,16 @@ export default webhookProcedure
         { activityId: input.object_id },
         'POST strava.webhooks received new webhook from Strava'
       )
+      const exist = await ctx.repos.activityRepository.getActivityByOriginId(
+        String(input.object_id)
+      )
+      if (exist) {
+        ctx.logger.info(
+          { activityId: exist.id },
+          'POST strava.webhooks Activity already exist'
+        )
+        return { status: 'EVENT_RECEIVED' }
+      }
       const tokens = await getStravaUserTokens(
         stravaUserId,
         ctx.stravaService,

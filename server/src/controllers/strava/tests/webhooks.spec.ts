@@ -4,7 +4,11 @@ import { wrapInRollbacks } from '@tests/utils/transactions'
 import { createTestDatabase } from '@tests/utils/database'
 import { logger, type Logger } from '@server/logger'
 import { insertAll, selectAll } from '@tests/utils/records'
-import { fakeStravaTokens, fakeUser } from '@server/entities/tests/fakes'
+import {
+  fakeActivity,
+  fakeStravaTokens,
+  fakeUser,
+} from '@server/entities/tests/fakes'
 import type { SongGenerationService } from '@server/controllers/generator/model'
 import stravaRouter from '..'
 import {
@@ -143,5 +147,30 @@ it('logs an error when song generation API fails to create generation task', asy
   expect(loggerMock.info).toHaveBeenCalledWith(
     expect.objectContaining({ activityId: expect.any(Number) }),
     'POST strava.webhooks received new webhook from Strava'
+  )
+})
+it('returns when activity already in db', async () => {
+  const logSpy = vi.spyOn(logger, 'info')
+  const originId = 1234445
+  const [user] = await insertAll(db, 'user', fakeUser())
+  const [activity] = await insertAll(
+    db,
+    'activity',
+    fakeActivity({ userId: user.id, originId: String(originId) })
+  )
+
+  const webhook = fakeWebhook({
+    aspect_type: 'create',
+    event_time: 12341241241,
+    object_id: originId,
+    object_type: 'activity',
+    owner_id: 1,
+  })
+  const result = await caller.webhooks(webhook)
+
+  expect(result).toEqual({ status: 'EVENT_RECEIVED' })
+  expect(logSpy).toBeCalledWith(
+    { activityId: activity.id },
+    'POST strava.webhooks Activity already exist'
   )
 })
