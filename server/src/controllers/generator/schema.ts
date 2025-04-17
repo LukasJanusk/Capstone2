@@ -62,15 +62,14 @@ const responseSchema = z.object({
 })
 
 const sunoDataItemSchema = z.object({
-  id: z.string(),
+  id: z.coerce.string(),
   audioUrl: z.string().url(),
   streamAudioUrl: z.string().url(),
-  imageUrl: z.string().url(),
+  imageUrl: z.string().url().nullable(),
   prompt: z.string(),
   modelName: z.string(),
   title: z.string(),
-  tags: z.string(),
-  createTime: z.string(),
+  tags: z.string().nullable(),
   duration: z.number(),
 })
 

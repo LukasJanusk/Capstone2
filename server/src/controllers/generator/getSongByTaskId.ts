@@ -29,13 +29,15 @@ export default authenticatedProcedure
       )
       return []
     }
-    const activities =
-      await ctx.repos.activityRepository?.getActivitiesByUserId(ctx.authUser.id)
+    const activities = await ctx.repos.activityRepository.getActivitiesByUserId(
+      ctx.authUser.id
+    )
     const newSongs = (
       await Promise.all(
         notGenerated.map(async (t) => {
           const songData = await ctx.songGenerationService.requestSongByTaskId(
-            t.taskId
+            t.taskId,
+            ctx.logger
           )
           return Promise.all(
             songData.data.response.sunoData.map(async (s) => {
