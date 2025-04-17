@@ -14,16 +14,23 @@ onMounted(async () => {
 const show = ref<boolean>(true)
 const reload = async () => {
   await getActivitiesWithSong()
-  if (userActivitiesWithSong.value.length < 1) show.value = true
+  if (userActivitiesWithSong.value.length < 1) {
+    popUpMessage.value = 'No Activities found'
+    show.value = true
+  }
 }
 const getMissingSongs = async () => {
   const reloadedActivitiesWithSongs = await requestSongData()
   if (reloadedActivitiesWithSongs.length > 0) {
     userActivitiesWithSong.value = reloadedActivitiesWithSongs
+    show.value = true
+    popUpMessage.value = 'Activities with songs fetched'
   } else {
     show.value = true
+    popUpMessage.value = 'No Songs found'
   }
 }
+const popUpMessage = ref('No activities found')
 </script>
 
 <template>
@@ -33,8 +40,7 @@ const getMissingSongs = async () => {
       <div>
         <Transition name="fade">
           <div class="info-box" v-if="userActivitiesWithSong.length < 1 && show">
-            <div>No activities found</div>
-
+            <div>{{ popUpMessage }}</div>
             <button class="toggle-button" @click="show = !show">Close</button>
           </div>
         </Transition>
