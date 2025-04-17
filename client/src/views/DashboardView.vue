@@ -14,7 +14,10 @@ onMounted(async () => {
 const show = ref<boolean>(true)
 const reload = async () => {
   await getActivitiesWithSong()
-  if (userActivitiesWithSong.value.length < 1) {
+  if (userActivitiesWithSong.value.length > 0) {
+    popUpMessage.value = 'Activities loaded'
+    show.value = true
+  } else {
     popUpMessage.value = 'No Activities found'
     show.value = true
   }
@@ -23,11 +26,11 @@ const getMissingSongs = async () => {
   const reloadedActivitiesWithSongs = await requestSongData()
   if (reloadedActivitiesWithSongs.length > 0) {
     userActivitiesWithSong.value = reloadedActivitiesWithSongs
-    show.value = true
     popUpMessage.value = 'Activities with songs fetched'
-  } else {
     show.value = true
-    popUpMessage.value = 'No Songs found'
+  } else {
+    popUpMessage.value = 'No new Songs found'
+    show.value = true
   }
 }
 const popUpMessage = ref('No activities found')
