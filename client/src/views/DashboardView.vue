@@ -9,7 +9,7 @@ import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
 import { requestSongData } from '../generator/index'
 
 onMounted(async () => {
-  await getActivitiesWithSong()
+  await reload()
 })
 const show = ref<boolean>(true)
 const reload = async () => {
@@ -42,7 +42,7 @@ const popUpMessage = ref('No activities found')
     <div class="main-box">
       <div>
         <Transition name="fade">
-          <div class="info-box" v-if="userActivitiesWithSong.length < 1 && show">
+          <div class="info-box" v-if="show">
             <div>{{ popUpMessage }}</div>
             <button class="toggle-button" @click="show = !show">Close</button>
           </div>
