@@ -18,6 +18,12 @@ export default authenticatedProcedure
       activity: a,
       songs: songs.filter((s) => s.activityId === a.id),
     })) as ActivityWithSong[]
-
+    ctx.logger.info(
+      {
+        userId: ctx.authUser.id,
+        activities: activitiesWithSongs.map((a) => a.activity.id),
+      },
+      'GET user.getUserActivitiesWithSong returning user Activities'
+    )
     return activitiesWithSongs
   })

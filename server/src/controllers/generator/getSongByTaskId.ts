@@ -1,3 +1,4 @@
+import type { ActivityWithSong } from '@server/entities/activity'
 import { activityRepository } from '@server/repositories/activityRepository'
 import { songRepository } from '@server/repositories/songRepository'
 import { userRepository } from '@server/repositories/userRepository'
@@ -16,6 +17,18 @@ export default authenticatedProcedure
     const notGenerated = generationTasks.filter(
       (t) => !songs.some((s) => s.taskId === t.id)
     )
+    if (notGenerated.length > 0) {
+      ctx.logger.info(
+        notGenerated,
+        'POST generator.getSongByTaskId found tasks that did not generate song'
+      )
+    } else {
+      ctx.logger.info(
+        { userId: ctx.authUser.id },
+        'POST generator.getSongByTaskId did not find any missing songs'
+      )
+      return []
+    }
     const activities =
       await ctx.repos.activityRepository?.getActivitiesByUserId(ctx.authUser.id)
     const newSongs = (
@@ -46,10 +59,18 @@ export default authenticatedProcedure
 
       .flat()
       .flat()
-
-    const activitiesWithSongs = notGenerated.map((t) => ({
-      activity: activities.find((a) => a.id === t.activityId),
-      songs: newSongs.filter((s) => s.taskId === t.id),
-    }))
-    return activitiesWithSongs.filter((a) => a.activity && a.songs)
+    ctx.logger.info(
+      newSongs.map((s) => s.id),
+      'POST generator.getSongByTaskId songs saved to db'
+    )
+    songs.push(...newSongs)
+    const activitiesWithSongs = activities.map((a) => ({
+      activity: a,
+      songs: songs.filter((s) => s.activityId === a.id),
+    })) as ActivityWithSong[]
+    ctx.logger.info(
+      activitiesWithSongs.map((a) => ({ activityId: a.activity.id })),
+      'POST generator.getSongByTaskId returning activities with songs'
+    )
+    return activitiesWithSongs
   })

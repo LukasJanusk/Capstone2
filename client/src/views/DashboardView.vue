@@ -3,9 +3,10 @@ import ErrorBox from '@/components/ErrorBox.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import { onMounted, ref } from 'vue'
 import ActivityList from '@/components/ActivityList/ActivityList.vue'
-import { errorMessage } from '../errors/index'
+import { errorMessage, setError } from '../errors/index'
 import TopBar from '@/components/TopBar.vue'
 import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
+import { requestSongData } from '../generator/index'
 
 onMounted(async () => {
   await getActivitiesWithSong()
@@ -14,6 +15,13 @@ const show = ref<boolean>(true)
 const reload = async () => {
   await getActivitiesWithSong()
   if (userActivitiesWithSong.value.length < 1) show.value = true
+}
+const getMissingSongs = async () => {
+  const reloadedActivitiesWithSongs = await requestSongData()
+  if (reloadedActivitiesWithSongs) userActivitiesWithSong.value = reloadedActivitiesWithSongs
+  else {
+    setError('No new Songs found')
+  }
 }
 </script>
 
@@ -33,6 +41,7 @@ const reload = async () => {
       <ActivityList :activities-with-songs="userActivitiesWithSong"></ActivityList>
     </div>
     <button class="load-button" @click="reload">Load activities</button>
+    <button class="request-button" @click="getMissingSongs">Request Songs</button>
   </MainContainer>
 
   <ErrorBox :message="errorMessage"></ErrorBox>
@@ -79,6 +88,12 @@ p {
 .load-button {
   position: fixed;
   right: 10px;
+  bottom: 10px;
+  margin-top: 10px;
+}
+.request-button {
+  position: fixed;
+  right: 180px;
   bottom: 10px;
   margin-top: 10px;
 }
