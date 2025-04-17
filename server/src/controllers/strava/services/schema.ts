@@ -18,7 +18,7 @@ const tokenSchema = z.object({
 const refreshTokenSchema = tokenSchema.omit({ athlete: true })
 export const webhookSchema = z.object({
   aspect_type: z.enum(['update', 'create', 'delete']),
-  event_time: z.coerce.number().int().positive(),
+  event_time: z.coerce.number().positive(),
   object_id: z.coerce.number().int().positive(),
   object_type: z.enum(['activity', 'athlete']),
   owner_id: z.coerce.number().int().positive(),
@@ -31,15 +31,15 @@ export const subscriptionSchema = z.object({
   'hub.verify_token': z.literal(config.stravaSubscribtionKey),
 })
 export const stravaActivitySchema = z.object({
-  id: z.coerce.number().positive().int(),
+  id: z.coerce.number().int(),
   athlete: z.object({
-    id: z.coerce.number().positive().int(),
+    id: z.coerce.number().int(),
   }),
   name: z.string().optional().nullable(),
-  distance: z.coerce.number().int().optional().nullable(),
-  moving_time: z.coerce.number().int().optional().nullable(),
-  elapsed_time: z.coerce.number().int().optional().nullable(),
-  total_elevation_gain: z.coerce.number().int().optional().nullable(),
+  distance: z.coerce.number().optional().nullable(),
+  moving_time: z.coerce.number().optional().nullable(),
+  elapsed_time: z.coerce.number().optional().nullable(),
+  total_elevation_gain: z.coerce.number().optional().nullable(),
   type: z.string().optional().nullable(),
   sport_type: z.string().optional().nullable(),
   start_date: z.string(),
