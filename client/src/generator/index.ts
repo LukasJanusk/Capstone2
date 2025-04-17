@@ -7,5 +7,6 @@ export const requestSongData = async () => {
     return activitiesWithSongs
   } catch (err) {
     setError(parseErrorMessage(err))
+    return []
   }
 }

@@ -18,9 +18,10 @@ const reload = async () => {
 }
 const getMissingSongs = async () => {
   const reloadedActivitiesWithSongs = await requestSongData()
-  if (reloadedActivitiesWithSongs) userActivitiesWithSong.value = reloadedActivitiesWithSongs
-  else {
-    setError('No new Songs found')
+  if (reloadedActivitiesWithSongs.length > 0) {
+    userActivitiesWithSong.value = reloadedActivitiesWithSongs
+  } else {
+    show.value = true
   }
 }
 </script>
