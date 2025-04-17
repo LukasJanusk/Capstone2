@@ -3,7 +3,7 @@ import ErrorBox from '@/components/ErrorBox.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import { onMounted, ref } from 'vue'
 import ActivityList from '@/components/ActivityList/ActivityList.vue'
-import { errorMessage } from '../errors/index'
+import { errorMessage, resetError } from '../errors/index'
 import TopBar from '@/components/TopBar.vue'
 import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
 import { requestSongData } from '../generator/index'
@@ -45,7 +45,7 @@ const getMissingSongs = async () => {
     <button class="request-button" @click="getMissingSongs">Request Songs</button>
   </MainContainer>
 
-  <ErrorBox :message="errorMessage"></ErrorBox>
+  <ErrorBox :message="errorMessage" @close="resetError"></ErrorBox>
 </template>
 
 <style lang="css" scoped>
