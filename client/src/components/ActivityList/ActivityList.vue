@@ -48,11 +48,12 @@ const goToPlayback = (id: number) => {
   flex-wrap: wrap;
 }
 .activity-box {
-  margin: 1px;
   background-color: rgba(1, 1, 1, 0.4);
-  padding: 3px;
+  padding: 5px;
+  padding-bottom: 0px;
   width: 300px;
-  height: 300px;
+  aspect-ratio: 1 / 1;
+  min-width: 250px;
   border: 1px solid rgba(0, 0, 0, 0.185);
 }
 .activity-box:hover {
@@ -65,6 +66,8 @@ const goToPlayback = (id: number) => {
 }
 .image-container {
   position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
 }
 .title-text {
   position: absolute;
@@ -86,12 +89,21 @@ const goToPlayback = (id: number) => {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .activity-image {
-  width: 300px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
 }
-@media (width <= 800px) {
+@media (width <= 600px) {
   .main-container {
-    min-width: 360px;
+    min-width: 250px;
+  }
+  .activity-box {
+    width: 100%;
+  }
+  .image-container {
+    position: relative;
+    width: 100%;
   }
 }
 </style>

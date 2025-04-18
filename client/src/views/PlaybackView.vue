@@ -7,6 +7,7 @@ import ActivityItem from '@/components/ActivityList/ActivityItem.vue'
 import { userActivitiesWithSong } from '@/activities'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import TopBar from '@/components/TopBar.vue'
 
 // const songUrl = ref(
 //   'https://files.topmediai.com/aimusic/api/6ad2dc9a-ee46-4d83-8d1f-682efe46c1f9-audio.mp3'
@@ -35,6 +36,7 @@ onMounted(() => {
 
 <template>
   <MainContainer>
+    <TopBar :name="'Playback'"></TopBar>
     <ActivityItem
       v-if="activityWithSong"
       :activity="activityWithSong.activity"

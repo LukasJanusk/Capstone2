@@ -15,6 +15,14 @@ import { showHeader } from '@/user'
 }
 
 .main-container.collapsed {
-  margin-left: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+@media (width<=600px) {
+  .main-container {
+    position: relative;
+    margin-right: 0px;
+    margin-top: 0px;
+  }
 }
 </style>

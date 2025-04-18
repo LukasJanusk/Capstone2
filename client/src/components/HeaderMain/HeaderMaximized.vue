@@ -41,7 +41,7 @@ header {
   width: 30px;
   height: 30px;
   cursor: pointer;
-  z-index: 10;
+  z-index: 100;
 }
 .arrows:hover {
   background: rgba(133, 134, 134, 0.8);
@@ -58,7 +58,7 @@ button {
 }
 @media (prefers-color-scheme: light) {
   header {
-    background: linear-gradient(to right, rgb(104, 104, 250), rgb(124, 124, 252));
+    background: linear-gradient(to right, rgb(104, 104, 250), rgb(165, 165, 250));
     border-right: 2px solid rgb(119, 136, 244);
   }
   .arrows:hover {

@@ -7,6 +7,7 @@ import { error, errorMessage, resetError } from '../errors/index'
 import TopBar from '@/components/TopBar.vue'
 import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
 import { requestSongData } from '../generator/index'
+import { showHeader } from '@/user'
 
 onMounted(async () => {
   await getActivitiesWithSong()
@@ -75,17 +76,23 @@ const highlightActivity = ref(false)
         </p>
       </div>
       <ActivityList :activities-with-songs="userActivitiesWithSong"></ActivityList>
+      <div :class="['button-container', { collapsed: !showHeader }]">
+        <button
+          :class="{ highlightActivity: highlightActivity }"
+          class="load-button"
+          @click="reload"
+        >
+          Load activities
+        </button>
+        <button
+          :class="{ highlightSong: highlightSong }"
+          class="request-button"
+          @click="getMissingSongs"
+        >
+          Request Songs
+        </button>
+      </div>
     </div>
-    <button :class="{ highlightActivity: highlightActivity }" class="load-button" @click="reload">
-      Load activities
-    </button>
-    <button
-      :class="{ highlightSong: highlightSong }"
-      class="request-button"
-      @click="getMissingSongs"
-    >
-      Request Songs
-    </button>
   </MainContainer>
 
   <ErrorBox :message="errorMessage" @close="resetError"></ErrorBox>
@@ -112,11 +119,10 @@ p {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 10;
   font-size: 30px;
   font-weight: 500;
   border-radius: 10px;
-  padding: 15px;
   border: 3px solid black;
   background-color: rgba(1, 60, 48, 1);
   box-shadow: 6px 6px 10px rgb(0, 0, 0, 0.3);
@@ -128,18 +134,6 @@ p {
   margin-top: 100px;
   margin-left: 50px;
   margin-bottom: 70px;
-}
-.load-button {
-  position: fixed;
-  right: 10px;
-  bottom: 10px;
-  margin-top: 10px;
-}
-.request-button {
-  position: fixed;
-  right: 180px;
-  bottom: 10px;
-  margin-top: 10px;
 }
 .no-activity-message {
   max-width: 800px;
@@ -157,6 +151,19 @@ p {
 .indicator {
   font-weight: 1000;
 }
+.button-container {
+  display: flex;
+  z-index: 11;
+  position: fixed;
+  bottom: 10px;
+  right: 150px;
+  gap: 5px;
+  transition: margin-left 0.6s ease;
+}
+.main-container.collapsed {
+  margin-left: 10px;
+  margin-right: 10px;
+}
 @media (prefers-color-scheme: light) {
   .no-activity-message {
     background-color: rgb(234, 233, 233);
@@ -164,12 +171,45 @@ p {
   }
   .info-box {
     color: rgb(0, 0, 0);
-
     border: 3px solid rgb(0, 0, 0);
     background-color: rgb(59, 173, 151);
     box-shadow: 6px 6px 10px rgb(0, 0, 0, 0.3);
     position: fixed;
     padding: 15px;
+  }
+}
+@media (max-width: 600px) {
+  .main-box {
+    margin-top: 50px;
+    margin-left: 0px;
+    flex-direction: column;
+    flex-direction: column;
+    align-items: center;
+  }
+  .button-container {
+    width: 280px;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+    display: grid;
+    grid-template-columns: 1fr, 1fr;
+    margin-left: 120px;
+  }
+  .load-button {
+    justify-self: flex-end;
+    width: 130px;
+    grid-row-start: 1;
+    grid-column-start: 1;
+  }
+  .request-button {
+    justify-self: flex-start;
+    width: 130px;
+    grid-row-start: 1;
+    grid-column-start: 2;
+  }
+  .button-container.collapsed {
+    margin-left: 0px;
   }
 }
 </style>

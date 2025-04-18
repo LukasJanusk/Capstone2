@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import HeaderMain from './components/HeaderMain/HeaderMain.vue'
+import FooterMain from './components/FooterMain.vue'
 import router from './router'
 import { logout } from './user'
 </script>
@@ -13,4 +14,5 @@ import { logout } from './user'
     @dashboard="router.push({ name: 'Dashboard' })"
   ></HeaderMain>
   <RouterView />
+  <FooterMain></FooterMain>
 </template>

@@ -22,6 +22,7 @@ header {
   padding-bottom: 40px;
   width: 20px;
   border-right: 2px solid rgb(3, 0, 21);
+  z-index: 100;
 }
 .arrows {
   position: fixed;

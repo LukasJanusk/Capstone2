@@ -51,20 +51,37 @@ const parseKey = (key: string) => {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-}
-.activity-container {
-  padding: 15px;
-  text-justify: start;
+  border-radius: 10px;
   background-color: rgba(0, 0, 0, 0.25);
 }
+.activity-container {
+  margin: 5px;
+  text-justify: start;
+  max-width: 50%;
+}
 .songs-container {
-  padding: 15px;
-
+  margin: 5px;
   text-justify: start;
 }
 .activity-row {
   text-align: start;
   padding: 1px;
   font-size: 20px;
+}
+
+@media (width <= 1000px) {
+  .main-container {
+    margin-top: 50px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 5px;
+  }
+  .activity-container,
+  .songs-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 5px auto;
+  }
 }
 </style>

@@ -30,10 +30,10 @@ const resetAudio = () => {
 </script>
 
 <template>
-  <div class="main-container">
+  <div class="main-container-inner">
     <div class="song-item">
-      <h4>{{ songs[index].title ? songs[index].title : 'Workout song' }}</h4>
       <div class="image-container">
+        <h2 class="song-title">{{ songs[index].title ? songs[index].title : 'Workout song' }}</h2>
         <img class="song-image" :src="songImageUrl(props.songs[index])" alt="Song image" />
         <img
           @click="playPrev"
@@ -59,15 +59,33 @@ const resetAudio = () => {
 </template>
 
 <style lang="css" scoped>
-.main-container {
+.main-container-inner {
   width: 100%;
 }
 .song-item {
   position: relative;
+  margin: 5px;
 }
 .image-container {
-  border: 2px solid black;
   width: 400px;
+  background-color: black;
+}
+.song-title {
+  color: black;
+  z-index: 10;
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translatex(-50%);
+  color: white;
+
+  /* WebKit-based outline */
+  -webkit-text-stroke: 1px black;
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;
 }
 .nav-item {
   height: 50px;
@@ -100,5 +118,30 @@ const resetAudio = () => {
 }
 audio {
   width: 100%;
+  background-color: black;
+}
+@media (width <=600px) {
+  .image-container {
+    width: 100%;
+    min-width: 200px;
+  }
+  .song-item {
+    margin: 0px;
+  }
+
+  audio {
+    height: 50px; /* container height */
+  }
+
+  /* WebKit-specific tweaks */
+  audio::-webkit-media-controls-panel {
+    height: 50px !important;
+  }
+  audio::-webkit-media-controls-play-button,
+  audio::-webkit-media-controls-mute-button,
+  audio::-webkit-media-controls-volume-slider {
+    width: 24px !important;
+    height: 24px !important;
+  }
 }
 </style>
