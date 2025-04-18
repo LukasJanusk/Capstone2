@@ -40,12 +40,14 @@ const resetAudio = () => {
           class="nav-item left-arrow"
           id="left-arrow"
           src="./assets/left.png"
+          alt="left-arrow"
         />
         <img
           @click="playNext"
           class="nav-item right-arrow"
           id="right-arrow"
           src="./assets/right.png"
+          alt="right-arrow"
         />
       </div>
       <audio ref="audioRef" controls>
@@ -65,7 +67,7 @@ const resetAudio = () => {
 }
 .image-container {
   border: 2px solid black;
-  width: 500px;
+  width: 400px;
 }
 .nav-item {
   height: 50px;

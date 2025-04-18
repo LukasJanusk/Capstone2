@@ -3,21 +3,22 @@ import ErrorBox from '@/components/ErrorBox.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import { onMounted, ref } from 'vue'
 import ActivityList from '@/components/ActivityList/ActivityList.vue'
-import { errorMessage, resetError } from '../errors/index'
+import { error, errorMessage, resetError } from '../errors/index'
 import TopBar from '@/components/TopBar.vue'
 import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
 import { requestSongData } from '../generator/index'
 
 onMounted(async () => {
-  await reload()
+  await getActivitiesWithSong()
 })
-const show = ref<boolean>(true)
+const show = ref<boolean>(false)
+const popUpMessage = ref('No activities found')
 const reload = async () => {
   await getActivitiesWithSong()
   if (userActivitiesWithSong.value.length > 0) {
     popUpMessage.value = 'Activities loaded'
     show.value = true
-  } else {
+  } else if (!error.value) {
     popUpMessage.value = 'No Activities found'
     show.value = true
   }
@@ -28,18 +29,19 @@ const getMissingSongs = async () => {
     userActivitiesWithSong.value = reloadedActivitiesWithSongs
     popUpMessage.value = 'Activities with songs fetched'
     show.value = true
-  } else {
-    popUpMessage.value = 'No new Songs found'
+  } else if (!error.value) {
+    popUpMessage.value = 'No new songs found'
     show.value = true
   }
 }
-const popUpMessage = ref('No activities found')
+const highlightSong = ref(false)
+const highlightActivity = ref(false)
 </script>
 
 <template>
   <MainContainer>
-    <TopBar :name="'My Activities'"></TopBar>
     <div class="main-box">
+      <TopBar :name="'My Activities'"></TopBar>
       <div>
         <Transition name="fade">
           <div class="info-box" v-if="show">
@@ -48,10 +50,42 @@ const popUpMessage = ref('No activities found')
           </div>
         </Transition>
       </div>
+      <div class="no-activity-message" v-if="userActivitiesWithSong.length < 1">
+        <p>
+          Once you have compelted your workout, activities with generated songs will be uploaded
+          here. If activities do not appear after few minutes try pressing
+          <span
+            @mouseover="highlightActivity = true"
+            @mouseleave="highlightActivity = false"
+            class="indicator"
+            >Load activities</span
+          >
+          button.
+        </p>
+        <p>
+          Song generation takes another minute or two. If you have your activities loaded and don't
+          see songs generated for those activities, try pressing
+          <span
+            @mouseover="highlightSong = true"
+            @mouseleave="highlightSong = false"
+            class="indicator"
+            >Request songs</span
+          >
+          button.
+        </p>
+      </div>
       <ActivityList :activities-with-songs="userActivitiesWithSong"></ActivityList>
     </div>
-    <button class="load-button" @click="reload">Load activities</button>
-    <button class="request-button" @click="getMissingSongs">Request Songs</button>
+    <button :class="{ highlightActivity: highlightActivity }" class="load-button" @click="reload">
+      Load activities
+    </button>
+    <button
+      :class="{ highlightSong: highlightSong }"
+      class="request-button"
+      @click="getMissingSongs"
+    >
+      Request Songs
+    </button>
   </MainContainer>
 
   <ErrorBox :message="errorMessage" @close="resetError"></ErrorBox>
@@ -74,7 +108,8 @@ p {
   font-size: 20px;
 }
 .info-box {
-  top: 55px;
+  color: rgb(255, 255, 255);
+  top: 20px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
@@ -83,10 +118,9 @@ p {
   border-radius: 10px;
   padding: 15px;
   border: 3px solid black;
-  background-color: rgba(1, 60, 48, 0.812);
+  background-color: rgba(1, 60, 48, 1);
   box-shadow: 6px 6px 10px rgb(0, 0, 0, 0.3);
   position: fixed;
-  transform: translateX(-50%);
   padding: 15px;
 }
 .main-box {
@@ -106,5 +140,36 @@ p {
   right: 180px;
   bottom: 10px;
   margin-top: 10px;
+}
+.no-activity-message {
+  max-width: 800px;
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  padding: 15px;
+}
+.highlightSong {
+  border: 1px solid blue;
+}
+.highlightActivity {
+  border: 1px solid blue;
+}
+.indicator {
+  font-weight: 1000;
+}
+@media (prefers-color-scheme: light) {
+  .no-activity-message {
+    background-color: rgb(234, 233, 233);
+    border: 2px solid rgba(152, 152, 152, 0.5);
+  }
+  .info-box {
+    color: rgb(0, 0, 0);
+
+    border: 3px solid rgb(0, 0, 0);
+    background-color: rgb(59, 173, 151);
+    box-shadow: 6px 6px 10px rgb(0, 0, 0, 0.3);
+    position: fixed;
+    padding: 15px;
+  }
 }
 </style>

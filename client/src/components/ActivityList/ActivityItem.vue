@@ -7,10 +7,14 @@ const props = defineProps<{
   songs: SongPublic[]
 }>()
 const parseValue = (key: string, value: string | number | undefined | null) => {
-  if (key === 'duration') return `${value} seconds`
-  else if (key === 'heartrate') return `${value} bpm`
-  else if (key === 'speedAverage') return `${value} m/s`
-  else if (key === 'distance') return `${value} meters`
+  if (!value) return 'No data'
+  if (key === 'duration') {
+    return `${value} seconds`
+  } else if (key === 'heartrate') {
+    return `${value} bpm`
+  } else if (key === 'speedAverage') {
+    return `${value} m/s`
+  } else if (key === 'distance') return `${value} meters`
   else if (key === 'cadence') return `${value} rpm`
   else if (key === 'startTime') return `${new Date(value as string).toLocaleString()}`
   else return value
@@ -51,6 +55,7 @@ const parseKey = (key: string) => {
 .activity-container {
   padding: 15px;
   text-justify: start;
+  background-color: rgba(0, 0, 0, 0.25);
 }
 .songs-container {
   padding: 15px;

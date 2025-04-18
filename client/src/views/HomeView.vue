@@ -7,6 +7,7 @@ import { errorMessage } from '../errors/index'
 import ErrorBox from '@/components/ErrorBox.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import { authorizeUser } from '@/strava'
+import TopBar from '@/components/TopBar.vue'
 
 const clientId = ref('')
 onMounted(async () => {
@@ -23,6 +24,7 @@ const returnHome = () => {
 
 <template>
   <MainContainer>
+    <TopBar></TopBar>
     <div v-if="authUserId" id="authorized">
       <div><img id="logo" src="../assets/icon.png" /></div>
       <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>

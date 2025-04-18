@@ -40,7 +40,6 @@ onMounted(() => {
       :activity="activityWithSong.activity"
       :songs="activityWithSong.songs"
     ></ActivityItem>
-    <div v-else>No Activities</div>
   </MainContainer>
   <ErrorBox :message="errorMessage" @close="returnToDashboard"></ErrorBox>
 </template>

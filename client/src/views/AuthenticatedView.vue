@@ -41,7 +41,7 @@ onMounted(async () => {
       </div>
       <div><h1>Strava access granted!</h1></div>
       <div><h2>Thank you for choosing us!</h2></div>
-      <div @click="returnToDashboard()"><button>To Dashboard</button></div>
+      <div @click="returnToDashboard()"><button>To dashboard</button></div>
     </div>
   </MainContainer>
   <ErrorBox :message="errorMessage" @close="returnHome"> </ErrorBox>
@@ -52,7 +52,7 @@ onMounted(async () => {
   border-radius: 10px;
   padding: 15px;
   border: 3px solid black;
-  background-color: rgba(1, 60, 48, 0.812);
+  background-color: rgba(1, 60, 48, 1);
   box-shadow: 6px 6px 10px rgb(0, 0, 0, 0.3);
 }
 </style>

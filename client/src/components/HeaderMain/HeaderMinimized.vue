@@ -41,4 +41,13 @@ header {
 .right {
   left: 10px;
 }
+@media (prefers-color-scheme: light) {
+  header {
+    background: linear-gradient(to right, rgb(80, 80, 255), rgb(127, 127, 255));
+    border-right: 2px solid rgb(119, 136, 244);
+  }
+  .arrows:hover {
+    background: rgba(219, 219, 219, 0.8);
+  }
+}
 </style>
