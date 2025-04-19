@@ -26,8 +26,8 @@
 }
 @media (prefers-color-scheme: light) {
   footer {
-    background: linear-gradient(to left, rgb(80, 80, 255), rgb(127, 127, 255));
-    border-left-width: 2px solid rgb(119, 136, 244);
+    background: linear-gradient(to left, rgb(32, 32, 254), rgb(36, 36, 248));
+    border-left: 2px solid rgb(0, 34, 255);
   }
 }
 </style>

@@ -44,8 +44,8 @@ header {
 }
 @media (prefers-color-scheme: light) {
   header {
-    background: linear-gradient(to right, rgb(80, 80, 255), rgb(127, 127, 255));
-    border-right: 2px solid rgb(119, 136, 244);
+    background: linear-gradient(to right, rgb(32, 32, 254), rgb(36, 36, 248));
+    border-right: 2px solid rgb(0, 34, 255);
   }
   .arrows:hover {
     background: rgba(219, 219, 219, 0.8);

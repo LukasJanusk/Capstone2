@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { signup } from '../user'
+import { signup } from '../../user'
 import { onMounted, ref } from 'vue'
-import { getTraits } from '../traits'
+import { getTraits } from '../../traits'
 import type { TraitPublic } from '@server/shared/trpc'
 import ErrorBox from '@/components/ErrorBox.vue'
-import { errorMessage, error, setError, resetError, parseErrorMessage } from '../errors/index'
+import { errorMessage, error, setError, resetError, parseErrorMessage } from '../../errors/index'
 
 const traits = ref<TraitPublic[]>([])
 const emit = defineEmits<{ (event: 'signup', user: any): void }>()
+const isMobileOS = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+  navigator.userAgent
+)
 
 const userData = ref({
   firstName: '',
@@ -16,7 +19,13 @@ const userData = ref({
   email: '',
   traits: [] as TraitPublic[],
 })
-
+const addTrait = () => {
+  if (selectedTrait.value && !userData.value.traits.includes(selectedTrait.value)) {
+    userData.value.traits.push(selectedTrait.value)
+    selectedTrait.value = null
+  }
+}
+const selectedTrait = ref<TraitPublic | null>(null)
 const signUp = async () => {
   try {
     const user = await signup(userData.value)
@@ -64,14 +73,27 @@ onMounted(async () => {
           {{ trait.name }} ❌
         </div>
       </div>
-
-      <select multiple>
+      <select
+        multiple
+        v-if="!isMobileOS"
+        v-model="selectedTrait"
+        @change="!isMobileOS ? addTrait : () => {}"
+      >
         <option
           @click="userData.traits.push(trait)"
-          @select="userData.traits.push(trait)"
           v-for="trait in traits"
           :key="trait.id"
           :hidden="userData.traits.includes(trait)"
+          :disabled="userData.traits.includes(trait)"
+          :value="trait"
+        >
+          {{ trait.name }}
+        </option>
+      </select>
+      <select v-if="isMobileOS" v-model="selectedTrait" @change="addTrait">
+        <option
+          v-for="trait in traits"
+          :key="trait.id"
           :disabled="userData.traits.includes(trait)"
           :value="trait"
         >

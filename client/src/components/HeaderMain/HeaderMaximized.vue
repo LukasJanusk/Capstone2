@@ -58,11 +58,8 @@ button {
 }
 @media (prefers-color-scheme: light) {
   header {
-    background: linear-gradient(to right, rgb(104, 104, 250), rgb(165, 165, 250));
-    border-right: 2px solid rgb(119, 136, 244);
-  }
-  .arrows:hover {
-    background: rgba(219, 219, 219, 0.8);
+    background: linear-gradient(to right, rgb(32, 32, 254), rgb(36, 36, 248));
+    border-right: 2px solid rgb(0, 34, 255);
   }
 }
 </style>
