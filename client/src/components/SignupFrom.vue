@@ -68,6 +68,7 @@ onMounted(async () => {
       <select multiple>
         <option
           @click="userData.traits.push(trait)"
+          @select="userData.traits.push(trait)"
           v-for="trait in traits"
           :key="trait.id"
           :hidden="userData.traits.includes(trait)"
