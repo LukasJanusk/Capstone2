@@ -6,7 +6,7 @@ import SigninView from '@/views/SigninView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import WelcomeView from '@/views/WelcomeView.vue'
 import DashboardView from '@/views/DashboardView.vue'
-import { resetError, setError } from '@/errors'
+import { errorMessage, resetError, setError } from '@/errors'
 import { authUser } from '@/user'
 
 const router = createRouter({
@@ -47,14 +47,16 @@ const router = createRouter({
   ],
 })
 router.beforeEach((to, from, next) => {
-  resetError()
+  if (errorMessage.value !== 'Unauthorized, please login') {
+    resetError()
+  }
   const protectedRoutes = ['Dashboard', 'Authenticated', 'Playback']
 
-  if (protectedRoutes.includes(to.name as string) && !authUser) {
+  if (protectedRoutes.includes(to.name as string) && !authUser.value) {
     setError('Unauthorized, please login')
-    next({ name: 'SignIn' })
-  } else {
-    next()
+    return next({ name: 'SignIn' })
   }
+
+  next()
 })
 export default router
