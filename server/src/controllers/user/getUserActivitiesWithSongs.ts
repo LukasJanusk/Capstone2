@@ -23,7 +23,7 @@ export default authenticatedProcedure
         userId: ctx.authUser.id,
         activities: activitiesWithSongs.map((a) => a.activity.id),
       },
-      'GET user.getUserActivitiesWithSong returning user Activities'
+      'GET user.getUserActivitiesWithSong - Returning user Activities'
     )
     return activitiesWithSongs
   })

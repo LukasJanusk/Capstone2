@@ -146,7 +146,7 @@ it('logs an error when song generation API fails to create generation task', asy
   expect(result).toEqual({ status: 'EVENT_RECEIVED' })
   expect(loggerMock.info).toHaveBeenCalledWith(
     expect.objectContaining({ activityId: expect.any(Number) }),
-    'POST strava.webhooks received new webhook from Strava'
+    'POST strava.webhooks - Received new webhook from Strava'
   )
 })
 it('returns when activity already in db', async () => {
@@ -171,6 +171,6 @@ it('returns when activity already in db', async () => {
   expect(result).toEqual({ status: 'EVENT_RECEIVED' })
   expect(logSpy).toBeCalledWith(
     { activityId: activity.id },
-    'POST strava.webhooks Activity already exist'
+    'POST strava.webhooks - Activity already exist'
   )
 })

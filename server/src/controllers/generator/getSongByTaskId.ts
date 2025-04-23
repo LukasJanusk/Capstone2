@@ -20,12 +20,12 @@ export default authenticatedProcedure
     if (notGenerated.length > 0) {
       ctx.logger.info(
         notGenerated,
-        'POST generator.getSongByTaskId found tasks that did not generate song'
+        'POST generator.getSongByTaskId - Found tasks that did not generate song'
       )
     } else {
       ctx.logger.info(
         { userId: ctx.authUser.id },
-        'POST generator.getSongByTaskId did not find any missing songs'
+        'POST generator.getSongByTaskId - No ungenerated songs found'
       )
       return []
     }
@@ -63,7 +63,7 @@ export default authenticatedProcedure
       .flat()
     ctx.logger.info(
       newSongs.map((s) => s.id),
-      'POST generator.getSongByTaskId songs saved to db'
+      'POST generator.getSongByTaskId - Songs saved to db'
     )
     songs.push(...newSongs)
     const activitiesWithSongs = activities.map((a) => ({
@@ -72,7 +72,7 @@ export default authenticatedProcedure
     })) as ActivityWithSong[]
     ctx.logger.info(
       activitiesWithSongs.map((a) => ({ activityId: a.activity.id })),
-      'POST generator.getSongByTaskId returning activities with songs'
+      'POST generator.getSongByTaskId - Returning activities with songs'
     )
     return activitiesWithSongs
   })

@@ -12,7 +12,7 @@ export default authenticatedProcedure
     if (input.id !== ctx.authUser.id) {
       ctx.logger.warn(
         { UserId: input.id },
-        'GET user.getPublicUser input id does not match authenticated user id'
+        'GET user.getPublicUser - Input id does not match authenticated user id'
       )
       throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Access denied' })
     }

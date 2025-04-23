@@ -9,7 +9,7 @@ import MainContainer from '@/components/MainContainer.vue'
 
 const accessGranter = ref(false)
 const userName = ref('')
-const returnToDashboard = () => {
+const toDashboard = () => {
   router.push({ name: 'Dashboard' })
 }
 const returnHome = () => {
@@ -26,6 +26,8 @@ onMounted(async () => {
         accessGranter.value = true
         stravaAuthenticated.value = true
       }
+    } else {
+      throw new Error('Something went wrong getting Strava authorization')
     }
   } catch (err) {
     setError(parseErrorMessage(err))
@@ -41,7 +43,7 @@ onMounted(async () => {
       </div>
       <div><h1>Strava access granted!</h1></div>
       <div><h2>Thank you for choosing us!</h2></div>
-      <div @click="returnToDashboard()"><button>To dashboard</button></div>
+      <div @click="toDashboard()"><button>To dashboard</button></div>
     </div>
   </MainContainer>
   <ErrorBox :message="errorMessage" @close="returnHome"> </ErrorBox>

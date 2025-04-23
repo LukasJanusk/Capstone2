@@ -11,13 +11,12 @@ export default authenticatedProcedure
       )
       ctx.logger.info(
         { userId: stravaTokens.userId },
-        'GET user.stravaAuthenticated user is authenticated by Strava'
+        'GET user.stravaAuthenticated - User is authenticated by Strava'
       )
       return { authenticated: true }
     } catch (err) {
       ctx.logger.info(
-        err,
-        'GET user.stravaAuthenticated user is not authenticated by Strava'
+        'GET user.stravaAuthenticated - User is not authenticated by Strava'
       )
       return { authenticated: false }
     }

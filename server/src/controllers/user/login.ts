@@ -16,7 +16,7 @@ export default publicProcedure
   .mutation(async ({ input: { email, password }, ctx }) => {
     const user = await ctx.repos.userRepository.findByEmail(email)
     if (!user) {
-      ctx.logger.info({ email }, 'POST user.login email not found')
+      ctx.logger.info({ email }, 'POST user.login - Email not found')
       throw new TRPCError({
         code: 'UNAUTHORIZED',
         message: 'Email not found',
@@ -24,7 +24,7 @@ export default publicProcedure
     }
     const match = await compare(password, user.password)
     if (!match) {
-      ctx.logger.info({ email }, 'POST user.login Incorrect password')
+      ctx.logger.info({ email }, 'POST user.login - Incorrect password')
       throw new TRPCError({
         code: 'UNAUTHORIZED',
         message: 'Incorrect password',
@@ -35,6 +35,9 @@ export default publicProcedure
     const accessToken = jsonwebtoken.sign(tokenPayload, tokenKey, {
       expiresIn: '7d',
     })
-
+    ctx.logger.info(
+      { userId: tokenPayload.user.id },
+      'POST user.login - User logged in'
+    )
     return { accessToken }
   })

@@ -7,7 +7,7 @@ import {
   fakeGenre,
   fakeStravaTokens,
 } from '@server/entities/tests/fakes'
-import { insertAll } from '@tests/utils/records'
+import { insertAll, selectAll } from '@tests/utils/records'
 import { userRepository } from '../userRepository'
 
 const db = await wrapInRollbacks(createTestDatabase())
@@ -201,5 +201,39 @@ describe('updateEmail', () => {
     const changed = await repository.updateEmail(newUser.id, newEmail)
 
     expect(changed).toEqual({ id: newUser.id, email: 'new@mail.com' })
+  })
+})
+describe('deleteUserByEmail', async () => {
+  it('deletes user', async () => {
+    const user = fakeUser()
+    const [newUser] = await insertAll(db, 'user', user)
+
+    const deleted = await repository.deleteUserByEmail(user.email)
+
+    expect(deleted).toEqual({ id: newUser.id })
+  })
+  it('returns undefined, when no user to delete', async () => {
+    expect(
+      await repository.deleteUserByEmail('someNonExistantEmail@fakeadrress.com')
+    ).toBeUndefined()
+  })
+  it('delete cascades', async () => {
+    const user = fakeUser()
+    const [newUser] = await insertAll(db, 'user', user)
+    await insertAll(
+      db,
+      'stravaTokens',
+      fakeStravaTokens({ userId: newUser.id })
+    )
+    const deleted = await repository.deleteUserByEmail(user.email)
+
+    expect(deleted).toEqual({ id: newUser.id })
+    expect(
+      (
+        await selectAll(db, 'stravaTokens', (eb) =>
+          eb('stravaTokens.userId', '=', newUser.id)
+        )
+      ).length
+    ).toEqual(0)
   })
 })

@@ -33,3 +33,6 @@ export function logout() {
   stravaAuthenticated.value = false
   clearStoredAccessToken(localStorage)
 }
+export async function deleteUser(email: string) {
+  await trpc.user.deleteUser.mutate({ email })
+}

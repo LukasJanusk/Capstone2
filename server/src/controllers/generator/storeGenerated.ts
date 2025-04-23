@@ -11,7 +11,7 @@ export default webhookProcedure
       if (input.code !== 200) {
         ctx.logger.error(
           input,
-          'POST generator.storeGenerated Bad Request input object:'
+          'POST generator.storeGenerated - Bad Request input object:'
         )
         return {
           code: 400,
@@ -23,19 +23,19 @@ export default webhookProcedure
       if (input.data.callbackType === 'text') {
         ctx.logger.info(
           { userId: task.userId, taskId },
-          'POST generator.StoreGenerated text generated'
+          'POST generator.StoreGenerated - Text generated'
         )
       }
       if (input.data.callbackType === 'first') {
         ctx.logger.info(
           { userId: task.userId, taskId },
-          'POST generator.StoreGenerated first song generated'
+          'POST generator.StoreGenerated - First song generated'
         )
       }
       if (input.data.callbackType === 'complete') {
         ctx.logger.info(
           { userId: task.userId, taskId },
-          'POST generator.StoreGenerated song generated for task'
+          'POST generator.StoreGenerated - Song generated for task'
         )
         if (input.data.data) {
           const songs = input.data.data.map((s) => ({
@@ -48,7 +48,7 @@ export default webhookProcedure
           stored.forEach((s) =>
             ctx.logger.info(
               { songId: s.id },
-              'POST generator.storeGenerated song stored to DB'
+              'POST generator.storeGenerated - Song stored to DB'
             )
           )
         }
@@ -58,7 +58,7 @@ export default webhookProcedure
         msg: 'Callback received successfully',
       }
     } catch (err) {
-      ctx.logger.error(err, 'POST generator.storeGenerated Error occured:')
+      ctx.logger.error(err, 'POST generator.storeGenerated - Error occured')
       return {
         code: 400,
         msg: 'Bad request',

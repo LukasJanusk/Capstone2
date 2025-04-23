@@ -5,6 +5,7 @@ import getPulbicUser from './getPulbicUser'
 import changeEmail from './changeEmail'
 import getUserActivitiesWithSongs from './getUserActivitiesWithSongs'
 import stravaAuthenticated from './stravaAuthenticated'
+import deleteUser from './deleteUser'
 
 export default router({
   signup,
@@ -13,4 +14,5 @@ export default router({
   changeEmail,
   getUserActivitiesWithSongs,
   stravaAuthenticated,
+  deleteUser,
 })

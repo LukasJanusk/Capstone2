@@ -22,13 +22,16 @@ export default authenticatedProcedure
         ctx.authUser.id
       )
       ctx.logger.info(
-        { id: ctx.authUser.id },
-        'User access to strava granted, tokens stored successfuly'
+        { userId: ctx.authUser.id },
+        'POST strava.getAccess - User access to strava granted, tokens stored successfuly'
       )
 
       return publicUser
     } catch (error) {
-      ctx.logger.error(error, 'Error trying to authorize strava user')
+      ctx.logger.error(
+        error,
+        'POST strava.getAccess - Error trying to authorize strava user'
+      )
       throw error
     }
   })

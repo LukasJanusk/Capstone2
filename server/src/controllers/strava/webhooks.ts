@@ -35,7 +35,7 @@ export default webhookProcedure
       const stravaUserId = input.owner_id
       ctx.logger.info(
         { activityId: input.object_id },
-        'POST strava.webhooks received new webhook from Strava'
+        'POST strava.webhooks - Received new webhook from Strava'
       )
       const exist = await ctx.repos.activityRepository.getActivityByOriginId(
         String(input.object_id)
@@ -43,7 +43,7 @@ export default webhookProcedure
       if (exist) {
         ctx.logger.info(
           { activityId: exist.id },
-          'POST strava.webhooks Activity already exist'
+          'POST strava.webhooks - Activity already exist'
         )
         return { status: 'EVENT_RECEIVED' }
       }
@@ -59,7 +59,7 @@ export default webhookProcedure
       if (!activityData) {
         ctx.logger.error(
           { activityId: input.object_id },
-          'POST strava.webhooks failed to fetch activity from Strava'
+          'POST strava.webhooks - Failed to fetch activity from Strava'
         )
         throw new TRPCError({
           code: 'BAD_REQUEST',
@@ -72,14 +72,14 @@ export default webhookProcedure
       }
       ctx.logger.info(
         activityToStore,
-        'POST strava.webhooks activity parsed for storing'
+        'POST strava.webhooks - Activity parsed for storing'
       )
       try {
         const activityStored =
           await ctx.repos.activityRepository.create(activityToStore)
         ctx.logger.info(
           activityStored,
-          'POST strava.webhooks activity saved to db'
+          'POST strava.webhooks - Activity saved to db'
         )
 
         const genres = (await ctx.repos.genreRepository.getAll()).map((g) =>
@@ -95,7 +95,7 @@ export default webhookProcedure
         )
         ctx.logger.info(
           prompt,
-          'POST strava.webhooks prompt generated successfully'
+          'POST strava.webhooks - Prompt generated successfully'
         )
         const task = await ctx.songGenerationService.requestSong({
           prompt: prompt.prompt,
@@ -104,7 +104,7 @@ export default webhookProcedure
         if (task.code !== 200 || !task.data) {
           ctx.logger.error(
             task,
-            'POST strava.webhooks External API failed create Song genration task'
+            'POST strava.webhooks - External API failed create Song genration task'
           )
           return { status: 'EVENT_RECEIVED' }
         }
@@ -116,10 +116,10 @@ export default webhookProcedure
           })
         ctx.logger.info(
           generationTask,
-          'POST strava.webhooks Song generation task created'
+          'POST strava.webhooks - Song generation task created'
         )
       } catch (err) {
-        ctx.logger.error(err, 'POST strava.webhooks error occured:')
+        ctx.logger.error(err, 'POST strava.webhooks - Error occured:')
         return { status: 'EVENT_RECEIVED' }
       }
     }

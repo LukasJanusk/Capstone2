@@ -16,7 +16,7 @@ export default publicProcedure
   .mutation(async ({ input, ctx: { repos, logger } }) => {
     const { traits, ...user } = input
     if (traits.length < 3) {
-      logger.warn(traits, 'POST user.signup User selected less than 3 traits')
+      logger.warn(traits, 'POST user.signup - User selected less than 3 traits')
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'Must select at least 3 traits',
@@ -33,7 +33,10 @@ export default publicProcedure
       userId: newUser.id,
     }))
     const newUserTraits = await repos.userRepository.createUserTrait(userTraits)
-    logger.info(newUserTraits, 'POST user.signup - User traits created')
+    logger.info(
+      newUserTraits.map((t) => t.id),
+      'POST user.signup - User traits created'
+    )
 
     return { id: newUser.id }
   })

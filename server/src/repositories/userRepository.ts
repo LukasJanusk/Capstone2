@@ -129,6 +129,15 @@ export function userRepository(db: Database) {
         .returning(['user.email', 'user.id'])
         .executeTakeFirstOrThrow()
     },
+    async deleteUserByEmail(
+      email: string
+    ): Promise<{ id: number } | undefined> {
+      return db
+        .deleteFrom('user')
+        .where('user.email', '=', email)
+        .returning('user.id')
+        .executeTakeFirst()
+    },
   }
 }
 

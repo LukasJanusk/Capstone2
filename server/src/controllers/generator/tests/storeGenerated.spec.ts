@@ -46,7 +46,7 @@ it('logs when text is generated and returns callback received', async () => {
   })
   expect(logSpy).toBeCalledWith(
     { taskId: generationTask.taskId, userId: user.id },
-    'POST generator.StoreGenerated text generated'
+    'POST generator.StoreGenerated - Text generated'
   )
 })
 it('logs that first song is generated and returns callback received', async () => {
@@ -63,7 +63,7 @@ it('logs that first song is generated and returns callback received', async () =
   })
   expect(logSpy).toBeCalledWith(
     { taskId: generationTask.taskId, userId: user.id },
-    'POST generator.StoreGenerated first song generated'
+    'POST generator.StoreGenerated - First song generated'
   )
 })
 it('logs when all songs are generated and stores songs to db, returns callback received', async () => {
@@ -96,7 +96,7 @@ it('logs when all songs are generated and stores songs to db, returns callback r
   })
   expect(logSpy).toBeCalledWith(
     { taskId: generationTask.taskId, userId: user.id },
-    'POST generator.StoreGenerated song generated for task'
+    'POST generator.StoreGenerated - Song generated for task'
   )
   const [song] = await selectAll(db, 'song')
   expect(song).toEqual({

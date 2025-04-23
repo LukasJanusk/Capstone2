@@ -89,7 +89,7 @@ const highlightActivity = ref(false)
           class="request-button"
           @click="getMissingSongs"
         >
-          Request Songs
+          Request songs
         </button>
       </div>
     </div>
