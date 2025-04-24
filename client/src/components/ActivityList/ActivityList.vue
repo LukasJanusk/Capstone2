@@ -13,7 +13,7 @@ const goToPlayback = (id: number) => {
 <template>
   <div class="main-container">
     <div class="activity-box" v-for="a in activitiesWithSongs" :key="a.activity.id">
-      <div class="image-container">
+      <div class="image-container" @click="goToPlayback(a.activity.id)">
         <h2 class="title-text">{{ a.activity.title }}</h2>
         <span class="date-text">{{ transformTime(a.activity.startTime) }} </span>
         <img
@@ -21,21 +21,18 @@ const goToPlayback = (id: number) => {
           v-if="a.activity.type === 'ride'"
           src="./assets/ride_default.png"
           alt="ride_logo"
-          @click="goToPlayback(a.activity.id)"
         />
         <img
           class="activity-image"
           v-if="a.activity.type === 'run'"
           src="./assets/run_default.png"
           alt="run_logo"
-          @click="goToPlayback(a.activity.id)"
         />
         <img
           class="activity-image"
           v-if="a.activity.type === 'static'"
           src="./assets/static_default.png"
           alt="static_logo"
-          @click="goToPlayback(a.activity.id)"
         />
       </div>
     </div>

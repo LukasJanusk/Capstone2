@@ -12,7 +12,7 @@ test.describe('DashboardView', () => {
 
     await asUser(page, user, async () => {
       await page.goto('/dashboard')
-      await expect(page.getByText('Once you have compelted your')).toBeVisible()
+      await expect(page.getByText('Once you have completed your')).toBeVisible()
       await expect(page.getByRole('button', { name: 'Load activities' })).toBeVisible()
       await expect(page.getByRole('button', { name: 'Request songs' })).toBeVisible()
       await deleteUser({ email: user.email })

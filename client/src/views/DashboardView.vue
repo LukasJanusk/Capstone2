@@ -53,7 +53,7 @@ const highlightActivity = ref(false)
       </div>
       <div class="no-activity-message" v-if="userActivitiesWithSong.length < 1">
         <p>
-          Once you have compelted your workout, activities with generated songs will be uploaded
+          Once you have completed your workout, activities with generated songs will be uploaded
           here. If activities do not appear after few minutes try pressing
           <span
             @mouseover="highlightActivity = true"

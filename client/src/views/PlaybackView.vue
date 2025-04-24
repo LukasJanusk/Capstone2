@@ -4,29 +4,32 @@ import ErrorBox from '@/components/ErrorBox.vue'
 import { setError, errorMessage } from '@/errors'
 import MainContainer from '@/components/MainContainer.vue'
 import ActivityItem from '@/components/ActivityList/ActivityItem.vue'
-import { userActivitiesWithSong } from '@/activities'
+import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import TopBar from '@/components/TopBar.vue'
 
-// const songUrl = ref(
-//   'https://files.topmediai.com/aimusic/api/6ad2dc9a-ee46-4d83-8d1f-682efe46c1f9-audio.mp3'
-// )
-const props = defineProps<{ activityId: number }>()
+const props = defineProps<{ activityId?: number }>()
+const route = useRoute()
 const returnToDashboard = () => {
   router.push({ name: 'Dashboard' })
 }
 const activityWithSong = ref<ActivityWithSong>()
 const router = useRouter()
-onMounted(() => {
-  const activityId = props.activityId
-  console.log('Activity ID:', activityId)
+onMounted(async () => {
+  if (userActivitiesWithSong.value.length < 1) {
+    await getActivitiesWithSong()
+  }
+  const param = props.activityId ?? route.params.activityId
+  const id = Array.isArray(param) ? parseInt(param[0], 10) : parseInt(String(param), 10)
 
-  activityWithSong.value = userActivitiesWithSong.value.find(
-    (item) => item.activity.id === activityId
-  )
+  if (isNaN(id)) {
+    setError('Invalid or missing activity ID')
+    return
+  }
+  activityWithSong.value = userActivitiesWithSong.value.find((item) => item.activity.id === id)
   if (!activityWithSong.value) {
-    setError('Activity not found')
+    setError(`Activity id: ${id} not found`)
 
     return
   }

@@ -37,7 +37,7 @@ export default authenticatedProcedure
       ctx.logger.info(
         'POST test.createActivities - Activity with songs created'
       )
-      return { created: true }
+      return { activityId: activity.id }
     }
     ctx.logger.info(
       'POST test.createActivities - Activity with songs not created'

@@ -21,6 +21,7 @@ export const trpc = createTRPCProxyClient<AppRouter>({
 
 type UserLogin = Parameters<typeof trpc.user.login.mutate>[0]
 type UserLoginAuthed = UserLogin & { id: number; accessToken: string }
+type FakeActivity = { activityId: number }
 
 /**
  * Logs in a new user by signing them up and logging them in with the provided
@@ -65,11 +66,13 @@ export async function createFakeTokens() {
     console.error(error)
   }
 }
-export async function createActivityWithSongs() {
+export async function createActivityWithSongs(): Promise<FakeActivity> {
   try {
-    await trpc.test.createActivitiesWithSongs.mutate()
+    const activity: FakeActivity = await trpc.test.createActivitiesWithSongs.mutate()
+    return activity
   } catch (error) {
     console.error(error)
+    throw error
   }
 }
 export async function asUser<T extends any>(
