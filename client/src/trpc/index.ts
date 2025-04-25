@@ -6,7 +6,6 @@ import superjson from 'superjson'
 
 export const trpc: ReturnType<typeof createTRPCProxyClient<AppRouter>> =
   createTRPCProxyClient<AppRouter>({
-    transformer: superjson,
     links: [
       httpBatchLink({
         url: apiBase,
@@ -17,4 +16,5 @@ export const trpc: ReturnType<typeof createTRPCProxyClient<AppRouter>> =
         },
       }),
     ],
+    transformer: superjson,
   })

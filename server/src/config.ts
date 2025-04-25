@@ -4,7 +4,6 @@ import { z } from 'zod'
 const { env } = process
 if (!env.NODE_ENV) env.NODE_ENV = 'development'
 
-// force UTC timezone, so it matches the default timezone in production
 env.TZ = 'UTC'
 
 const isTest = env.NODE_ENV === 'test'
@@ -28,7 +27,6 @@ const schema = z
     database: z.object({
       connectionString: z.string().url(),
     }),
-    topmediaiKey: z.string(),
     apiBoxKey: z.string(),
     publicDomain: z.string().default('http://localhost:5173/'),
   })
@@ -49,7 +47,6 @@ const config = schema.parse({
     connectionString: env.DATABASE_URL,
   },
   apiBoxKey: env.API_BOX_KEY,
-  topmediaiKey: env.TOP_MEDIAI_KEY,
   publicDomain: env.PUBLIC_DOMAIN,
 })
 

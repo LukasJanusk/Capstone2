@@ -13,7 +13,6 @@ jobs:
       STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
       STRAVA_SUBSCRIBTION_SECRET: ${{ secrets.STRAVA_SUBSCRIBTION_SECRET }}
       API_BOX_KEY: ${{ secrets.API_BOX_KEY }}
-      TOP_MEDIAI_KEY: ${{ secrets.TOP_MEDIAI_KEY }}
       TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
 
     services:
@@ -174,7 +173,6 @@ jobs:
                 "STRAVA_CLIENT_SECRET": "${{secrets.STRAVA_CLIENT_SECRET}}",
                 "STRAVA_SUBSCRIBTION_SECRET": "${{secrets.STRAVA_SUBSCRIBTION_SECRET}}",
                 "API_BOX_KEY": "${{secrets.API_BOX_KEY}}",
-                "TOP_MEDIAI_KEY": "${{secrets.TOP_MEDIAI_KEY}}",
                 "DATABASE_URL": "${{ secrets.PROD_DATABASE_URL }}",
                 "TOKEN_KEY": "${{ secrets.PROD_TOKEN_KEY }}",
                 "PUBLIC_DOMAIN": "${{ secrets.PUBLIC_DOMAIN }}"
