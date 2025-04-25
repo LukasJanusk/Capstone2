@@ -29,7 +29,7 @@ onMounted(async () => {
   }
   activityWithSong.value = userActivitiesWithSong.value.find((item) => item.activity.id === id)
   if (!activityWithSong.value) {
-    setError(`Activity id: ${id} not found`)
+    setError(`Activity ID: ${id} not found`)
 
     return
   }

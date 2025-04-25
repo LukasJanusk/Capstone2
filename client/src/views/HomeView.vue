@@ -20,6 +20,9 @@ onMounted(async () => {
 const returnHome = () => {
   router.push({ name: 'Home' })
 }
+const goToSignup = () => {
+  router.push({ name: 'SignUp' })
+}
 </script>
 
 <template>
@@ -29,6 +32,10 @@ const returnHome = () => {
       <div><img id="logo" src="../assets/icon.png" /></div>
       <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
       <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">Authorize Strava</button>
+    </div>
+    <div v-if="!authUserId" id="non-authorized">
+      To start generating songs for your workouts
+      <span id="sign-up-instruction" @click="goToSignup">Sign up</span> now.
     </div>
   </MainContainer>
   <ErrorBox :message="errorMessage" @close="returnHome"></ErrorBox>
@@ -48,6 +55,16 @@ const returnHome = () => {
 }
 #instruction {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+#non-authorized {
+  font-size: large;
+}
+#sign-up-instruction {
+  font-weight: 800;
+}
+#sign-up-instruction:hover {
+  font-weight: 800;
+  color: blue;
 }
 @media (width <= 600px) {
   #logo {

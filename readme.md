@@ -13,19 +13,52 @@ During the user signup process, we collect various traits. Each trait is associa
 
 Workout Data
 
-We collect workout statistics from the Strava API, such as heart rate, speed, calories, pulse, etc. These stats are used to calculate mood, energy, and other multipliers.
+Workout statistics are collected from the Strava API, such as heart rate, speed, calories, pulse, etc. These stats are used to calculate mood, energy, and other multipliers.
 
 The basic values from the workout are processed through these multipliers to generate a prompt for the music generation AI.
 
-Currently, we are using Topmediai for music generation.
+Currently, Suno API from apibox is used.
 
 Flow Overview
 
     User traits and workout data are gathered.
     These values are combined and used to create a prompt for the AI.
-    Once the song is generated (or starts generating, depending on the implementation), we send the song URL to the frontend so the user can start listening.
+    Once the song is generated (or starts generating, depending on the implementation), song url data is sent to user to start listening.
+
+Front-end is built on Vue framework, back-end uses TRPC with express adapter.
+
+Client Views
+
+HomeView
+Path: /
+Description: Displays message for new user to sign up. For singed up user displays app logo and authorization for Strava button.
+
+WelcomeView
+Path: /welcome
+Description: Displays welcome message or error message on user signup.
+
+AuthenticatedView
+Path: /authenticated
+Description: Receives one time code parameter from strava once redirected on callback. Displays Welcome message or Error message upon completing strava authorization.
+
+SignupView
+Path: /signup
+Description: Sign up form for user sign up. Displays error message if failed to sign up. Redirects to WelcomeView on success.
+
+SigninView
+Path: /signin
+Description: Redirects to DashboardView on success, displays error message if failed to singin.
+
+DashboardView
+Path: /dashboard
+Description: Here all user activities with titles and date are displayed. User can click on activity image to go to PlaybackView for that activity. User can reload activities or request songs for yet activities. If there are no activities yet, displays instructions message.
+
+PlaybackView
+Path: /playback/:activityId
+Description: Displays activity data with generated songs and image for songs. User can play generated songs for that activity.
 
 Server Endpoints
+
 User Enpoints
 
     /user/login
@@ -40,26 +73,62 @@ User Enpoints
         Input: Requires no input (authenticated procedure).
         Returns: Public user information. Id, firstName, lastName wrapped in object
 
-    Strava Endpoints
+    /user/getUserActivitiesWithSong
+        Description: Returns acitvities with songs generated for that activity
+        Input: Requires no input (authenticated procedure).
+        Returns: ActivityWithSongs object array
+
+    /user/stravaAuthenticated
+        Description: Checks if user is Authenticated by Strava
+        Input: Requires no input (authenticated procedure).
+        Returns: object with authenticated: boolean
+
+    /user/deleteUser
+        Description: Deletes user data, cascades for all data. Currently not implemented on Client side.
+        Input: Object with user email
+        Returns: Object with deleted user Id
+
+    /user/changeEmail
+        Description: Changes user email, currently not implemented on Client side
+        Input: Object with user email
+        Returns: Object with user Id and updated email
+
+Strava Endpoints
 
     /strava/getAccess
-        Input: One-time code received from Strava authentication.
         Description: Retrieves the Strava user's access and refresh tokens and stores them in the database.
+        Input: One-time code received from Strava authentication.
         Returns: Public user information.
 
+    /strava/getClientId
+        Description: Gets strava applictaion id
+        Input: No input required (public endpoint)
+        Returns: String with client id
+
     /strava/getAthlete
+        Description: Currently unused on Client side.
         Input: Requires no input (authenticated procedure).
         Returns: Athlete information (ID, first name, last name) from Strava.
 
-    /strava/webhooks (WORK IN PROGRESS)
+    /strava/webhooks
         Description: Listens for activity or user updates from Strava servers.
         Function: Automatically collects user trait data, combines it with activity data, and generates a prompt for the music generation API.
 
 Generator Endpoints
 
-    /generator/getSongs
-        Input: Object containing lyric, title, and prompt.
-        Returns: Song objects with audio file URL.
+    /generator/getSongByTaskId
+        Input: no input required, user must be authorized.
+        Returns: AcitvityWithSongs containing audio and image url.
+
+    /generator/storeGenerated
+        Description: Listens for songs from Suno API, stores them to db.
+        Input: Suno API generated song objects
+        Returns:  code: 200, msg: 'Callback received successfully', or code: 400, msg: 'Bad request'
+
+    /generator/requestSong
+        Description: currently unused;
+        Input: Prompt for api
+        Returns: Song generation task
 
 Trait Endpoints
 
@@ -93,6 +162,12 @@ To run the server tests, use:
 npm run test -w server
 ```
 
+Client e2e test:
+
+```bash
+npm run test:e2e -w client
+```
+
 Environment Variables
 
 The project requires the following environment variables:
@@ -113,13 +188,17 @@ The project requires the following environment variables:
         TOKEN_KEY
 
     Music Generation
-    Music generation is still in the early phase but requires an API key for the music service.
-        TOP_MEDIAI_KEY
+    Music generation key for APIBOX SUNO API
+        API_BOX_KEY
 
     Strava Webhooks
     Webhooks require subscriptions on Strava. For how to set this up, refer to the Strava Webhooks Documentation: https://developers.strava.com/docs/webhooks/
 
 Additional Notes
 
-Ensure your database is properly set up with the appropriate schema and environment variables.
-For trying app, you will need a valid Strava account and API keys. Tests should still pass since they dont use or use mocked strava service. However databas and token key are required since current tests use same key and database. Project still is in early stages of develoment so there will be bugs. There are still quite some unhappy path error handling and testing to be done. Keeping that in mind, im looking forward for further impovements and suggestions for the project.
+Project is hosted: https://capstone2.g5qsj0y7zwc7y.eu-central-1.cs.amazonlightsail.com
+
+Currently only one user is allowed to use the app until strava approval is granted.
+In this case when trying to authorize strava, athlete limit reached error will be displayed.
+
+Also prompt generation formula needs work, music genre is currently determined by user traits with each trait having certain bias towards music genre. Weighted average formula is being used to determined music genre for prompt. User selection for music genre during signup of later in settings will be implemented later.

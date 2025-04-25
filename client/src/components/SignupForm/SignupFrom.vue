@@ -119,7 +119,11 @@ form {
   max-width: 100%;
   text-align: start;
 }
+label {
+  margin-top: 10px;
+}
 button {
   margin: 5px;
+  margin-top: 10px;
 }
 </style>

@@ -40,5 +40,9 @@ form {
 }
 button {
   margin: 5px;
+  margin-top: 10px;
+}
+label {
+  margin-top: 10px;
 }
 </style>
