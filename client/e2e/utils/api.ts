@@ -1,5 +1,4 @@
 import { AppRouter } from '@cap/server/src/shared/trpc'
-import superjson from 'superjson'
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
 import { fakeUser } from './fakes'
 import { Page } from 'playwright/test'
@@ -8,7 +7,6 @@ import { apiOrigin, apiPath } from './config'
 let accessToken: string | null = null
 
 export const trpc = createTRPCProxyClient<AppRouter>({
-  transformer: superjson,
   links: [
     httpBatchLink({
       url: `${apiOrigin}${apiPath}`,

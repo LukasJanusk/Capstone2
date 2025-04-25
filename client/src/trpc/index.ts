@@ -2,7 +2,6 @@ import { createTRPCProxyClient, httpBatchLink } from '@trpc/client'
 import type { AppRouter } from '@server/shared/trpc'
 import { getStoredAccessToken } from '@/utils/auth'
 import { apiBase } from '@/config'
-import superjson from 'superjson'
 
 export const trpc: ReturnType<typeof createTRPCProxyClient<AppRouter>> =
   createTRPCProxyClient<AppRouter>({
@@ -16,5 +15,4 @@ export const trpc: ReturnType<typeof createTRPCProxyClient<AppRouter>> =
         },
       }),
     ],
-    transformer: superjson,
   })

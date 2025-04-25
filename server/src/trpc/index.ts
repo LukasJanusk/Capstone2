@@ -5,7 +5,6 @@ import type { Repositories } from '@server/repositories'
 import type { Database } from '@server/database'
 import type { SongGenerationService } from '@server/controllers/generator/model'
 import { ZodError } from 'zod'
-import superjson from 'superjson'
 import type { Logger } from '../logger'
 import type { AuthUser } from '../entities/user'
 
@@ -22,7 +21,6 @@ export type Context = {
 export type ContextMinimal = Pick<Context, 'db'>
 
 const t = initTRPC.context<Context>().create({
-  transformer: superjson,
   errorFormatter({ shape, error }) {
     return {
       ...shape,
