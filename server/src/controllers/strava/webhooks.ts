@@ -34,47 +34,48 @@ export default webhookProcedure
     if (input.aspect_type === 'create' && input.object_type === 'activity') {
       const stravaUserId = input.owner_id
       ctx.logger.info(
-        { activityId: input.object_id },
+        { activityId: input.object_id, aspectType: input.aspect_type },
         'POST strava.webhooks - Received new webhook from Strava'
       )
-      const exist = await ctx.repos.activityRepository.getActivityByOriginId(
-        String(input.object_id)
-      )
-      if (exist) {
-        ctx.logger.info(
-          { activityId: exist.id },
-          'POST strava.webhooks - Activity already exist'
-        )
-        return { status: 'EVENT_RECEIVED' }
-      }
-      const tokens = await getStravaUserTokens(
-        stravaUserId,
-        ctx.stravaService,
-        ctx.repos.userRepository
-      )
-      const activityData = await ctx.stravaService.getActivityById(
-        input.object_id,
-        tokens.accessToken
-      )
-      if (!activityData) {
-        ctx.logger.error(
-          { activityId: input.object_id },
-          'POST strava.webhooks - Failed to fetch activity from Strava'
-        )
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Activity not found',
-        })
-      }
-      const activityToStore: Insertable<Activity> = {
-        userId: tokens.userId,
-        ...transformActivityFromStrava(activityData),
-      }
-      ctx.logger.info(
-        activityToStore,
-        'POST strava.webhooks - Activity parsed for storing'
-      )
       try {
+        const exist = await ctx.repos.activityRepository.getActivityByOriginId(
+          String(input.object_id)
+        )
+        if (exist) {
+          ctx.logger.info(
+            { activityId: exist.id },
+            'POST strava.webhooks - Activity already exist'
+          )
+          return { status: 'EVENT_RECEIVED' }
+        }
+        const tokens = await getStravaUserTokens(
+          stravaUserId,
+          ctx.stravaService,
+          ctx.repos.userRepository
+        )
+        const activityData = await ctx.stravaService.getActivityById(
+          input.object_id,
+          tokens.accessToken
+        )
+        if (!activityData) {
+          ctx.logger.error(
+            { activityId: input.object_id },
+            'POST strava.webhooks - Failed to fetch activity from Strava'
+          )
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Activity not found',
+          })
+        }
+        const activityToStore: Insertable<Activity> = {
+          userId: tokens.userId,
+          ...transformActivityFromStrava(activityData),
+        }
+        ctx.logger.info(
+          activityToStore,
+          'POST strava.webhooks - Activity parsed for storing'
+        )
+
         const activityStored =
           await ctx.repos.activityRepository.create(activityToStore)
         ctx.logger.info(
@@ -120,6 +121,8 @@ export default webhookProcedure
         )
       } catch (err) {
         ctx.logger.error(err, 'POST strava.webhooks - Error occured:')
+        if (err instanceof TRPCError && err.message === 'Activity not found')
+          throw err
         return { status: 'EVENT_RECEIVED' }
       }
     }

@@ -41,7 +41,8 @@ const parseKey = (key: string) => {
     <div class="songs-container">
       <h3>Songs</h3>
       <hr />
-      <SongPlayer class="player" :songs="props.songs"></SongPlayer>
+      <SongPlayer v-if="props.songs.length > 0" class="player" :songs="props.songs"></SongPlayer>
+      <div v-else class="no-songs">No songs found</div>
     </div>
   </div>
 </template>
@@ -62,6 +63,9 @@ const parseKey = (key: string) => {
 .songs-container {
   margin: 5px;
   text-justify: start;
+}
+.no-songs {
+  width: 400px;
 }
 .activity-row {
   text-align: start;

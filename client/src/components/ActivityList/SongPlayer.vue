@@ -50,7 +50,7 @@ const resetAudio = () => {
           alt="right-arrow"
         />
       </div>
-      <audio ref="audioRef" controls>
+      <audio v-if="props.songs.length > 0" ref="audioRef" controls>
         <source :src="songs[index].audioUrl" type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
