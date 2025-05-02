@@ -1,24 +1,24 @@
 import provideRepos from '@server/trpc/provideRepos'
 import { songRepository } from '@server/repositories/songRepository'
-import { webhookProcedure } from '@server/trpc/webhookProcedure'
+
+import { publicProcedure } from '@server/trpc'
+import { z } from 'zod'
+import { TRPCError } from '@trpc/server'
 import { callbackSchema, transformSongCallbackData } from './schema'
 
-export default webhookProcedure
+export default publicProcedure
   .use(provideRepos({ songRepository }))
-  .input(callbackSchema)
+  .input(z.any())
   .mutation(async ({ input, ctx }) => {
     try {
-      if (input.code !== 200) {
-        ctx.logger.error(
-          input,
-          'POST generator.storeGenerated - Bad Request input object:'
-        )
-        return {
-          code: 400,
-          msg: 'Bad request',
-        }
+      const parsedInput = callbackSchema.safeParse(input)
+      if (!parsedInput.success) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: `Invalid input: ${JSON.stringify(parsedInput.error.errors)}`,
+        })
       }
-      const songData = transformSongCallbackData(input.data)
+      const songData = transformSongCallbackData(parsedInput.data.data)
       const { taskId } = songData
       const task = await ctx.repos.songRepository.getByTaskId(taskId)
       if (songData.callbackType === 'text') {

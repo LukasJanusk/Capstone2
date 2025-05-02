@@ -111,15 +111,3 @@ it('logs when all songs are generated and stores songs to db, returns callback r
     title: webhook.data.data[0].title,
   })
 })
-it('returns bad request when status code is not 200', async () => {
-  const webhook = {
-    msg: 'fail',
-    code: 400,
-    data: { callbackType: 'first', task_id: generationTask.taskId },
-  }
-  const result = await caller.storeGenerated(webhook)
-  expect(result).toEqual({
-    code: 400,
-    msg: 'Bad request',
-  })
-})
