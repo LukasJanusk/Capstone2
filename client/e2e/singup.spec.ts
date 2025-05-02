@@ -54,7 +54,9 @@ test.describe('HomeView', () => {
     await page.getByRole('listbox').click()
     await page.getByRole('button', { name: 'Sign Up', exact: true }).click()
 
-    await expect(page.getByRole('heading', { name: 'Must select at least 3 traits' })).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'Must provide at least 3 traits' })
+    ).toBeVisible()
   })
   test('user can logout', async ({ page }) => {
     const user = fakeUser()
