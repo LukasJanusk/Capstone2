@@ -21,7 +21,7 @@ export const songItemSchema = z.object({
   model_name: z.string().optional().nullable(),
   title: z.string().optional().nullable(),
   tags: z.string().optional().nullable(),
-  createTime: z.string(),
+  createTime: z.coerce.string(),
   duration: z.number(),
 })
 
