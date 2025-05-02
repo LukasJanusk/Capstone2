@@ -39,6 +39,13 @@ export default authenticatedProcedure
             t.taskId,
             ctx.logger
           )
+          if (!songData.data.response.sunoData) {
+            ctx.logger.info(
+              { taskId: t.taskId },
+              `POST generator.getSongByTaksId - Failed to generate song with errorCode: ${songData.data.errorCode}, error message: ${songData.data.errorMessage}`
+            )
+            return []
+          }
           return Promise.all(
             songData.data.response.sunoData.map(async (s) => {
               const song = {

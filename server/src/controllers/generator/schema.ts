@@ -82,11 +82,11 @@ const songGenerationResponseSchema = z.object({
     param: z.string(),
     response: z.object({
       taskId: z.string(),
-      sunoData: z.array(sunoDataItemSchema),
+      sunoData: z.array(sunoDataItemSchema).nullable(),
     }),
     status: z.string(),
     type: z.string(),
-    errorCode: z.string().nullable(),
+    errorCode: z.number().nullable(),
     errorMessage: z.string().nullable(),
   }),
 })

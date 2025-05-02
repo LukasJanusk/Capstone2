@@ -3,10 +3,17 @@ import provideRepos from '@server/trpc/provideRepos'
 import { songRepository } from '@server/repositories/songRepository'
 import { activityRepository } from '@server/repositories/activityRepository'
 import { fakeActivity } from '@server/entities/tests/fakes'
+import config from '@server/config'
+import { TRPCError } from '@trpc/server'
 
 export default authenticatedProcedure
   .use(provideRepos({ songRepository, activityRepository }))
   .mutation(async ({ ctx }) => {
+    if (config.env !== 'development' && config.env !== 'test')
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'not allowed in non dev/test environment',
+      })
     const activity = await ctx.repos.activityRepository.create(
       fakeActivity({ userId: ctx.authUser.id, title: 'Test activity' })
     )

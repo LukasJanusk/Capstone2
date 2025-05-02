@@ -9,16 +9,11 @@ export const userSchema = z.object({
   email: z.string().trim().email().min(5).max(100).toLowerCase(),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters long')
-    .max(100, 'Password must be at most 100 characters long')
-    .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/\d/, 'Password must contain at least one number')
     .regex(
-      /[!@#$%^&*(),.?":{}|<>]/,
-      'Password must contain at least one special character'
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{}|;:'",.<>/?])[A-Za-z\d!@#$%^&*()_+\-=\\[\]{}|;:'",.<>/?]{8,64}$/,
+      'Password must be at least 8 characters long, contain one capital letter, one number and one symbol'
     ),
-  traits: z.array(traitSchema).min(3, 'Must provide at least 3 traits'),
+  traits: traitSchema.array().min(3, 'Must provide at least 3 traits'),
   strava: z.object({
     accessToken: z.string().nullable().default(null),
     refreshToken: z.string().nullable().default(null),
@@ -33,7 +28,7 @@ export const userSignupSchema = userSchema
     email: true,
   })
   .extend({
-    traits: z.array(traitPublic),
+    traits: traitPublic.array().min(3, 'Must provide at least 3 traits'),
   })
 
 export const userSigninSchema = userSchema.pick({ email: true, password: true })
