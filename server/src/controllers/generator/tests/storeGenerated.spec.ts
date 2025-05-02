@@ -96,7 +96,7 @@ it('logs when all songs are generated and stores songs to db, returns callback r
   })
   expect(logSpy).toBeCalledWith(
     { taskId: generationTask.taskId, userId: user.id },
-    'POST generator.StoreGenerated - Song generated for task'
+    'POST generator.StoreGenerated - Song generated'
   )
   const [song] = await selectAll(db, 'song')
   expect(song).toEqual({

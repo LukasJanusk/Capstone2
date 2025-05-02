@@ -42,7 +42,7 @@ export default authenticatedProcedure
           if (!songData.data.response.sunoData) {
             ctx.logger.info(
               { taskId: t.taskId },
-              `POST generator.getSongByTaksId - Failed to generate song with errorCode: ${songData.data.errorCode}, error message: ${songData.data.errorMessage}`
+              `POST generator.getSongByTaksId - SUNO API failed to generate song with errorCode: ${songData.data.errorCode}, error message: ${songData.data.errorMessage}`
             )
             return []
           }
@@ -68,10 +68,6 @@ export default authenticatedProcedure
 
       .flat()
       .flat()
-    ctx.logger.info(
-      newSongs.map((s) => s.id),
-      'POST generator.getSongByTaskId - Songs saved to db'
-    )
     songs.push(...newSongs)
     const activitiesWithSongs = activities.map((a) => ({
       activity: a,

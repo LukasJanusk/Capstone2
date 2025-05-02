@@ -1,7 +1,7 @@
 import provideRepos from '@server/trpc/provideRepos'
 import { songRepository } from '@server/repositories/songRepository'
 import { webhookProcedure } from '@server/trpc/webhookProcedure'
-import { callbackSchema } from './schema'
+import { callbackSchema, transformSongCallbackData } from './schema'
 
 export default webhookProcedure
   .use(provideRepos({ songRepository }))
@@ -18,27 +18,28 @@ export default webhookProcedure
           msg: 'Bad request',
         }
       }
-      const { taskId } = input.data
+      const songData = transformSongCallbackData(input.data)
+      const { taskId } = songData
       const task = await ctx.repos.songRepository.getByTaskId(taskId)
-      if (input.data.callbackType === 'text') {
+      if (songData.callbackType === 'text') {
         ctx.logger.info(
           { userId: task.userId, taskId },
           'POST generator.StoreGenerated - Text generated'
         )
       }
-      if (input.data.callbackType === 'first') {
+      if (songData.callbackType === 'first') {
         ctx.logger.info(
           { userId: task.userId, taskId },
           'POST generator.StoreGenerated - First song generated'
         )
       }
-      if (input.data.callbackType === 'complete') {
+      if (songData.callbackType === 'complete') {
         ctx.logger.info(
           { userId: task.userId, taskId },
-          'POST generator.StoreGenerated - Song generated for task'
+          'POST generator.StoreGenerated - Song generated'
         )
-        if (input.data.data) {
-          const songs = input.data.data.map((s) => ({
+        if (songData.data) {
+          const songs = songData.data.map((s) => ({
             userId: task.userId,
             activityId: task.activityId,
             taskId: task.id,

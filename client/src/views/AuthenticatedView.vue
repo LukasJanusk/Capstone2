@@ -9,6 +9,7 @@ import MainContainer from '@/components/MainContainer.vue'
 
 const accessGranter = ref(false)
 const userName = ref('')
+
 const toDashboard = () => {
   router.push({ name: 'Dashboard' })
 }
