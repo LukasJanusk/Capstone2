@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { signup } from '../../user'
+import { schema } from '../../user/schema'
 import { onMounted, ref } from 'vue'
 import { getTraits } from '../../traits'
 import type { TraitPublic } from '@server/shared/trpc'
-import ErrorBox from '@/components/ErrorBox.vue'
-import { errorMessage, error, setError, resetError, parseErrorMessage } from '../../errors/index'
+import { setError, resetError, parseErrorMessage } from '../../errors/index'
 
 const traits = ref<TraitPublic[]>([])
 const emit = defineEmits<{ (event: 'signup', user: any): void }>()
-const isMobileOS = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-  navigator.userAgent
-)
-
 const userData = ref({
   firstName: '',
   lastName: '',
@@ -19,13 +15,7 @@ const userData = ref({
   email: '',
   traits: [] as TraitPublic[],
 })
-const addTrait = () => {
-  if (selectedTrait.value && !userData.value.traits.includes(selectedTrait.value)) {
-    userData.value.traits.push(selectedTrait.value)
-    selectedTrait.value = null
-  }
-}
-const selectedTrait = ref<TraitPublic | null>(null)
+
 const signUp = async () => {
   try {
     const user = await signup(userData.value)
@@ -49,81 +39,38 @@ onMounted(async () => {
   }
 })
 </script>
-
 <template>
-  <div class="main-container">
-    <form @submit.prevent="signUp">
-      <label for="first_name">First name*</label>
-      <input id="first_name" required v-model="userData.firstName" />
-      <label for="last_name">Last name*</label>
-      <input id="last_name" required v-model="userData.lastName" />
-      <label for="email">Email*</label>
-      <input id="email" type="email" required v-model="userData.email" />
-      <label for="password">Password*</label>
-      <input id="password" type="password" v-model="userData.password" />
-      <label for="traits" title="Select 3 or more traits that defines you the best">Traits*</label>
-
-      <div id="selected-traits">
-        <div
-          @click="userData.traits = userData.traits.filter((t) => t.id !== trait.id)"
-          v-for="trait in userData.traits"
-          :key="trait.id"
-          class="trait-tag"
-        >
-          {{ trait.name }} ❌
-        </div>
-      </div>
-      <select
+  <UForm class="max-w-xs w-xs mx-auto p-4" @submit="signUp" :state="userData" :schema="schema">
+    <UFormField size="lg" label="First Name" name="firstName" required>
+      <UInput class="w-full" v-model="userData.firstName"></UInput>
+    </UFormField>
+    <UFormField size="lg" label="Last Name" name="lastName" required>
+      <UInput class="w-full" v-model="userData.lastName"></UInput>
+    </UFormField>
+    <UFormField size="lg" label="Email" name="email" required>
+      <UInput class="w-full" v-model="userData.email" />
+    </UFormField>
+    <UFormField size="lg" label="Password" name="password" required>
+      <UInput class="w-full" v-model="userData.password" type="password" />
+    </UFormField>
+    <UFormField label="Traits" name="traits" required>
+      <UInputMenu
+        class="w-full"
+        placeholder="Select 3 or more traits"
+        v-model="userData.traits"
+        size="lg"
         multiple
-        v-if="!isMobileOS"
-        v-model="selectedTrait"
-        @change="!isMobileOS ? addTrait : () => {}"
-      >
-        <option
-          @click="userData.traits.push(trait)"
-          v-for="trait in traits"
-          :key="trait.id"
-          :hidden="userData.traits.includes(trait)"
-          :disabled="userData.traits.includes(trait)"
-          :value="trait"
-        >
-          {{ trait.name }}
-        </option>
-      </select>
-      <select v-if="isMobileOS" v-model="selectedTrait" @change="addTrait">
-        <option
-          v-for="trait in traits"
-          :key="trait.id"
-          :disabled="userData.traits.includes(trait)"
-          :value="trait"
-        >
-          {{ trait.name }}
-        </option>
-      </select>
-
-      <button type="submit">Sign Up</button>
-    </form>
-  </div>
-  <ErrorBox v-if="error" :message="errorMessage" @close="resetError"></ErrorBox>
+        label-key="name"
+        :items="traits"
+        :loading="traits.length < 1"
+      />
+    </UFormField>
+    <UButton
+      loading-auto
+      class="mt-4 mb-4 w-full h-12"
+      trailing-icon="i-lucide-arrow-right"
+      type="submit"
+      >Submit</UButton
+    >
+  </UForm>
 </template>
-<style lang="css" scoped>
-form {
-  display: flex;
-  max-width: 200px;
-  flex-direction: column;
-  padding: 2px;
-}
-#selected-traits {
-  display: grid;
-  grid-template-columns: 1fr;
-  max-width: 100%;
-  text-align: start;
-}
-label {
-  margin-top: 10px;
-}
-button {
-  margin: 5px;
-  margin-top: 10px;
-}
-</style>

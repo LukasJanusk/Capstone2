@@ -1,10 +1,7 @@
 <script lang="ts" setup>
-import ErrorBox from '@/components/ErrorBox.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import { onMounted, ref } from 'vue'
 import ActivityList from '@/components/ActivityList/ActivityList.vue'
-import { error, errorMessage, resetError } from '../errors/index'
-import TopBar from '@/components/TopBar.vue'
 import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
 import { requestSongData } from '../generator/index'
 import { showHeader } from '@/user'
@@ -19,9 +16,6 @@ const reload = async () => {
   if (userActivitiesWithSong.value.length > 0) {
     popUpMessage.value = 'Activities loaded'
     show.value = true
-  } else if (!error.value) {
-    popUpMessage.value = 'No Activities found'
-    show.value = true
   }
 }
 const getMissingSongs = async () => {
@@ -29,9 +23,6 @@ const getMissingSongs = async () => {
   if (reloadedActivitiesWithSongs.length > 0) {
     userActivitiesWithSong.value = reloadedActivitiesWithSongs
     popUpMessage.value = 'Activities with songs fetched'
-    show.value = true
-  } else if (!error.value) {
-    popUpMessage.value = 'No new songs found'
     show.value = true
   }
 }
@@ -42,7 +33,6 @@ const highlightActivity = ref(false)
 <template>
   <MainContainer>
     <div class="main-box">
-      <TopBar :name="'My Activities'"></TopBar>
       <div>
         <Transition name="fade">
           <div class="info-box" v-if="show">
@@ -77,25 +67,23 @@ const highlightActivity = ref(false)
       </div>
       <ActivityList :activities-with-songs="userActivitiesWithSong"></ActivityList>
       <div :class="['button-container', { collapsed: !showHeader }]">
-        <button
+        <UButton
           :class="{ highlightActivity: highlightActivity }"
           class="load-button"
           @click="reload"
         >
           Load activities
-        </button>
-        <button
+        </UButton>
+        <UButton
           :class="{ highlightSong: highlightSong }"
           class="request-button"
           @click="getMissingSongs"
         >
           Request songs
-        </button>
+        </UButton>
       </div>
     </div>
   </MainContainer>
-
-  <ErrorBox :message="errorMessage" @close="resetError"></ErrorBox>
 </template>
 
 <style lang="css" scoped>

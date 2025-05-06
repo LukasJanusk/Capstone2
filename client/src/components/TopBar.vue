@@ -21,15 +21,15 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="top-bar">
-    <h2 :class="['text-header', { collapsed: !showHeader }]" :style="{ opacity: opacity }">
+    <h1 :class="['text-header', { collapsed: !showHeader }]" :style="{ opacity: opacity }">
       {{ name ? name : 'Home' }}
-    </h2>
+    </h1>
   </div>
 </template>
 <style lang="css" scoped>
 .top-bar {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(1, 1, 1, 0));
-  position: fixed;
+  position: relative;
   height: 200px;
   width: 100%;
   top: 0;

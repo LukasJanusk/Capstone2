@@ -1,6 +1,8 @@
 import { trpc } from '@/trpc'
 import { setError, parseErrorMessage } from '@/errors'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 export const authorizeUser = async (clientId: string | undefined | null) => {
   try {
     if (!clientId) {
@@ -12,5 +14,6 @@ export const authorizeUser = async (clientId: string | undefined | null) => {
     window.location.href = authUrl
   } catch (err) {
     setError(parseErrorMessage(err))
+    router.push({ name: 'Home' })
   }
 }

@@ -3,8 +3,7 @@ import { ref, onMounted } from 'vue'
 import { trpc } from '@/trpc'
 import router from '@/router'
 import { stravaAuthenticated } from '@/user'
-import ErrorBox from '@/components/ErrorBox.vue'
-import { errorMessage, setError, parseErrorMessage } from '../errors/index'
+import { setError, parseErrorMessage } from '../errors/index'
 import MainContainer from '@/components/MainContainer.vue'
 
 const accessGranter = ref(false)
@@ -32,6 +31,7 @@ onMounted(async () => {
     }
   } catch (err) {
     setError(parseErrorMessage(err))
+    returnHome()
   }
 })
 </script>
@@ -47,7 +47,6 @@ onMounted(async () => {
       <div @click="toDashboard()"><button>To dashboard</button></div>
     </div>
   </MainContainer>
-  <ErrorBox :message="errorMessage" @close="returnHome"> </ErrorBox>
 </template>
 
 <style scoped>

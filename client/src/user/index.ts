@@ -10,8 +10,15 @@ import {
 
 export const authUser = ref<null | AuthUser>(null)
 export const stravaAuthenticated = ref<boolean>(false)
-export const showHeader = ref<boolean>(true)
 
+export const setOnboardComplete = () => {
+  localStorage.setItem('onboarding', 'done')
+}
+const onboardingDone = () => {
+  return localStorage.getItem('onboarding') === 'done'
+}
+export const showHeader = ref<boolean>(true)
+export const onBoardComplete = ref<boolean>(onboardingDone())
 const authToken = ref<string | null>(getStoredAccessToken(localStorage))
 
 export const authUserId = computed(() =>

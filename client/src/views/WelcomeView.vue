@@ -7,7 +7,7 @@ import router from '@/router'
   <MainContainer>
     <div>
       <h1>Welcome!</h1>
-      <button @click="router.push({ name: 'SignIn' })">Sign in now</button>
+      <button @click="router.push({ name: 'Sign In' })">Sign in now</button>
     </div>
   </MainContainer>
 </template>

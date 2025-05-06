@@ -13,12 +13,14 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@nuxt/ui": "^3.1.1",
     "@trpc/client": "^10.45.2",
     "kysely": "^0.27.5",
     "kysely-codegen": "^0.17.0",
     "playwright": "^1.51.0",
     "server": "^1.0.41",
     "superjson": "^2.2.2",
+    "tailwindcss": "^4.1.5",
     "vue": "^3.5.13",
     "vue-router": "^4.3.0"
   },

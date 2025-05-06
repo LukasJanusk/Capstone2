@@ -37,8 +37,8 @@ const router = createRouter({
       component: PlaybackView,
     },
     { path: '/dashboard', name: 'Dashboard', component: DashboardView },
-    { path: '/signup', name: 'SignUp', component: SignupView },
-    { path: '/signin', name: 'SignIn', component: SigninView },
+    { path: '/signup', name: 'Sign Up', component: SignupView },
+    { path: '/signin', name: 'Sign In', component: SigninView },
     { path: '/welcome', name: 'Welcome', component: WelcomeView },
     {
       path: '/:pathMatch(.*)*',

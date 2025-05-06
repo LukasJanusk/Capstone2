@@ -28,3 +28,8 @@ dist-ssr
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# nuxt
+.nuxt
+auto-imports.d.ts
+components.d.ts

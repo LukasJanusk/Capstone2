@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { ActivityWithSong } from '@server/shared/trpc'
-import ErrorBox from '@/components/ErrorBox.vue'
-import { setError, errorMessage } from '@/errors'
+import { setError } from '@/errors'
 import MainContainer from '@/components/MainContainer.vue'
 import ActivityItem from '@/components/ActivityList/ActivityItem.vue'
 import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
@@ -31,7 +30,7 @@ onMounted(async () => {
   if (!activityWithSong.value) {
     setError(`Activity ID: ${id} not found`)
 
-    return
+    returnToDashboard()
   }
   return
 })
@@ -46,7 +45,6 @@ onMounted(async () => {
       :songs="activityWithSong.songs"
     ></ActivityItem>
   </MainContainer>
-  <ErrorBox :message="errorMessage" @close="returnToDashboard"></ErrorBox>
 </template>
 
 <style scoped></style>

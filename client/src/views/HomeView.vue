@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import { authUserId, stravaAuthenticated } from '../user'
+import { authUserId, onBoardComplete, stravaAuthenticated } from '../user'
 import router from '@/router'
 import { trpc } from '../trpc/index'
 import { onMounted, ref } from 'vue'
-import { errorMessage } from '../errors/index'
-import ErrorBox from '@/components/ErrorBox.vue'
 import MainContainer from '@/components/MainContainer.vue'
 import { authorizeUser } from '@/strava'
-import TopBar from '@/components/TopBar.vue'
+import Onboarding from '@/components/Onboarding.vue'
 
 const clientId = ref('')
+
 onMounted(async () => {
   clientId.value = await trpc.strava.getClientId.query()
   if (authUserId.value) {
@@ -17,28 +16,31 @@ onMounted(async () => {
     stravaAuthenticated.value = response.authenticated
   }
 })
-const returnHome = () => {
-  router.push({ name: 'Home' })
-}
 const goToSignup = () => {
-  router.push({ name: 'SignUp' })
+  router.push({ name: 'Sign Up' })
 }
 </script>
 
 <template>
   <MainContainer>
-    <TopBar></TopBar>
-    <div v-if="authUserId" id="authorized">
-      <div><img id="logo" src="../assets/icon.png" /></div>
-      <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
-      <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">Authorize Strava</button>
+    <div v-if="!onBoardComplete">
+      <h1>Welcome!</h1>
+      <Onboarding @close="onBoardComplete = true"></Onboarding>
     </div>
-    <div v-if="!authUserId" id="non-authorized">
-      To start generating songs for your workouts
-      <span id="sign-up-instruction" @click="goToSignup">Sign up</span> now.
+    <div v-else>
+      <div v-if="authUserId" id="authorized">
+        <div><img id="logo" src="../assets/icon.png" /></div>
+        <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
+        <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">
+          Authorize Strava
+        </button>
+      </div>
+      <div v-if="!authUserId" id="non-authorized">
+        To start generating songs for your workouts
+        <span id="sign-up-instruction" @click="goToSignup">Sign up</span> now.
+      </div>
     </div>
   </MainContainer>
-  <ErrorBox :message="errorMessage" @close="returnHome"></ErrorBox>
 </template>
 
 <style scoped>

@@ -8,6 +8,7 @@ import { authUserId } from '@/user'
       <button v-if="!authUserId" @click="$emit('signin')">Sign in</button>
       <button v-if="authUserId" @click="$emit('signout')">Sign out</button>
       <button v-if="authUserId" @click="$emit('dashboard')">Dashboard</button>
+      <ColorButton></ColorButton>
     </nav>
     <img
       class="arrows left"

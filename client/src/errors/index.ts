@@ -1,16 +1,21 @@
 import { ref } from 'vue'
 import { ZodError } from 'zod'
 
+const toast = useToast()
+
 export const errorMessage = ref('')
-export const error = ref<boolean>(false)
 
 export const resetError = () => {
   errorMessage.value = ''
-  error.value = false
 }
 export const setError = (message: string) => {
   errorMessage.value = message
-  error.value = true
+
+  toast.add({
+    title: 'Error',
+    description: errorMessage.value,
+    color: 'error',
+  })
 }
 
 export const parseErrorMessage = (error: unknown) => {
