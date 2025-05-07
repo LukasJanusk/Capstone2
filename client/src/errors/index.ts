@@ -10,7 +10,6 @@ export const resetError = () => {
 }
 export const setError = (message: string) => {
   errorMessage.value = message
-
   toast.add({
     title: 'Error',
     description: errorMessage.value,

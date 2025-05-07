@@ -5,7 +5,9 @@ import MainContainer from '@/components/MainContainer.vue'
 </script>
 <template>
   <MainContainer>
-    <SignupFrom @signup="router.push({ name: 'Welcome' })"></SignupFrom>
+    <div class="flex items-center justify-center">
+      <SignupFrom @signup="router.push({ name: 'Welcome' })"></SignupFrom>
+    </div>
   </MainContainer>
 </template>
 

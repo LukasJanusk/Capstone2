@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { signin } from '../user'
 import router from '../router'
 import { parseErrorMessage, setError } from '@/errors'
+import { signInSchema } from '@/user/schema'
 
 const userData = ref({ email: '', password: '' })
 const signIn = async () => {
@@ -16,13 +17,25 @@ const signIn = async () => {
 }
 </script>
 <template>
-  <UForm class="max-w-xs w-xs mx-auto p-4" @submit="signIn" :state="userData">
+  <UForm
+    class="max-w-xs w-xs mx-auto p-4"
+    @submit="signIn"
+    :state="userData"
+    :schema="signInSchema"
+  >
     <UFormField label="Email" name="email" required>
-      <UInput size="lg" class="w-full" v-model="userData.email" />
+      <UInput size="lg" class="w-full" v-model="userData.email" name="email" />
     </UFormField>
     <UFormField label="Password" name="password" required>
-      <UInput size="lg" class="w-full" v-model="userData.password" type="password" />
+      <UInput
+        size="lg"
+        class="w-full"
+        v-model="userData.password"
+        type="password"
+        name="password"
+      />
     </UFormField>
+    <USeparator class="mt-4"></USeparator>
     <UButton
       loading-auto
       class="mt-4 mb-4 w-full h-12"

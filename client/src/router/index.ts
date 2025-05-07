@@ -8,6 +8,7 @@ import WelcomeView from '@/views/WelcomeView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import { errorMessage, resetError, setError } from '@/errors'
 import { authUserId } from '@/user'
+import AboutView from '@/views/AboutView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,7 @@ const router = createRouter({
       name: 'Home',
       component: HomeView,
     },
+    { path: '/about', name: 'About', component: AboutView },
     {
       path: '/authenticated',
       name: 'Authenticated',

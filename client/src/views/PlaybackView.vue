@@ -6,7 +6,6 @@ import ActivityItem from '@/components/ActivityList/ActivityItem.vue'
 import { getActivitiesWithSong, userActivitiesWithSong } from '@/activities'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import TopBar from '@/components/TopBar.vue'
 
 const props = defineProps<{ activityId?: number }>()
 const route = useRoute()
@@ -38,7 +37,6 @@ onMounted(async () => {
 
 <template>
   <MainContainer>
-    <TopBar :name="'Playback'"></TopBar>
     <ActivityItem
       v-if="activityWithSong"
       :activity="activityWithSong.activity"

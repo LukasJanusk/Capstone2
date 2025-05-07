@@ -65,6 +65,7 @@ onMounted(async () => {
         :loading="traits.length < 1"
       />
     </UFormField>
+    <USeparator class="mt-4"></USeparator>
     <UButton
       loading-auto
       class="mt-4 mb-4 w-full h-12"

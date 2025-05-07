@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import { authUserId, onBoardComplete, stravaAuthenticated } from '../user'
-import router from '@/router'
+import { authUserId, stravaAuthenticated } from '../user'
 import { trpc } from '../trpc/index'
 import { onMounted, ref } from 'vue'
 import MainContainer from '@/components/MainContainer.vue'
 import { authorizeUser } from '@/strava'
-import Onboarding from '@/components/Onboarding.vue'
 
 const clientId = ref('')
 
@@ -16,29 +14,19 @@ onMounted(async () => {
     stravaAuthenticated.value = response.authenticated
   }
 })
-const goToSignup = () => {
-  router.push({ name: 'Sign Up' })
-}
 </script>
 
 <template>
   <MainContainer>
-    <div v-if="!onBoardComplete">
-      <h1>Welcome!</h1>
-      <Onboarding @close="onBoardComplete = true"></Onboarding>
+    <div v-if="authUserId" id="authorized">
+      <div><img id="logo" src="../assets/icon.png" /></div>
+      <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
+      <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">Authorize Strava</button>
     </div>
-    <div v-else>
-      <div v-if="authUserId" id="authorized">
-        <div><img id="logo" src="../assets/icon.png" /></div>
-        <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
-        <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">
-          Authorize Strava
-        </button>
-      </div>
-      <div v-if="!authUserId" id="non-authorized">
-        To start generating songs for your workouts
-        <span id="sign-up-instruction" @click="goToSignup">Sign up</span> now.
-      </div>
+    <div v-if="!authUserId" id="non-authorized">
+      To start generating songs for your workouts
+      <ULink as="button" to="signup">Sign up</ULink> now or
+      <ULink as="button" to="signin">Sign in</ULink>.
     </div>
   </MainContainer>
 </template>

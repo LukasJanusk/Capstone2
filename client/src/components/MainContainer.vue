@@ -2,7 +2,7 @@
 
 <template>
   <div
-    class="h-100 ml-[200px] flex-1 max-md:ml-0 p-4 flex flex-col items-center justify-center max-md:mt-[200px]"
+    class="min-h-[500px] h-auto ml-auto flex-1 p-4 flex flex-col items-center justify-center max-md:mt-[100px] md:mt-20 md:ml-40"
   >
     <slot></slot>
   </div>
