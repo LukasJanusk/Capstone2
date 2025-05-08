@@ -44,12 +44,14 @@ onMounted(async () => {
 </script>
 
 <template>
-  <MainContainer>
-    <div class="flex flex-col items-center justify-center h-screen text-center">
-      <div class="font-bold mb-2 text-2xl">Loading</div>
-      <UProgress v-if="!accessGranter" class="max-w-[300px]" size="xl" animation="swing" />
-    </div>
-  </MainContainer>
+  <div>
+    <MainContainer>
+      <div class="flex flex-col items-center justify-center h-screen text-center">
+        <div class="font-bold mb-2 text-2xl">Loading</div>
+        <UProgress v-if="!accessGranter" class="max-w-[300px]" size="xl" animation="swing" />
+      </div>
+    </MainContainer>
+  </div>
 </template>
 
 <style scoped></style>

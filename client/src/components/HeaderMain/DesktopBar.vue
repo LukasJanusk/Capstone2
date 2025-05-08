@@ -1,11 +1,16 @@
 <script lang="ts" setup>
+import router from '@/router'
 import { authUserId, logout } from '@/user'
 import { useRoute } from 'vue-router'
 const route = useRoute()
+const signOut = () => {
+  logout()
+  router.push({ name: 'Sign In' })
+}
 </script>
 <template>
   <div
-    class="fixed left-0 top-0 h-screen min-w-40 max-md:hidden flex flex-col gap-4 overflow-y-auto bg-background-primary text-foreground-primary"
+    class="fixed left-0 top-0 h-screen min-w-40 max-md:hidden flex flex-col gap-4 overflow-y-auto text-foreground-primary"
   >
     <span class="font-bold text-xl mt-6">{{ route.name ? route.name : 'Menu' }}</span>
     <div class="flex flex-1 flex-col">
@@ -39,14 +44,20 @@ const route = useRoute()
           </div>
         </template>
       </UModal>
-      <UModal v-if="authUserId" title="Are you sure?">
+      <UPopover v-if="authUserId">
         <UButton class="mx-auto" size="lg" label="Sign Out" color="primary" variant="ghost" />
-        <template #body>
-          <UButton size="xl" @click="logout">Sign out</UButton>
+        <template #content>
+          <div class="size-44 m-6 flex flex-1 flex-col justify-around p-2">
+            <div class="text-bold text-4xl text-justify-center">Are you sure?</div>
+            <UButton icon="i-lucide-log-out" class="w-full" size="xl" @click="signOut"
+              >Sign out</UButton
+            >
+          </div>
         </template>
-      </UModal>
+      </UPopover>
     </div>
     <div class="mb-4"><ColorButton></ColorButton> <Onboarding></Onboarding></div>
     <USeparator orientation="vertical" class="fixed ml-40"></USeparator>
   </div>
 </template>
+<style scoped></style>

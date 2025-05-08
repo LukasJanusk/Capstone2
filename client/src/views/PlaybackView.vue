@@ -9,6 +9,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 const props = defineProps<{ activityId?: number }>()
 const route = useRoute()
+
 const returnToDashboard = () => {
   router.push({ name: 'Dashboard' })
 }
@@ -36,13 +37,15 @@ onMounted(async () => {
 </script>
 
 <template>
-  <MainContainer>
-    <ActivityItem
-      v-if="activityWithSong"
-      :activity="activityWithSong.activity"
-      :songs="activityWithSong.songs"
-    ></ActivityItem>
-  </MainContainer>
+  <div>
+    <MainContainer>
+      <ActivityItem
+        v-if="activityWithSong"
+        :activity="activityWithSong.activity"
+        :songs="activityWithSong.songs"
+      ></ActivityItem>
+    </MainContainer>
+  </div>
 </template>
 
 <style scoped></style>

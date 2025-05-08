@@ -6,20 +6,22 @@ import { onBoardComplete } from '@/user'
 import Onboarding from '@/components/Onboarding.vue'
 </script>
 <template>
-  <MainContainer>
-    <div>
-      <h1 class="font-bold text-5xl pb-4">Welcome!</h1>
-      <UButton
-        color="primary"
-        variant="subtle"
-        class="text-xl"
-        @click="router.push({ name: 'Sign In' })"
-        >Sign in
-      </UButton>
+  <div>
+    <MainContainer>
       <div>
-        <Onboarding @close="onBoardComplete = true"></Onboarding>
+        <h1 class="font-bold text-5xl pb-4">Welcome!</h1>
+        <UButton
+          color="primary"
+          variant="subtle"
+          class="text-xl"
+          @click="router.push({ name: 'Sign In' })"
+          >Sign in
+        </UButton>
+        <div>
+          <Onboarding @close="onBoardComplete = true"></Onboarding>
+        </div>
       </div>
-    </div>
-  </MainContainer>
+    </MainContainer>
+  </div>
 </template>
 <style lang="css" scoped></style>

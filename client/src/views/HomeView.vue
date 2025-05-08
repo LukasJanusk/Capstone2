@@ -17,18 +17,22 @@ onMounted(async () => {
 </script>
 
 <template>
-  <MainContainer>
-    <div v-if="authUserId" id="authorized">
-      <div><img id="logo" src="../assets/icon.png" /></div>
-      <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
-      <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">Authorize Strava</button>
-    </div>
-    <div v-if="!authUserId" id="non-authorized">
-      To start generating songs for your workouts
-      <ULink as="button" to="signup">Sign up</ULink> now or
-      <ULink as="button" to="signin">Sign in</ULink>.
-    </div>
-  </MainContainer>
+  <div>
+    <MainContainer>
+      <div v-if="authUserId" id="authorized">
+        <div><img id="logo" src="../assets/icon.png" /></div>
+        <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
+        <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">
+          Authorize Strava
+        </button>
+      </div>
+      <div v-if="!authUserId" id="non-authorized">
+        To start generating songs for your workouts
+        <ULink as="button" to="signup">Sign up</ULink> now or
+        <ULink as="button" to="signin">Sign in</ULink>.
+      </div>
+    </MainContainer>
+  </div>
 </template>
 
 <style scoped>

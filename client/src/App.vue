@@ -5,6 +5,12 @@ import { RouterView } from 'vue-router'
 <template>
   <UApp>
     <SideBar></SideBar>
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <TransitionFade mode="out-in" :duration="300">
+        <component :is="Component" />
+      </TransitionFade>
+    </RouterView>
   </UApp>
 </template>
+
+<style></style>

@@ -75,7 +75,7 @@ const items = computed<DropdownMenuItem[]>(
 </script>
 <template>
   <div
-    class="bg-background-primary dark:bg-neutral-900 h-21 bg-white md:hidden fixed top-0 left-0 w-full z-50"
+    class="bg-background-primary dark:bg-neutral-900 h-20 bg-white md:hidden fixed top-0 left-0 w-full z-50"
   >
     <div class="p-4 z-[50] flex justify-between mb-2">
       <UDropdownMenu
