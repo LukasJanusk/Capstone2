@@ -43,11 +43,11 @@ export async function up(db: Kysely<any>) {
         tempoMultiplier: 0.8,
       },
       {
-        name: 'Energetic',
+        name: 'Lively',
         complexityMultiplier: 1.4,
         energyMultiplier: 1.6,
         genreBias: 0.2,
-        genreId: genres.find((g) => g.name === 'Electronic')?.id,
+        genreId: genres.find((g) => g.name === 'Lively')?.id,
         moodMultiplier: 1.6,
         tempoMultiplier: 1.5,
       },
