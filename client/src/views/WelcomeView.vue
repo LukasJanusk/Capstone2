@@ -15,6 +15,7 @@ import Onboarding from '@/components/Onboarding.vue'
           variant="subtle"
           class="text-xl"
           @click="router.push({ name: 'Sign In' })"
+          loading-auto
           >Sign in
         </UButton>
         <div>

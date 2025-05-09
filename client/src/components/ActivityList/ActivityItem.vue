@@ -58,7 +58,7 @@ const parseKey = (key: string) => {
       </template>
       <SongPlayer :songs="props.songs"></SongPlayer>
     </UCard>
-    <UCard v-if="songs.length < 1" variant="subtle" class="w-full min-w-72 md:max-w-120">
+    <UCard v-if="songs.length < 1" variant="subtle" class="w-full min-w-72 md:max-w-160">
       <template #header> <span class="h-8 text-xl font-bold">Song</span></template>
       <div
         class="min-w-72 min-h-72 flex flex-col align-middle justify-center text-lg text-error font-bold"

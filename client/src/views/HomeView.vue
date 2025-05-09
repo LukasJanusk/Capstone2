@@ -4,9 +4,12 @@ import { trpc } from '../trpc/index'
 import { onMounted, ref } from 'vue'
 import MainContainer from '@/components/MainContainer.vue'
 import { authorizeUser } from '@/strava'
+import router from '@/router'
 
 const clientId = ref('')
-
+const toDashboard = () => {
+  router.push({ name: 'Dashboard' })
+}
 onMounted(async () => {
   clientId.value = await trpc.strava.getClientId.query()
   if (authUserId.value) {
@@ -19,55 +22,42 @@ onMounted(async () => {
 <template>
   <div>
     <MainContainer>
-      <div v-if="authUserId" id="authorized">
-        <div><img id="logo" src="../assets/icon.png" /></div>
-        <h2 v-if="!stravaAuthenticated" id="instruction">To start using our app click bellow</h2>
-        <button v-if="!stravaAuthenticated" @click="authorizeUser(clientId)">
-          Authorize Strava
-        </button>
+      <div v-if="authUserId">
+        <div>
+          <img
+            class="max-w-[500px] w-full min-w-[300px] border-4 border-primary rounded-lg"
+            src="../assets/icon.png"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span v-if="!stravaAuthenticated" class="font-bold text-2xl p-2">
+            To start using our app click bellow
+          </span>
+          <UButton
+            icon="i-lucide-check"
+            size="xl"
+            class="self-center"
+            v-if="!stravaAuthenticated"
+            @click="authorizeUser(clientId)"
+            loading-auto
+          >
+            Authorize Strava
+          </UButton>
+        </div>
       </div>
-      <div v-if="!authUserId" id="non-authorized">
-        To start generating songs for your workouts
+      <div v-if="!authUserId" class="font-bold text-2xl p-2">
+        <span>To start generating songs for your workouts </span>
         <ULink as="button" to="signup">Sign up</ULink> now or
         <ULink as="button" to="signin">Sign in</ULink>.
+      </div>
+      <div v-if="authUserId && stravaAuthenticated" class="mt-4 flex flex-col">
+        <span class="font-bold text-2xl p-2">To view your workouts click below</span>
+        <UButton class="self-center" icon="i-lucide-arrow-right" size="xl" @click="toDashboard">
+          To Dashboard
+        </UButton>
       </div>
     </MainContainer>
   </div>
 </template>
 
-<style scoped>
-.box {
-  border-radius: 10px;
-  border: 5px solid black;
-  padding: 10px;
-}
-#logo {
-  width: 300px;
-  border-radius: 20px;
-  border: 5px solid black;
-  margin-bottom: 10px;
-}
-#instruction {
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-#non-authorized {
-  font-size: large;
-}
-#sign-up-instruction {
-  font-weight: 800;
-}
-#sign-up-instruction:hover {
-  font-weight: 800;
-  color: blue;
-}
-@media (width <= 600px) {
-  #logo {
-    width: 300px;
-  }
-}
-@media (prefers-color-scheme: light) {
-  #logo {
-    border: 5px solid rgba(5, 5, 5, 0.911);
-  }
-}
-</style>
+<style scoped></style>

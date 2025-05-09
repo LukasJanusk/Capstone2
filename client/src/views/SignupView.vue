@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import router from '@/router'
-import SignupFrom from '@/components/SignupForm/SignupFrom.vue'
+import SignupFrom from '@/components/SignupFrom.vue'
 import MainContainer from '@/components/MainContainer.vue'
 </script>
 <template>

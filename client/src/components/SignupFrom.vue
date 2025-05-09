@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { signup } from '../../user'
-import { schema } from '../../user/schema'
+import { signup } from '../user'
+import { schema } from '../user/schema'
 import { onMounted, ref } from 'vue'
-import { getTraits } from '../../traits'
-import type { TraitPublic } from '@server/shared/trpc'
-import { setError, resetError, parseErrorMessage } from '../../errors/index'
+import { getTraits } from '../traits'
+import type { TraitPublic } from '@cap/server/src/shared/trpc'
+import { setError, resetError, parseErrorMessage } from '../errors/index'
 
 const traits = ref<TraitPublic[]>([])
 const emit = defineEmits<{ (event: 'signup', user: any): void }>()

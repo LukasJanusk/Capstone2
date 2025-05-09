@@ -11,7 +11,9 @@ test.describe('AuthenticatedView', () => {
     const user = fakeUser()
     await asUser(page, user, async () => {
       await page.goto('/authenticated')
-      const errorMessage = page.getByRole('heading', { name: 'Something went wrong getting' })
+      const errorMessage = page.getByText('Something went wrong getting Strava authorization', {
+        exact: true,
+      })
       await expect(errorMessage).toBeVisible()
 
       await deleteUser({ email: user.email })
@@ -23,15 +25,13 @@ test.describe('AuthenticatedView', () => {
     const user = fakeUser()
     await asUser(page, user, async () => {
       await page.goto('/')
-      await expect(
-        page.getByRole('heading', { name: 'To start using our app click' })
-      ).toBeVisible()
+      await expect(page.getByText('To start using our app click')).toBeVisible()
       await expect(page.getByRole('button', { name: 'Authorize Strava' })).toBeVisible()
 
       await deleteUser({ email: user.email })
     })
   })
-  test('does not display authorize strava message and button when user is authorized', async ({
+  test('does not display redirect to dashboard button when user is authorized by strava', async ({
     page,
   }) => {
     const user = fakeUser()
@@ -42,6 +42,8 @@ test.describe('AuthenticatedView', () => {
       await page.goto('/')
       await expect(authorizeButton).not.toBeVisible()
       await expect(authrizeMessage).not.toBeVisible()
+      await expect(page.getByText('To view your workouts click')).toBeVisible()
+      await expect(page.getByRole('button', { name: 'To Dashboard' })).toBeVisible()
 
       await deleteUser({ email: user.email })
     })

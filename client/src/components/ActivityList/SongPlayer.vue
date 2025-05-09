@@ -42,14 +42,4 @@ watch(index, async () => {
   </div>
 </template>
 
-<style lang="css" scoped>
-audio::-webkit-media-controls-panel {
-  height: 50px !important;
-}
-audio::-webkit-media-controls-play-button,
-audio::-webkit-media-controls-mute-button,
-audio::-webkit-media-controls-volume-slider {
-  width: 24px !important;
-  height: 24px !important;
-}
-</style>
+<style lang="css" scoped></style>

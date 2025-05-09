@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import router from '@/router'
 import { authUserId, logout } from '@/user'
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
+const showSignup = ref(false)
 const signOut = () => {
   logout()
   router.push({ name: 'Sign In' })
@@ -15,7 +17,12 @@ const signOut = () => {
     <span class="font-bold text-xl mt-6">{{ route.name ? route.name : 'Menu' }}</span>
     <div class="flex flex-1 flex-col">
       <ULink active-class="font-bold" inactive-class="text-muted" to="/" as="button">Home</ULink>
-      <ULink active-class="font-bold" inactive-class="text-muted" to="dashboard" as="button"
+      <ULink
+        v-if="authUserId"
+        active-class="font-bold"
+        inactive-class="text-muted"
+        to="dashboard"
+        as="button"
         >Dashboard</ULink
       >
     </div>
@@ -36,11 +43,14 @@ const signOut = () => {
           </div>
         </template>
       </UModal>
-      <UModal v-if="!authUserId" title="Sign up">
+      <UModal v-if="!authUserId" title="Sign up" v-model:open="showSignup">
         <UButton class="mx-auto" size="md" label="Sign up" color="primary" variant="ghost" />
         <template #body>
           <div class="flex justify-center">
-            <SignupFrom class="h-100 m-2" />
+            <SignupFrom
+              @signup="(router.push({ name: 'Welcome' }), (showSignup = false))"
+              class="h-100 m-2"
+            />
           </div>
         </template>
       </UModal>

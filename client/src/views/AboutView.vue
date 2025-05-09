@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import { cards } from '@/utils/cards'
-import { ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import router from '@/router'
-
+const isSmall = ref(window.innerWidth < 768)
+function onResize() {
+  isSmall.value = window.innerWidth < 768
+}
+onUnmounted(() => {
+  window.removeEventListener('resize', onResize)
+})
+onMounted(() => {
+  index.value = 0
+  window.addEventListener('resize', onResize)
+})
 const index = ref(0)
 </script>
 <template>
@@ -11,7 +21,7 @@ const index = ref(0)
       <UCarousel
         v-slot="{ item, index: currentIndex }"
         dots
-        arrows
+        :arrows="!isSmall"
         :items="cards"
         :index="index"
         @update:index="index = $event"
