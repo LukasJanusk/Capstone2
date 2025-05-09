@@ -47,7 +47,7 @@ export async function up(db: Kysely<any>) {
         complexityMultiplier: 1.4,
         energyMultiplier: 1.6,
         genreBias: 0.2,
-        genreId: genres.find((g) => g.name === 'Lively')?.id,
+        genreId: genres.find((g) => g.name === 'Rock')?.id,
         moodMultiplier: 1.6,
         tempoMultiplier: 1.5,
       },
