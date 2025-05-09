@@ -6,9 +6,16 @@ import SigninView from '@/views/SigninView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import WelcomeView from '@/views/WelcomeView.vue'
 import DashboardView from '@/views/DashboardView.vue'
-import { errorMessage, resetError, setError } from '@/errors'
+import { setError } from '@/errors'
 import { authUserId } from '@/user'
 import AboutView from '@/views/AboutView.vue'
+
+const authenticate = () => {
+  if (!authUserId.value) {
+    setError('Unauthorized, please login')
+    router.push({ name: 'Sign In' })
+  }
+}
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +29,7 @@ const router = createRouter({
     {
       path: '/authenticated',
       name: 'Authenticated',
+      beforeEnter: authenticate,
       component: AuthenticatedView,
     },
     {
@@ -35,10 +43,11 @@ const router = createRouter({
           10
         ),
       }),
+      beforeEnter: authenticate,
 
       component: PlaybackView,
     },
-    { path: '/dashboard', name: 'Dashboard', component: DashboardView },
+    { path: '/dashboard', name: 'Dashboard', beforeEnter: authenticate, component: DashboardView },
     { path: '/signup', name: 'Sign Up', component: SignupView },
     { path: '/signin', name: 'Sign In', component: SigninView },
     { path: '/welcome', name: 'Welcome', component: WelcomeView },
@@ -48,17 +57,5 @@ const router = createRouter({
     },
   ],
 })
-router.beforeEach((to, from, next) => {
-  if (errorMessage.value !== 'Unauthorized, please login') {
-    resetError()
-  }
-  const protectedRoutes = ['Dashboard', 'Authenticated', 'Playback']
 
-  if (protectedRoutes.includes(to.name as string) && !authUserId.value) {
-    setError('Unauthorized, please login')
-    return next({ name: 'SignIn' })
-  }
-
-  next()
-})
 export default router
