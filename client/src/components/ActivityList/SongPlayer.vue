@@ -1,41 +1,36 @@
 <script setup lang="ts">
 import type { SongPublic } from '@server/shared/trpc'
-import { nextTick, ref, watch } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps<{ songs: SongPublic[] }>()
-const index = ref(0)
 
 const songImageUrl = (song: SongPublic) => {
   return song.imageUrl || new URL('./assets/song_image_default.png', import.meta.url).href
 }
-const audioRef = ref<HTMLAudioElement | null>(null)
 
-const onSlideChange = (newIndex: number) => {
-  index.value = newIndex
+const audioRefs = ref<HTMLAudioElement[]>([])
+
+const setAudio = (el: HTMLAudioElement | null, idx: number) => {
+  if (el) audioRefs.value[idx] = el
 }
-watch(index, async () => {
-  await nextTick()
-  if (audioRef.value) {
-    audioRef.value.pause()
-    audioRef.value.currentTime = 0
-    audioRef.value.load()
-  }
-})
+const resetAll = () => {
+  audioRefs.value.forEach((a) => a?.pause())
+}
 </script>
 
 <template>
   <div class="mb-6">
-    <UCarousel :items="props.songs" dots :index="index" @update:modelValue="onSlideChange">
+    <UCarousel :items="props.songs" v-slot="{ item, index }" dots @select="resetAll">
       <div class="relative w-full h-full">
-        <img class="w-full h-full" :src="songImageUrl(props.songs[index])" alt="Song album image" />
+        <img class="w-full h-full" :src="songImageUrl(item)" alt="Song album image" />
         <span
           class="absolute bottom-4 right-4 text-white text-base md:text-xl bg-black/50 px-2 py-1 rounded"
         >
-          {{ props.songs[index].title ? props.songs[index].title : 'Workout song' }}
+          {{ item.title || 'Workout song' }}
         </span>
       </div>
-      <audio class="w-full" ref="audioRef" controls>
-        <source :src="props.songs[index].audioUrl" type="audio/mp3" />
+      <audio class="w-full" :ref="(el) => setAudio(el as HTMLAudioElement, index)" controls>
+        <source :src="item.audioUrl" type="audio/mp3" />
         Your browser does not support the audio element.
       </audio>
     </UCarousel>

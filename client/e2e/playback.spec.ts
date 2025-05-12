@@ -34,7 +34,7 @@ test.describe('playbackView', () => {
       await expect(page.getByText('Test activity')).toBeVisible()
       await expect(page.getByText('First song').first()).toBeVisible()
       await page.getByRole('button', { name: 'Go to slide 2' }).click()
-      await expect(page.getByText('First song').nth(1)).toBeVisible()
+      await expect(page.getByText('Second song').first()).toBeVisible()
       await page.getByRole('button', { name: 'Go to slide 1' }).click()
       await expect(page.getByText('First song').first()).toBeVisible()
       await deleteUser({ email: user.email })

@@ -37,8 +37,8 @@ export function songRepository(db: Database) {
     async getSongByUserId(userId: number): Promise<Selectable<Song>[]> {
       return db
         .selectFrom('song')
-        .where('song.userId', '=', userId)
         .selectAll()
+        .where('song.userId', '=', userId)
         .execute()
     },
   }

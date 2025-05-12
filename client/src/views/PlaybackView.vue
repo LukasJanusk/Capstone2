@@ -21,12 +21,14 @@ onMounted(async () => {
   }
   const param = props.activityId ?? route.params.activityId
   const id = Array.isArray(param) ? parseInt(param[0], 10) : parseInt(String(param), 10)
-
   if (isNaN(id)) {
     setError('Invalid or missing activity ID')
     return
   }
   activityWithSong.value = userActivitiesWithSong.value.find((item) => item.activity.id === id)
+  activityWithSong.value?.songs.forEach((s) =>
+    console.log(`Song id: ${s.id}, song URL: ${s.audioUrl}`)
+  )
   if (!activityWithSong.value) {
     setError(`Activity ID: ${id} not found`)
 

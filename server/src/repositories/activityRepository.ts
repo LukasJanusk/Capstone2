@@ -16,8 +16,8 @@ export function activityRepository(db: Database) {
     getActivitiesByUserId(userId: number): Promise<Selectable<Activity>[]> {
       return db
         .selectFrom('activity')
-        .where('activity.userId', '=', userId)
         .selectAll()
+        .where('activity.userId', '=', userId)
         .execute()
     },
     getActivityByOriginId(
