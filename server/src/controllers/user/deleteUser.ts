@@ -22,6 +22,6 @@ export default authenticatedProcedure
         err,
         'POST user.deleteUser - Error occured deleting user'
       )
-      return err
+      throw err
     }
   })

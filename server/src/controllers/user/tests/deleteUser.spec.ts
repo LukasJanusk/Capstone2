@@ -5,6 +5,7 @@ import { insertAll } from '@tests/utils/records'
 import { authContext } from '@tests/utils/context'
 import { createTestDatabase } from '@tests/utils/database'
 import { logger } from '@server/logger'
+
 import userRouter from '../index'
 
 const db = await wrapInRollbacks(createTestDatabase())
@@ -19,4 +20,9 @@ it('returns user id and email changed', async () => {
   })
 
   expect(deleted).toEqual({ id: user.id })
+})
+it('throws error when user not found in db', async () => {
+  await expect(
+    caller.deleteUser({ email: 'dadasjdkafjasnfkqw@dsaasdasdasd.com' })
+  ).rejects.toThrow(/user not found/i)
 })

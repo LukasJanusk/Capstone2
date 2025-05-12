@@ -5,3 +5,4 @@ dist
 dist-ssr
 coverage
 *.local
+todo.md

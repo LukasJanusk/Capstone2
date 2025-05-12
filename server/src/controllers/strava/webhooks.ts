@@ -15,10 +15,6 @@ import { parseTrait } from '../../entities/traits'
 import { transformActivityFromStrava, webhookSchema } from './services/schema'
 import getStravaUserTokens from './utils/getStravaUserTokens'
 
-// TODO: (this would be necessary to get approved by strava for publishing full app)
-// if "object_type": "activity" get activity data
-// if "object_type": "athlete" update or delete
-
 export default webhookProcedure
   .use(
     provideRepos({
