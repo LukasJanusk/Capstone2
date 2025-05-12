@@ -5,11 +5,12 @@ import router from '@/router'
 import { stravaAuthenticated } from '@/user'
 import { setError, parseErrorMessage } from '../errors/index'
 import MainContainer from '@/components/MainContainer.vue'
+import { useRoute } from 'vue-router'
 
 const toast = useToast()
 const accessGranter = ref(false)
 const userName = ref('')
-
+const route = useRoute()
 const toDashboard = () => {
   router.push({ name: 'Dashboard' })
 }
@@ -18,8 +19,7 @@ const returnHome = () => {
 }
 onMounted(async () => {
   try {
-    const urlParams = new URLSearchParams(window.location.search)
-    const code = urlParams.get('code')
+    const code = route.query.code as string
     if (code) {
       const user = await trpc.strava.getAccess.mutate({ code })
       if (user) {

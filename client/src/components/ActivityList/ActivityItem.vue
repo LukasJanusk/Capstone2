@@ -15,7 +15,7 @@ const parseDuration = (duration: number): string => {
   else return `${seconds}s`
 }
 const parseValue = (key: string, value: string | number | undefined | null) => {
-  if (!value) return 'No data'
+  if (value == null || value === '') return 'No data'
   if (key === 'duration') {
     const parsed = parseDuration(value as number)
     return parsed

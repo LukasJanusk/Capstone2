@@ -23,8 +23,9 @@ const activityAlt = (activityType: string) => {
 <template>
   <div class="flex flex-wrap gap-2 md:justify-start">
     <ActivityCard
-      @click="goToPlayback(a.activity.id)"
       v-for="a in activitiesWithSongs"
+      class="h-auto"
+      @click="goToPlayback(a.activity.id)"
       :key="a.activity.id"
       :date="transformTime(a.activity.startTime)"
       :image="activityLink(a.activity.type)"

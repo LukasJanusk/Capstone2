@@ -18,7 +18,7 @@ const signIn = async () => {
 </script>
 <template>
   <UForm
-    class="max-w-xs w-xs mx-auto p-4"
+    class="md:max-w-sm md:w-sm mx-auto p-2 max-w-xs w-xs"
     @submit="signIn"
     :state="userData"
     :schema="signInSchema"

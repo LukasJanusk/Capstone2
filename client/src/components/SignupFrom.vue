@@ -40,7 +40,12 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <UForm class="max-w-xs w-xs mx-auto p-4" @submit="signUp" :state="userData" :schema="schema">
+  <UForm
+    class="md:max-w-sm md:w-sm mx-auto p-2 max-w-xs w-xs"
+    @submit="signUp"
+    :state="userData"
+    :schema="schema"
+  >
     <UFormField size="lg" label="First Name" name="firstName" required>
       <UInput class="w-full" v-model="userData.firstName"></UInput>
     </UFormField>

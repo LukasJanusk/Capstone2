@@ -15,7 +15,7 @@ export const schema = z.object({
     .string()
     .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\\[\]{}|;:'",.<>/?])[A-Za-z\d!@#$%^&*()_+\-=\\[\]{}|;:'",.<>/?]{8,64}$/,
-      'Password must be at least 8 characters long, contain a capital letter, a number and a symbol'
+      'Must be at least 8 characters long, contain a capital letter, a number and a symbol'
     ),
   traits: z.array(traitSchema).min(3, 'Must provide at least 3 traits'),
 })

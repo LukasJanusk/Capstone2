@@ -31,7 +31,7 @@ watch(index, async () => {
         <span
           class="absolute bottom-4 right-4 text-white text-base md:text-xl bg-black/50 px-2 py-1 rounded"
         >
-          {{ props.songs[0].title }}
+          {{ props.songs[index].title ? props.songs[index].title : 'Workout song' }}
         </span>
       </div>
       <audio class="w-full" ref="audioRef" controls>

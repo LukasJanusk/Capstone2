@@ -21,7 +21,7 @@ const signOut = () => {
         v-if="authUserId"
         active-class="font-bold"
         inactive-class="text-muted"
-        to="dashboard"
+        to="/dashboard"
         as="button"
         >Dashboard</ULink
       >
@@ -39,7 +39,7 @@ const signOut = () => {
         <UButton class="mx-auto" size="md" label="Sign in" color="primary" variant="ghost" />
         <template #body>
           <div class="flex justify-center">
-            <SignInForm class="h-56 m-2" />
+            <SignInForm class="h-auto m-2" />
           </div>
         </template>
       </UModal>
@@ -49,7 +49,7 @@ const signOut = () => {
           <div class="flex justify-center">
             <SignupFrom
               @signup="(router.push({ name: 'Welcome' }), (showSignup = false))"
-              class="h-100 m-2"
+              class="h-auto m-2"
             />
           </div>
         </template>

@@ -25,8 +25,8 @@ test.describe('Sign up', () => {
   })
   test('submits signupfrom when all fields are filled', async ({ page }) => {
     const user = fakeUser()
-    await page.goto('/signup')
 
+    await page.goto('/signup')
     await page.getByText('First name').click()
     await page.getByRole('textbox', { name: 'First name' }).fill(user.firstName)
     await page.getByText('Last name').click()
@@ -39,7 +39,7 @@ test.describe('Sign up', () => {
     await page.getByRole('option', { name: 'Optimistic' }).click()
     await page.getByRole('option', { name: 'Calm' }).click()
     await page.getByRole('option', { name: 'Melancholic' }).click()
-    await page.getByText('Traits').click()
+    await page.getByRole('button', { name: 'Show popup' }).click()
     await page.getByRole('button', { name: 'Submit' }).click()
 
     await expect(page.getByRole('heading', { name: 'Welcome!' })).toBeVisible()
@@ -50,6 +50,7 @@ test.describe('Sign up', () => {
         .filter({ hasText: /^About$/ })
         .getByRole('button')
     ).toBeVisible()
+
     await asUser(page, user, async () => {
       await deleteUser({ email: user.email })
     })
@@ -57,6 +58,7 @@ test.describe('Sign up', () => {
   test('submits pop up signup from when all fields are filled', async ({ page }) => {
     const user = fakeUser()
     await page.goto('/')
+
     await page.getByRole('button', { name: 'Sign up' }).click()
     await page.getByText('First name').click()
     await page.getByRole('textbox', { name: 'First name' }).fill(user.firstName)
@@ -70,7 +72,6 @@ test.describe('Sign up', () => {
     await page.getByRole('option', { name: 'Optimistic' }).click()
     await page.getByRole('option', { name: 'Calm' }).click()
     await page.getByRole('option', { name: 'Melancholic' }).click()
-    await page.getByText('Traits').click()
     await page.getByRole('button', { name: 'Submit' }).click()
     await expect(page.getByRole('heading', { name: 'Welcome!' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Sign in' }).nth(1)).toBeVisible()
@@ -86,15 +87,17 @@ test.describe('Sign up', () => {
   })
   test('Displays error to the user with form requirements when not met', async ({ page }) => {
     await page.goto('/signup')
+
     await page.getByRole('button', { name: 'Submit' }).click()
     await expect(page.locator('#v-6-error')).toBeVisible()
     await expect(page.locator('#v-7-error')).toBeVisible()
     await expect(page.getByText('Invalid email')).toBeVisible()
-    await expect(page.getByText('Password must be at least 8')).toBeVisible()
+    await expect(page.getByText('Must be at least 8')).toBeVisible()
     await expect(page.getByText('Must provide at least 3 traits')).toBeVisible()
   })
   test('user can logout', async ({ page }) => {
     const user = fakeUser()
+
     await asUser(page, user, async () => {
       await page.goto('/home')
       const logoutButton = page.getByRole('button', { name: 'Sign out' })
@@ -123,6 +126,7 @@ test.describe('Sign up', () => {
   })
   test('throws error when not logged in and trying to access protected route', async ({ page }) => {
     await page.goto('/dashboard')
+
     const errorMessage = page.getByText('Unauthorized, please login', { exact: true })
     await expect(page).toHaveURL('/signin')
     await expect(errorMessage).toBeVisible()

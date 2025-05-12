@@ -7,7 +7,7 @@ const props = defineProps<{ title: string; date: string; image: string; alt: str
       <span class="h-8 text-xl font-bold">{{ props.title }}</span>
     </template>
 
-    <img :src="props.image" alt="workout logo image" />
+    <img :src="props.image" :alt="props.alt" />
 
     <template #footer>
       <span class="h-4">{{ props.date }}</span>
