@@ -31,6 +31,7 @@ const parseValue = (key: string, value: string | number | undefined | null) => {
 const parseKey = (key: string) => {
   if (key === 'speedAverage') return 'Average speed'
   else if (key === 'startTime') return 'Start time'
+  else if (key === 'originId') return ' Origin Id'
   else return key[0].toLocaleUpperCase() + key.slice(1)
 }
 </script>
