@@ -3,7 +3,7 @@
 ![Website screenshot](https://github.com/LukasJanusk/Capstone2/blob/main/screenshots/Screenshot%202025-09-27%20at%2014.07.51.png?raw=true)
 
 This project combines **Strava workout data** and **user traits** to generate **personalized AI-generated songs and images**.
-Songs are generated using the **Suno API** (via [apibox](https://apibox.ai/)).
+Songs are generated using the **Suno API** (via [apibox](https://api.box/)).
 
 ---
 
